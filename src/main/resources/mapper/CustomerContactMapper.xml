@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bibe.crm.dao.CustomerContactMapper">
+  <resultMap id="BaseResultMap" type="com.bibe.crm.entity.po.CustomerContact">
+    <!--@mbg.generated-->
+    <!--@Table customer_contact-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="landline" jdbcType="VARCHAR" property="landline" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, customer_id, `position`, phone, `name`, qq, landline, email, `type`, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from customer_contact
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from customer_contact
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.CustomerContact" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_contact (customer_id, `position`, phone, 
+      `name`, qq, landline, 
+      email, `type`, create_time, 
+      update_time)
+    values (#{customerId,jdbcType=INTEGER}, #{position,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{landline,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.CustomerContact" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into customer_contact
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="position != null">
+        `position`,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="landline != null">
+        landline,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerId != null">
+        #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="landline != null">
+        #{landline,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bibe.crm.entity.po.CustomerContact">
+    <!--@mbg.generated-->
+    update customer_contact
+    <set>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=INTEGER},
+      </if>
+      <if test="position != null">
+        `position` = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="landline != null">
+        landline = #{landline,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bibe.crm.entity.po.CustomerContact">
+    <!--@mbg.generated-->
+    update customer_contact
+    set customer_id = #{customerId,jdbcType=INTEGER},
+      `position` = #{position,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      landline = #{landline,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-27-->
+  <insert id="insertList">
+    INSERT INTO customer_contact(
+    id,
+    customer_id,
+    position,
+    phone,
+    name,
+    qq,
+    landline,
+    email,
+    type,
+    create_time,
+    update_time
+    )VALUES
+    <foreach collection="list" item="element" index="index" separator=",">
+      (
+      #{element.id,jdbcType=INTEGER},
+      #{element.customerId,jdbcType=INTEGER},
+      #{element.position,jdbcType=VARCHAR},
+      #{element.phone,jdbcType=VARCHAR},
+      #{element.name,jdbcType=VARCHAR},
+      #{element.qq,jdbcType=VARCHAR},
+      #{element.landline,jdbcType=VARCHAR},
+      #{element.email,jdbcType=VARCHAR},
+      #{element.type,jdbcType=VARCHAR},
+      #{element.createTime,jdbcType=TIMESTAMP},
+      #{element.updateTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+</mapper>

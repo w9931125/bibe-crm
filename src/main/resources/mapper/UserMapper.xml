@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bibe.crm.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.bibe.crm.entity.po.User">
+    <!--@mbg.generated-->
+    <!--@Table users-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="host" jdbcType="VARCHAR" property="host" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, phone, `password`, `name`, role_id, dept_id, `host`, `number`, `status`, login_time, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from users
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.User" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into users (phone, `password`, `name`, 
+      role_id, dept_id, `host`, 
+      `number`, `status`, login_time, 
+      create_time, update_time)
+    values (#{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER}, #{host,jdbcType=VARCHAR}, 
+      #{number,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{loginTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.User" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="host != null">
+        `host`,
+      </if>
+      <if test="number != null">
+        `number`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="host != null">
+        #{host,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bibe.crm.entity.po.User">
+    <!--@mbg.generated-->
+    update users
+    <set>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="host != null">
+        `host` = #{host,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null">
+        `number` = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bibe.crm.entity.po.User">
+    <!--@mbg.generated-->
+    update users
+    set phone = #{phone,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=INTEGER},
+      dept_id = #{deptId,jdbcType=INTEGER},
+      `host` = #{host,jdbcType=VARCHAR},
+      `number` = #{number,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-18-->
+  <select id="findAllByPhone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where phone=#{phone,jdbcType=VARCHAR}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-23-->
+  <select id="show"  resultType="com.bibe.crm.entity.vo.UserVO">
+    select t.id, t.phone, t.`password`, t.`name`, t.role_id, t.dept_id, t.`host`, t.`number`, t.`status`, t.login_time, t.create_time, t.update_time ,t1.name as deptName , t2.name as roleName
+    from users t
+    left join  department t1 on  dept_id=t1.id
+    left join  roles t2 on  role_id=t2.id
+    where t.id=#{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="pageList"  resultType="com.bibe.crm.entity.vo.UserVO">
+    select t.id, t.phone, t.`password`, t.`name`, t.role_id, t.dept_id, t.`host`, t.`number`, t.`status`, t.login_time, t.create_time, t.update_time ,t1.name as deptName , t2.name as roleName
+    from users t
+    left join  department t1 on  dept_id=t1.id
+    left join  roles t2 on  role_id=t2.id
+    where 1=1
+    <if test="dto.name != null and dto.name != ''">
+      and t.name  like   concat(concat('%',#{dto.name,jdbcType=VARCHAR}),'%')
+
+    </if>
+    <if test="dto.phone != null and dto.phone != ''">
+      and t.phone like  concat(concat('%',#{dto.phone,jdbcType=VARCHAR}),'%')
+    </if>
+    <if test="dto.deptId">
+      and t.dept_id=#{dto.deptId}
+    </if>
+    <if test="dto.status!=null ">
+      and t.`status`=#{dto.status,jdbcType=INTEGER}
+    </if>
+    order by t.id
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-23-->
+  <select id="selectCountByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(1)
+    from users
+    where `name`=#{name,jdbcType=VARCHAR}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-23-->
+  <select id="selectCountByDeptId" resultType="java.lang.Integer">
+    select
+    count(1)
+    from users
+    where dept_id=#{deptId,jdbcType=INTEGER}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-24-->
+  <delete id="deletebyIdIn">
+        delete from users
+        where id in
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-24-->
+  <select id="selectCountByPassword" resultType="java.lang.Integer">
+    select
+     count(1)
+    from users
+    where `password`=#{password,jdbcType=VARCHAR}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-25-->
+  <select id="selectCountByRoleId" resultType="java.lang.Integer">
+    select
+    count(1)
+    from users
+    where role_id=#{roleId,jdbcType=INTEGER}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-07-25-->
+  <update id="updateNumberByRoleId">
+        update users
+        set `number`=#{updatedNumber,jdbcType=INTEGER}
+        where role_id=#{roleId,jdbcType=INTEGER}
+    </update>
+
+</mapper>
