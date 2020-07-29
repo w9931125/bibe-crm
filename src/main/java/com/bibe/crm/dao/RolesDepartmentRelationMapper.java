@@ -9,7 +9,7 @@ public interface RolesDepartmentRelationMapper {
 
     int insertList(@Param("list") List<RolesDepartmentRelation> list);
 
-    int deleteByRoleId(@Param("roleId")Integer roleId);
+    int deleteByRoleId(@Param("roleId")Integer roleId,@Param("type")Integer type);
 
     List<RolesDepartmentRelation> selectAllByRoleIdAndType(@Param("roleId")Integer roleId,@Param("type")Integer type);
 

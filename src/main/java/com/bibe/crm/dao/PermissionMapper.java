@@ -1,4 +1,5 @@
 package com.bibe.crm.dao;
+import java.util.Collection;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -42,4 +43,23 @@ public interface PermissionMapper {
      * @return
      */
     List<Permission> loadPermission(@Param("roleId")Integer roleId);
+
+    /**
+     * 启用 禁止 子权限
+     * @param updatedStatus
+     * @param parentId
+     * @return
+     */
+    int updateStatusByParentId(@Param("updatedStatus")Integer updatedStatus,@Param("parentId")Integer parentId);
+
+
+    /**
+     *  启用 禁止 父权限
+     * @param updatedStatus
+     * @param id
+     * @return
+     */
+    int updateStatusById(@Param("updatedStatus")Integer updatedStatus,@Param("id")Integer id);
+
+
 }

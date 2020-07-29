@@ -76,7 +76,7 @@ public interface UserMapper {
      * @param password
      * @return
      */
-    int selectCountByPassword(@Param("password")String password);
+    int selectCountByPassword(@Param("password")String password,@Param("id") Integer id);
 
     /**
      * 设置录入客户

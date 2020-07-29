@@ -8,6 +8,7 @@ import com.bibe.crm.entity.dto.UserDTO;
 import com.bibe.crm.entity.dto.UserPageDTO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.entity.vo.UserVO;
+import com.bibe.crm.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.BeanUtils;
@@ -91,8 +92,9 @@ public class UserService {
     }
 
     public RespVO checkPassword(String password){
+
         String password1 = getPassword(password);
-        int i = userMapper.selectCountByPassword(password1);
+        int i = userMapper.selectCountByPassword(password1, ShiroUtils.getUserInfo().getId());
         if (i>0){
             return RespVO.ofSuccess();
         }else {
