@@ -8,6 +8,9 @@ import com.bibe.crm.entity.vo.RespVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 
 import java.util.LinkedHashMap;
@@ -54,7 +57,7 @@ public class PermissionService {
     }
 
 
-
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RespVO add(PermissionDTO dto){
 
         //1客户资料 2联系跟进 3部门员工/职位权限

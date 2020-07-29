@@ -44,12 +44,12 @@
   <insert id="insertList">
         INSERT INTO roles_permission_relation(
         role_id,
-        permission_id,
+        permission_id
         )VALUES
         <foreach collection="list" index="index" item="element" separator=",">
             (
             #{element.roleId,jdbcType=INTEGER},
-            #{element.permissionId,jdbcType=INTEGER},
+            #{element.permissionId,jdbcType=INTEGER}
             )
         </foreach>
     </insert>

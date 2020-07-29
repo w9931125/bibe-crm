@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * excel工具
  */
-@Service
+@Component
 @Slf4j
 public class ImportExcelUtil {
     private final static String excel2003L = ".xls"; // 2003- 版本的excel
@@ -99,11 +99,11 @@ public class ImportExcelUtil {
     /**
      * 下载模板
      * @param resp
-     * @param fileNames
      * @return
      */
-    public RespVO downloadExcel(HttpServletResponse resp, String fileNames) {
+    public RespVO downloadExcel(HttpServletResponse resp) {
         String fileName = null;
+        String fileNames = "企业客户模版.xls";
         String downloadName = fileNames; //下载之后的名字
         try {
             fileName = new String(downloadName.getBytes("GBK"), "ISO-8859-1");
