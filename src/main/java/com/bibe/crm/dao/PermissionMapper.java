@@ -62,4 +62,5 @@ public interface PermissionMapper {
     int updateStatusById(@Param("updatedStatus")Integer updatedStatus,@Param("id")Integer id);
 
 
+    List<Integer> getIds(@Param("parentId")Integer parentId);
 }

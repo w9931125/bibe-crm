@@ -13,7 +13,7 @@ public class RolesDepartmentRelation {
     private Integer roleId;
 
     /**
-     * 部门id -1为全部客户
+     * 部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户 -4与自己同一个部门 -5与自己同一个部门及下级部门
      */
     private Integer deptId;
 

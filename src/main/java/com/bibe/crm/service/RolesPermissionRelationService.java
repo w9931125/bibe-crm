@@ -16,6 +16,9 @@ public class RolesPermissionRelationService {
     }
 
 
-
+    public int insertSelective(RolesPermissionRelation record) {
+        return rolesPermissionRelationMapper.insertSelective(record);
+    }
 }
+
 

@@ -1,11 +1,13 @@
 package com.bibe.crm.api;
 
 import com.bibe.crm.entity.dto.PermissionDTO;
+import com.bibe.crm.entity.dto.PermissionUpdateDTO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.PermissionService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 @RestController
@@ -58,4 +60,12 @@ public class PermissionController {
         return permissionService.selectAllByParentId(parentId, type);
     }
 
+    /**
+     * 修改状态
+     * @return
+     */
+    @PutMapping("/update")
+    public RespVO update(@RequestBody PermissionUpdateDTO dto) {
+        return permissionService.update(dto.getIds(),dto.getStatus(),dto.getRoleId());
+    }
 }

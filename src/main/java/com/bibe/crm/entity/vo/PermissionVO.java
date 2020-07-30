@@ -17,6 +17,8 @@ public class PermissionVO {
      * 查看所有为-1
      * 只看自己为-2
      * 同步客户-3
+     * -4与自己同一个部门
+     * -5与自己同一个部门及下级部门
      * 其他按部门id记录
      */
     private List<RolesDepartmentRelation> rolesDepartmentRelationList;
@@ -24,7 +26,6 @@ public class PermissionVO {
     /**
      * 权限id
      */
-    //private List<RolesPermissionRelation> PermissionList;
     private List<Permission> permissionList;
 
 

@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -60,7 +57,7 @@ public class PermissionService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RespVO add(PermissionDTO dto){
 
-        //1客户资料 2联系跟进 3部门员工/职位权限
+        //1客户资料 2联系跟进 3部门员工 4职位权限
         Integer flag = dto.getFlag();
 
         switch (flag){
@@ -68,9 +65,10 @@ public class PermissionService {
                 //授权接口
                 List<RolesPermissionRelation> permissionList = dto.getPermissionList();
 
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId());
+                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
 
                 if (permissionList.size()>0){
+                    permissionList.forEach(i->i.setType(flag));
                     rolesPermissionRelationMapper.insertList(permissionList);
                 }
                 //为null说明是指定部门
@@ -88,10 +86,7 @@ public class PermissionService {
 
                 }else {
                     rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),0);
-                    //     * 禁止查看为0
-                    //     * 查看所有为-1
-                    //     * 只看自己为-2
-                    //     * 同步客户-3
+                    //     部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户 -4与自己同一个部门 -5与自己同一个部门及下级部门
                     RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
                     rolesDepartmentRelation.setType(0);
                     rolesDepartmentRelation.setDeptId(dto.getRolesDepartId());
@@ -114,12 +109,12 @@ public class PermissionService {
                 //授权接口
                 List<RolesPermissionRelation> permissionRelationList = dto.getPermissionList();
 
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId());
+                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
 
                 if (permissionRelationList.size()>0){
+                    permissionRelationList.forEach(i->i.setType(flag));
                     rolesPermissionRelationMapper.insertList(permissionRelationList);
                 }
-
                 //为null说明是指定部门
                 if (null==dto.getRolesDepartId()){
                     //授权查看部门
@@ -131,13 +126,9 @@ public class PermissionService {
                         rolesDepartmentRelationList.forEach(i->i.setType(1));
                         rolesDepartmentRelationMapper.insertList(rolesDepartmentRelationList);
                     }
-
                 }else {
                     rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
-                    //     * 禁止查看为0
-                    //     * 查看所有为-1
-                    //     * 只看自己为-2
-                    //     * 同步客户-3
+                    //     部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户 -4与自己同一个部门 -5与自己同一个部门及下级部门
                     RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
                     rolesDepartmentRelation.setType(1);
                     rolesDepartmentRelation.setDeptId(dto.getRolesDepartId());
@@ -145,12 +136,22 @@ public class PermissionService {
                     rolesDepartmentRelationMapper.insert(rolesDepartmentRelation);
                 }
                 break;
-
             case 3:
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId());
-                rolesPermissionRelationMapper.insertList(dto.getPermissionList());
+                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+                List<RolesPermissionRelation> permissionList1 = dto.getPermissionList();
+                if (permissionList1.size()>0){
+                    permissionList1.forEach(i->i.setType(flag));
+                    rolesPermissionRelationMapper.insertList(permissionList1);
+                }
                 break;
-
+            case 4:
+                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+                List<RolesPermissionRelation> permissionList2 = dto.getPermissionList();
+                if (permissionList2.size()>0){
+                    permissionList2.forEach(i->i.setType(flag));
+                    rolesPermissionRelationMapper.insertList(permissionList2);
+                }
+                break;
         }
         return RespVO.ofSuccess();
     }
@@ -229,6 +230,21 @@ public class PermissionService {
     public RespVO selectAllByParentId(Integer pid,Integer type){
         List<Permission> permissions = permissionMapper.selectAllByParentId(pid, type);
         return RespVO.ofSuccess(permissions);
+    }
+
+    /**
+     * 设置权限
+     * @return
+     */
+    public RespVO update(List<Integer> ids,Integer status,Integer roleId){
+        List<Integer> list=new ArrayList<>();
+        for (Integer id :ids){
+          list.addAll(permissionMapper.getIds(id));
+        }
+        //本身父级也要修改
+        list.addAll(ids);
+        rolesPermissionRelationMapper.updateStatusByPermissionIdInAndRoleId(status,list,roleId);
+        return RespVO.ofSuccess();
     }
 
 }
