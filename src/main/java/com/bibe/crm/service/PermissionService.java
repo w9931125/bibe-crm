@@ -253,7 +253,7 @@ public class PermissionService {
             }
         }
         obj.addAll(list);
-        rolesPermissionRelationMapper.updateStatus(obj);
+        obj.forEach(i->rolesPermissionRelationMapper.updateStatusByPermissionIdAndRoleId(i.getStatus(),i.getId(),i.getRoleId()));
         return RespVO.ofSuccess();
     }
 

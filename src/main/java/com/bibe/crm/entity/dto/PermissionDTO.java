@@ -52,5 +52,8 @@ public class PermissionDTO {
     private List<RolesCustomerGroupRelation> groupRelationList;
 
 
+    /**
+     * 修改 状态
+     */
     private List<PermissionUpdateDTO> permissionUpdateDTO;
 }

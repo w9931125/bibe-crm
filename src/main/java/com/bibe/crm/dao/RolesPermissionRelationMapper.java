@@ -27,5 +27,9 @@ public interface RolesPermissionRelationMapper {
      * @param updateList
      * @return
      */
-    int updateStatus(@Param("updateList")List<PermissionUpdateDTO> updateList);
+    int updateStatus(List<PermissionUpdateDTO> updateList);
+
+    int updateStatusByPermissionIdAndRoleId(@Param("updatedStatus")Integer updatedStatus,@Param("permissionId")Integer permissionId,@Param("roleId")Integer roleId);
+
+
 }
