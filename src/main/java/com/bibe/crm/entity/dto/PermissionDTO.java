@@ -50,4 +50,7 @@ public class PermissionDTO {
      * -2为用户所属部门
      */
     private List<RolesCustomerGroupRelation> groupRelationList;
+
+
+    private List<PermissionUpdateDTO> permissionUpdateDTO;
 }

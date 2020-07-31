@@ -2,6 +2,7 @@ package com.bibe.crm.service;
 
 import com.bibe.crm.dao.*;
 import com.bibe.crm.entity.dto.PermissionDTO;
+import com.bibe.crm.entity.dto.PermissionUpdateDTO;
 import com.bibe.crm.entity.po.*;
 import com.bibe.crm.entity.vo.PermissionVO;
 import com.bibe.crm.entity.vo.RespVO;
@@ -236,14 +237,23 @@ public class PermissionService {
      * 设置权限
      * @return
      */
-    public RespVO update(List<Integer> ids,Integer status,Integer roleId){
-        List<Integer> list=new ArrayList<>();
-        for (Integer id :ids){
-          list.addAll(permissionMapper.getIds(id));
+    public RespVO update(List<PermissionUpdateDTO> list){
+
+        List<PermissionUpdateDTO> obj=new ArrayList<>();
+        Iterator<PermissionUpdateDTO> iterator = list.iterator();
+        while (iterator.hasNext()){
+            PermissionUpdateDTO next = iterator.next();
+            List<Integer> ids = permissionMapper.getIds(next.getId());
+            for (Integer id : ids) {
+                PermissionUpdateDTO  update= new PermissionUpdateDTO();
+                update.setId(id);
+                update.setStatus(next.getStatus());
+                update.setRoleId(next.getRoleId());
+                obj.add(update);
+            }
         }
-        //本身父级也要修改
-        list.addAll(ids);
-        rolesPermissionRelationMapper.updateStatusByPermissionIdInAndRoleId(status,list,roleId);
+        obj.addAll(list);
+        rolesPermissionRelationMapper.updateStatus(obj);
         return RespVO.ofSuccess();
     }
 

@@ -65,7 +65,7 @@ public class PermissionController {
      * @return
      */
     @PutMapping("/update")
-    public RespVO update(@RequestBody PermissionUpdateDTO dto) {
-        return permissionService.update(dto.getIds(),dto.getStatus(),dto.getRoleId());
+    public RespVO update(@RequestBody PermissionDTO dto) {
+        return permissionService.update(dto.getPermissionUpdateDTO());
     }
 }

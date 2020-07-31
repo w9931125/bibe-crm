@@ -1,6 +1,7 @@
 package com.bibe.crm.dao;
 import java.util.Collection;
 
+import com.bibe.crm.entity.dto.PermissionUpdateDTO;
 import com.bibe.crm.entity.po.RolesPermissionRelation;import org.apache.ibatis.annotations.Param;import java.util.List;import java.util.Set;
 
 public interface RolesPermissionRelationMapper {
@@ -23,11 +24,8 @@ public interface RolesPermissionRelationMapper {
 
     /**
      * 启用 禁用权限 0 1
-     * @param updatedStatus
-     * @param permissionIdCollection
-     * @param roleId
+     * @param updateList
      * @return
      */
-    int updateStatusByPermissionIdInAndRoleId(@Param("updatedStatus")Integer updatedStatus,@Param("permissionIdCollection")Collection<Integer> permissionIdCollection,@Param("roleId")Integer roleId);
-
+    int updateStatus(@Param("updateList")List<PermissionUpdateDTO> updateList);
 }
