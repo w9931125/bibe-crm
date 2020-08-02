@@ -10,20 +10,21 @@
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="group_id" jdbcType="INTEGER" property="groupId" />
     <result column="area_id" jdbcType="INTEGER" property="areaId" />
-    <result column="public_customer_id" jdbcType="INTEGER" property="publicCustomerId" />
     <result column="intention" jdbcType="INTEGER" property="intention" />
+    <result column="progress_num" jdbcType="INTEGER" property="progressNum" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="customer_type" jdbcType="INTEGER" property="customerType" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="lats_time" jdbcType="TIMESTAMP" property="latsTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`, industry, user_id, group_id, area_id, public_customer_id, intention, 
-    `type`, customer_type, address, remarks, `status`, create_time, update_time
+    id, `name`, industry, user_id, group_id, area_id, intention, progress_num, `type`, 
+    customer_type, address, remarks, `status`, lats_time, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -40,15 +41,17 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.Customer" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into customer (`name`, industry, user_id, 
-      group_id, area_id, public_customer_id, 
-      intention, `type`, customer_type, 
+      group_id, area_id, intention, 
+      progress_num, `type`, customer_type, 
       address, remarks, `status`, 
-      create_time, update_time)
+      lats_time, create_time, update_time
+      )
     values (#{name,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
-      #{groupId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{publicCustomerId,jdbcType=INTEGER}, 
-      #{intention,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{customerType,jdbcType=INTEGER}, 
+      #{groupId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{intention,jdbcType=INTEGER}, 
+      #{progressNum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{customerType,jdbcType=INTEGER}, 
       #{address,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{latsTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.Customer" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -69,11 +72,11 @@
       <if test="areaId != null">
         area_id,
       </if>
-      <if test="publicCustomerId != null">
-        public_customer_id,
-      </if>
       <if test="intention != null">
         intention,
+      </if>
+      <if test="progressNum != null">
+        progress_num,
       </if>
       <if test="type != null">
         `type`,
@@ -89,6 +92,9 @@
       </if>
       <if test="status != null">
         `status`,
+      </if>
+      <if test="latsTime != null">
+        lats_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -113,11 +119,11 @@
       <if test="areaId != null">
         #{areaId,jdbcType=INTEGER},
       </if>
-      <if test="publicCustomerId != null">
-        #{publicCustomerId,jdbcType=INTEGER},
-      </if>
       <if test="intention != null">
         #{intention,jdbcType=INTEGER},
+      </if>
+      <if test="progressNum != null">
+        #{progressNum,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
@@ -133,6 +139,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="latsTime != null">
+        #{latsTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -161,11 +170,11 @@
       <if test="areaId != null">
         area_id = #{areaId,jdbcType=INTEGER},
       </if>
-      <if test="publicCustomerId != null">
-        public_customer_id = #{publicCustomerId,jdbcType=INTEGER},
-      </if>
       <if test="intention != null">
         intention = #{intention,jdbcType=INTEGER},
+      </if>
+      <if test="progressNum != null">
+        progress_num = #{progressNum,jdbcType=INTEGER},
       </if>
       <if test="type != null">
         `type` = #{type,jdbcType=INTEGER},
@@ -181,6 +190,9 @@
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="latsTime != null">
+        lats_time = #{latsTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -199,18 +211,97 @@
       user_id = #{userId,jdbcType=INTEGER},
       group_id = #{groupId,jdbcType=INTEGER},
       area_id = #{areaId,jdbcType=INTEGER},
-      public_customer_id = #{publicCustomerId,jdbcType=INTEGER},
       intention = #{intention,jdbcType=INTEGER},
+      progress_num = #{progressNum,jdbcType=INTEGER},
       `type` = #{type,jdbcType=INTEGER},
       customer_type = #{customerType,jdbcType=INTEGER},
       address = #{address,jdbcType=VARCHAR},
       remarks = #{remarks,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=INTEGER},
+      lats_time = #{latsTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectCountByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
      select  count(1) from  customer where user_id=#{userId}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-08-02-->
+  <update id="updateByIdIn">
+    update customer
+    <set>
+      <if test="updated.id != null">
+        id = #{updated.id,jdbcType=INTEGER},
+      </if>
+      <if test="updated.name != null">
+        name = #{updated.name,jdbcType=VARCHAR},
+      </if>
+      <if test="updated.industry != null">
+        industry = #{updated.industry,jdbcType=VARCHAR},
+      </if>
+      <if test="updated.userId != null">
+        user_id = #{updated.userId,jdbcType=INTEGER},
+      </if>
+      <if test="updated.groupId != null">
+        group_id = #{updated.groupId,jdbcType=INTEGER},
+      </if>
+      <if test="updated.areaId != null">
+        area_id = #{updated.areaId,jdbcType=INTEGER},
+      </if>
+      <if test="updated.publicCustomerId != null">
+        public_customer_id = #{updated.publicCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="updated.intention != null">
+        intention = #{updated.intention,jdbcType=INTEGER},
+      </if>
+      <if test="updated.progressNum != null">
+        progress_num = #{updated.progressNum,jdbcType=INTEGER},
+      </if>
+      <if test="updated.type != null">
+        type = #{updated.type,jdbcType=INTEGER},
+      </if>
+      <if test="updated.customerType != null">
+        customer_type = #{updated.customerType,jdbcType=INTEGER},
+      </if>
+      <if test="updated.address != null">
+        address = #{updated.address,jdbcType=VARCHAR},
+      </if>
+      <if test="updated.remarks != null">
+        remarks = #{updated.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updated.status != null">
+        status = #{updated.status,jdbcType=INTEGER},
+      </if>
+      <if test="updated.createTime != null">
+        create_time = #{updated.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updated.updateTime != null">
+        update_time = #{updated.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id in
+    <foreach close=")" collection="idCollection" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-08-02-->
+  <update id="updateStatusByIdIn">
+    update customer
+    set `status`= 1
+    where id in
+    <foreach close=")" collection="ids" index="index" item="item" open="(" separator=",">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <select id="pageList"  resultType="java.util.Map">
+  SELECT t1.id,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t2.phone,t1.lats_time AS latsTime,t4.name AS userName,t5.next_time AS nextTime,t5.remarks,t1.progress_num AS num,t1.create_time as createTime
+  FROM customer t1
+  LEFT JOIN customer_contact t2 ON t1.id=t2.customer_id
+  LEFT JOIN `area` t3 ON t1.area_id=t3.Id
+  LEFT JOIN users t4 ON t1.user_id=t4.id
+  LEFT JOIN customer_progress t5 ON t1.id=t5.customer_id
   </select>
 </mapper>

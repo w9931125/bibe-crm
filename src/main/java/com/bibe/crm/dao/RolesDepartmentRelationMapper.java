@@ -13,5 +13,4 @@ public interface RolesDepartmentRelationMapper {
 
     List<RolesDepartmentRelation> selectAllByRoleIdAndType(@Param("roleId")Integer roleId,@Param("type")Integer type);
 
-
 }

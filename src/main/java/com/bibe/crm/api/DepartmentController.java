@@ -81,4 +81,18 @@ public class DepartmentController {
     public RespVO<List<TreeData>> tree(){
         return RespVO.ofSuccess(departmentService.tree());
     }
+
+
+    /**
+     * 选择团队成员
+     * @param name
+     * @param deptId
+     * @return
+     */
+    @GetMapping("/selectUserDept")
+    public RespVO selectUserDept(String name,Integer deptId){
+        return departmentService.deptNameList(name,deptId);
+    }
+
+
 }

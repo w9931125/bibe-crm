@@ -26,7 +26,7 @@ public class Customer {
     private Integer userId;
 
     /**
-     * 客户分组id
+     * 客户分组id 0代表无
      */
     private Integer groupId;
 
@@ -36,14 +36,14 @@ public class Customer {
     private Integer areaId;
 
     /**
-     * 公客分组id
-     */
-    private Integer publicCustomerId;
-
-    /**
      * 意向度:0:成交客户,1:A+,2:A-,3:B+,4:B-,5:C+,6:D+,7:E
      */
     private Integer intention;
+
+    /**
+     * 跟进次数
+     */
+    private Integer progressNum;
 
     /**
      * 客户类别:0代理商 1直客 2采购方
@@ -69,6 +69,11 @@ public class Customer {
      * 删除状态1:已删除
      */
     private Integer status;
+
+    /**
+     * 最后跟进时间
+     */
+    private Date latsTime;
 
     /**
      * 创建时间

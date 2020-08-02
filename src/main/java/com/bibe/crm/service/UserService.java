@@ -71,11 +71,10 @@ public class UserService {
 
 
     public RespVO update(UserDTO record) {
-        log.info("////////////// 修改"+record.toString());
-        int i = userMapper.selectCountByName(record.getName());
-        if (i>0){
-            return RespVO.fail(ExceptionTypeEnum.USER_COUNT_ERROR);
-        }
+//        int i = userMapper.selectCountByName(record.getName());
+//        if (i>0){
+//            return RespVO.fail(ExceptionTypeEnum.USER_COUNT_ERROR);
+//        }
         User user=new User();
         BeanUtils.copyProperties(record,user);
         if (user.getPassword()!=null){
@@ -101,7 +100,6 @@ public class UserService {
             return RespVO.fail(ExceptionTypeEnum.CHECK_PASSWORD_ERROR);
         }
     }
-
 
     private String getPassword(String password){
         Md5Hash md5Hash = new Md5Hash(password,null,2);

@@ -1,4 +1,5 @@
 package com.bibe.crm.dao;
+import java.util.Collection;
 import com.bibe.crm.entity.vo.TreeData;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -37,4 +38,15 @@ public interface DepartmentMapper {
      * @return
      */
     List<TreeData> tree();
+
+
+    TreeData treeById(Integer id);
+
+
+    List<TreeData> findAllByIdIn(@Param("idCollection")Collection<Integer> idCollection);
+
+    List<Integer> findIdByParentId(@Param("parentId")Integer parentId);
+
+    List<Integer> findIdByParentIdIn(@Param("parentIdCollection")Collection<Integer> parentIdCollection);
+
 }

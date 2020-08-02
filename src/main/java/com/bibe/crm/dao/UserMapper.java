@@ -1,14 +1,17 @@
 package com.bibe.crm.dao;
+import java.util.Date;
 import java.util.Collection;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.entity.dto.UserPageDTO;
 import com.bibe.crm.entity.po.User;
+import com.bibe.crm.entity.vo.DeptNameVO;
 import com.bibe.crm.entity.vo.UserVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -85,4 +88,19 @@ public interface UserMapper {
      * @return
      */
     int updateNumberByRoleId(@Param("updatedNumber")Integer updatedNumber,@Param("roleId")Integer roleId);
+
+
+    /**
+     * 选择团队成员
+     * @param name
+     * @param deptIds
+     * @return
+     */
+     List<DeptNameVO> selectNameDeptNameList(@Param("name") String name, @Param("ids")List<Integer> deptIds);
+
+    /**
+     * 指定人员-按人员浏览
+     * @return
+     */
+     List<Map<String,Object>> findUserByDeptId(Integer deptId);
 }

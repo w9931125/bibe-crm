@@ -60,6 +60,25 @@ public class PermissionController {
         return permissionService.selectAllByParentId(parentId, type);
     }
 
+
+    /**
+     * 客户资料-指定人员
+     * @return
+     */
+    @GetMapping("/findCustomerInput")
+    public RespVO findCustomerInput() {
+        return permissionService.findCustomerInput();
+    }
+
+    /**
+     * 当前角色拥有的权限部门列表
+     * @return
+     */
+    @GetMapping("/findPermissionDept")
+    public RespVO findPermissionDept() {
+        return permissionService.permissionDeptList();
+    }
+
     /**
      * 修改状态
      * @return

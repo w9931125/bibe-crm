@@ -13,9 +13,6 @@ public class TreeData {
 
     private String  title;
 
-    private Integer num;
-
-    private Integer level;
 
     private List<TreeData> children;
 }

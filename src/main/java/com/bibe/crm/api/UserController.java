@@ -71,8 +71,6 @@ public class UserController {
     public RespVO checkPassword(String  password){
         return userService.checkPassword(password);
     }
-
-
     /**
      * 删除
      * @param ids

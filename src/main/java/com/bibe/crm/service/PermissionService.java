@@ -1,11 +1,16 @@
 package com.bibe.crm.service;
 
+import com.bibe.crm.common.enums.ExceptionTypeEnum;
 import com.bibe.crm.dao.*;
 import com.bibe.crm.entity.dto.PermissionDTO;
 import com.bibe.crm.entity.dto.PermissionUpdateDTO;
 import com.bibe.crm.entity.po.*;
 import com.bibe.crm.entity.vo.PermissionVO;
 import com.bibe.crm.entity.vo.RespVO;
+import com.bibe.crm.entity.vo.TreeData;
+import com.bibe.crm.utils.DepartmentUtil;
+import com.bibe.crm.utils.ShiroUtils;
+import com.bibe.crm.utils.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -38,6 +43,74 @@ public class PermissionService {
     @Resource
     private RolesMapper rolesMapper;
 
+    @Resource
+    private DepartmentMapper departmentMapper;
+
+    @Resource
+    private DepartmentUtil departmentUtil;
+
+
+    public RespVO findCustomerInput(){
+        User userInfo = ShiroUtils.getUserInfo();
+        //客户资料查询权限
+        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
+        if (rolesDepartmentRelationList.size()>1){
+            //按人员浏览
+            List<Map<String, Object>> userByDeptId = userMapper.findUserByDeptId(userInfo.getDeptId());
+            return RespVO.ofSuccess(userByDeptId);
+        }
+        return null;
+    }
+
+
+    /**
+     * 当前角色拥有的权限部门列表
+     * @return
+     */
+    public RespVO permissionDeptList(){
+        User userInfo = ShiroUtils.getUserInfo();
+        //客户资料查询权限
+        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
+        if (rolesDepartmentRelationList.size()>1){
+            List<Integer> deptIds=new ArrayList<>();
+            rolesDepartmentRelationList.forEach(i->deptIds.add(i.getDeptId()));
+            List<TreeData> treeDataList = departmentMapper.findAllByIdIn(deptIds);
+            return RespVO.ofSuccess(treeDataList);
+        }else {
+            RolesDepartmentRelation rolesDepartmentRelation = rolesDepartmentRelationList.get(0);
+            Integer deptId = rolesDepartmentRelation.getDeptId();
+            return checkFindDeptPermission(deptId,userInfo);
+        }
+    }
+
+
+    private RespVO checkFindDeptPermission(Integer dept,User user){
+        /**
+         * 职位指定查看部门权限
+         * 禁止查看为0
+         * 查看所有为-1
+         * 只看自己为-2
+         * 同步客户-3
+         * -4与自己同一个部门
+         * -5与自己同一个部门及下级部门
+         * 其他按部门id记录
+         */
+
+        if (dept.equals(0)){
+            return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+        }else if (dept.equals(-1)){
+            List<TreeData> tree = departmentMapper.tree();
+            return RespVO.ofSuccess(TreeUtil.getTreeList(tree,0));
+        }else if (dept.equals(-2)){
+            return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+        }else if (dept.equals(-4)){
+            return RespVO.ofSuccess(departmentMapper.treeById(user.getDeptId()));
+        }else if (dept.equals(-5)){
+            List<Integer> childDeptIds = departmentUtil.getChildDeptId(user.getDeptId());
+            return RespVO.ofSuccess(TreeUtil.getTreeList(departmentMapper.findAllByIdIn(childDeptIds),user.getDeptId()));
+        }
+        return null;
+    }
 
 
     public Map<String, String> loadFilterChainDefinitionMap() {
@@ -128,8 +201,18 @@ public class PermissionService {
                         rolesDepartmentRelationMapper.insertList(rolesDepartmentRelationList);
                     }
                 }else {
+                    //如果为同步客户资料
+                    if (dto.getRolesDepartId().equals(-3)){
+                        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(dto.getRoleId(), 0);
+                        if (rolesDepartmentRelationList.size()==0||rolesDepartmentRelationList==null){
+                            return RespVO.fail(ExceptionTypeEnum.PERMISSION_SYSN_ERROR);
+                        }
+                        rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
+                        rolesDepartmentRelationList.forEach(o->o.setType(1));
+                        rolesDepartmentRelationMapper.insertList(rolesDepartmentRelationList);
+                    }
                     rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
-                    //     部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户 -4与自己同一个部门 -5与自己同一个部门及下级部门
+                    //   部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户资料 -4与自己同一个部门 -5与自己同一个部门及下级部门
                     RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
                     rolesDepartmentRelation.setType(1);
                     rolesDepartmentRelation.setDeptId(dto.getRolesDepartId());
@@ -258,5 +341,3 @@ public class PermissionService {
     }
 
 }
-
-

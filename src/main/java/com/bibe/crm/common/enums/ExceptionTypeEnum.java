@@ -88,6 +88,8 @@ public enum ExceptionTypeEnum{
     DEPT_USER_COUNT_ERROR(10004,"无法删除,该部门下存在员工"),
     CHECK_PASSWORD_ERROR(10005,"密码不正确"),
     ROLES_COUNT_ERROR(10006,"无法删除，该职务下存在员工"),
+    SELECT_DEPT_BAN(10007,"没有查看权限"),
+    PERMISSION_SYSN_ERROR(10008,"客户资料未设定查看权限,无法同步客户资料权限"),
 
     ;
     /**
