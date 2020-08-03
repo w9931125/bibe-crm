@@ -171,6 +171,26 @@
         </foreach>
     </select>
 
+  <select id="selectAllBYIdIn" resultType="com.bibe.crm.entity.vo.DeptInputVO">
+        select
+    id, `name` as title,  parent_id as pid
+        from department
+        where id in
+        <foreach item="item" index="index" collection="idCollection"
+                 open="(" separator="," close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </select>
+
+
+  <select id="findBaseDept" resultType="com.bibe.crm.entity.vo.DeptInputVO">
+    select id, `name` as title,  parent_id as pid from department
+  </select>
+
+  <select id="findBaseDeptById" resultType="com.bibe.crm.entity.vo.DeptInputVO">
+    select id, `name` as title,  parent_id as pid from department where id=#{id,jdbcType=INTEGER}
+  </select>
+
   <select id="treeById" resultType="com.bibe.crm.entity.vo.TreeData">
     select   id, `name` as title,  parent_id as pid from department where id=#{id} department order by num
   </select>

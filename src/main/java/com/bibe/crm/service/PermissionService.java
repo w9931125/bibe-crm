@@ -5,9 +5,7 @@ import com.bibe.crm.dao.*;
 import com.bibe.crm.entity.dto.PermissionDTO;
 import com.bibe.crm.entity.dto.PermissionUpdateDTO;
 import com.bibe.crm.entity.po.*;
-import com.bibe.crm.entity.vo.PermissionVO;
-import com.bibe.crm.entity.vo.RespVO;
-import com.bibe.crm.entity.vo.TreeData;
+import com.bibe.crm.entity.vo.*;
 import com.bibe.crm.utils.DepartmentUtil;
 import com.bibe.crm.utils.ShiroUtils;
 import com.bibe.crm.utils.TreeUtil;
@@ -50,17 +48,114 @@ public class PermissionService {
     private DepartmentUtil departmentUtil;
 
 
-    public RespVO findCustomerInput(){
-        User userInfo = ShiroUtils.getUserInfo();
+    /**
+     *
+     * @param flag 0客户资料 1联系跟进
+     * @return
+     */
+    public RespVO findInput(Integer flag){
+        User user = ShiroUtils.getUserInfo();
         //客户资料查询权限
-        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
+        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(user.getRoleId(), flag);
+        //指定人员
+        Map<String,Object> userMap=new HashMap<>();
+        //指定部门
+        Map<String,Object> deptMap=new HashMap<>();
+        //最后封装map
+        Map<String,Object> map=new HashMap<>();
         if (rolesDepartmentRelationList.size()>1){
             //按人员浏览
-            List<Map<String, Object>> userByDeptId = userMapper.findUserByDeptId(userInfo.getDeptId());
-            return RespVO.ofSuccess(userByDeptId);
+            List<Integer> deptIds=new ArrayList<>();
+            rolesDepartmentRelationList.forEach(i->deptIds.add(i.getDeptId()));
+            List<Map<String, Object>> userDeptVO = userMapper.findUserByDeptId(deptIds);
+            //按部门浏览
+            List<DeptInputVO> deptInputVOS = departmentMapper.selectAllBYIdIn(deptIds);
+            for (DeptInputVO deptInputVO : deptInputVOS) {
+                List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
+                deptInputVO.setUsers(allByDeptId);
+            }
+
+            userMap.put("users",userDeptVO);
+            userMap.put("depts",deptInputVOS);
+            //指定部门
+            deptMap.put("dept",departmentMapper.findAllByIdIn(deptIds));
+            //最后封装
+            map.put("appointUser",userMap);
+            map.put("appointDept",deptMap);
+            return RespVO.ofSuccess(map);
+        }else {
+            RolesDepartmentRelation rolesDepartmentRelation = rolesDepartmentRelationList.get(0);
+            Integer deptId = rolesDepartmentRelation.getDeptId();
+            /**
+             * 职位指定查看部门权限
+             * 禁止查看为0
+             * 查看所有为-1
+             * 只看自己为-2
+             * 同步客户-3
+             * -4与自己同一个部门
+             * -5与自己同一个部门及下级部门
+             * 其他按部门id记录
+             */
+            if (deptId.equals(0)){
+                return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+            }else if (deptId.equals(-1)){
+                //按人员
+                List<Map<String, Object>> baseInfo = userMapper.findBaseInfo(null);
+                userMap.put("users",baseInfo);
+                //按部门
+                List<DeptInputVO> baseDept = departmentMapper.findBaseDept();
+                for (DeptInputVO deptInputVO : baseDept) {
+                    List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
+                    deptInputVO.setUsers(allByDeptId);
+                }
+                userMap.put("users",baseInfo);
+                userMap.put("depts",baseDept);
+                //指定部门
+                deptMap.put("dept",TreeUtil.getTreeList(departmentMapper.tree(),0));
+                //最后封装
+                map.put("appointUser",userMap);
+                map.put("appointDept",deptMap);
+                return RespVO.ofSuccess(map);
+            }else if (deptId.equals(-2)){
+                return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+            }else if (deptId.equals(-4)){
+                //按人员
+                List<Map<String, Object>> allByDeptId = userMapper.findBaseInfo(user.getDeptId());
+                //按部门
+                DeptInputVO baseDeptById = departmentMapper.findBaseDeptById(user.getDeptId());
+                baseDeptById.setUsers(userMapper.findAllByDeptId(baseDeptById.getId()));
+                userMap.put("users",allByDeptId);
+                userMap.put("depts",baseDeptById);
+                //指定部门
+                deptMap.put("dept",departmentMapper.treeById(user.getDeptId()));
+                //最后封装
+                map.put("appointUser",userMap);
+                map.put("appointDept",deptMap);
+                return RespVO.ofSuccess(map);
+            }else if (deptId.equals(-5)){
+                List<Integer> childDeptIds = departmentUtil.getChildDeptId(user.getDeptId());
+                //按人员
+                List<Map<String, Object>> userByDeptId = userMapper.findUserByDeptId(childDeptIds);
+                //按部门
+                List<DeptInputVO> deptInputVOS = departmentMapper.selectAllBYIdIn(childDeptIds);
+                for (DeptInputVO deptInputVO : deptInputVOS) {
+                    List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
+                    deptInputVO.setUsers(allByDeptId);
+                }
+                userMap.put("users",userByDeptId);
+                userMap.put("depts",deptInputVOS);
+                //指定部门
+                deptMap.put("dept",TreeUtil.getTreeList(departmentMapper.findAllByIdIn(childDeptIds),user.getDeptId()));
+                //最后封装
+                map.put("appointUser",userMap);
+                map.put("appointDept",deptMap);
+                return RespVO.ofSuccess(map);
+            }
+            return null;
         }
-        return null;
     }
+
+
 
 
     /**
@@ -84,6 +179,12 @@ public class PermissionService {
     }
 
 
+    /**
+     * 选择查询权限
+     * @param dept
+     * @param user
+     * @return
+     */
     private RespVO checkFindDeptPermission(Integer dept,User user){
         /**
          * 职位指定查看部门权限

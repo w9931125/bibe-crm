@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class CustomerDTO extends Customer {
     /**
-     * 联系人集合
+     * 联系人相关
      */
-    private List<CustomerContact> contactList;
+    private CustomerContact customerContact;
 }

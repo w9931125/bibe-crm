@@ -6,7 +6,6 @@ import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,19 +18,15 @@ public class CustomerController {
 
     @Resource
     private CustomerService customerService;
-
-
-
-
-//    /**
-//     * 修改
-//     * @param department
-//     * @return
-//     */
-//    @PutMapping("/update")
-//    public RespVO update(@RequestBody Department department){
-//        return customerService.update(department);
-//    }
+    /**
+     * 修改
+     * @param dto
+     * @return
+     */
+    @PutMapping("/update")
+    public RespVO update(@RequestBody CustomerDTO dto,List<Integer> ids){
+        return customerService.update(dto,ids);
+    }
 
     /**
      * 添加
@@ -45,11 +40,11 @@ public class CustomerController {
 
 
     /**
-     * 详情
+     * 编辑
      * @param id
      * @return
      */
-    @GetMapping("/show")
+    @GetMapping("/edit")
     public RespVO show(Integer id){
         return customerService.show(id);
     }
@@ -63,7 +58,7 @@ public class CustomerController {
     @PostMapping("/pageList")
     public RespVO pageList(@RequestBody FindCustomerDTO dto){
         Page page = dto.getPage();
-        return RespVO.ofSuccess(customerService.pageList(dto,page));
+        return customerService.pageList(dto,page);
     }
 
 

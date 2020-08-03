@@ -1,4 +1,5 @@
 package com.bibe.crm.dao;
+import java.util.Collection;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -18,6 +19,8 @@ public interface CustomerContactMapper {
     int updateByPrimaryKey(CustomerContact record);
 
     int insertList(@Param("list")List<CustomerContact> list);
+
+    int updateByCustomerIdin(@Param("updated")CustomerContact updated,@Param("customerIdCollection")Collection<Integer> customerIdCollection);
 
 
 }

@@ -42,8 +42,8 @@ public class CustomerService {
         customerMapper.insert(record);
 
         //新增联系人
-        List<CustomerContact> contactList = record.getContactList();
-        customerContactMapper.insertList(contactList);
+        CustomerContact customerContact = record.getCustomerContact();
+        customerContactMapper.insertSelective(customerContact);
         return RespVO.ofSuccess();
     }
 
@@ -57,11 +57,14 @@ public class CustomerService {
     }
 
 
-    public RespVO updateByPrimaryKeySelective(CustomerDTO record, List<Integer> ids) {
+    public RespVO update(CustomerDTO record, List<Integer> ids) {
         Customer customer = new Customer();
         BeanUtils.copyProperties(record, customer);
         customerMapper.updateByIdIn(customer, ids);
-        // TODO: 2020/8/2 联系人批量修改未完成
+
+        //联系人
+        CustomerContact customerContact = record.getCustomerContact();
+        customerContactMapper.updateByCustomerIdin(customerContact,ids);
         return RespVO.ofSuccess();
     }
 
