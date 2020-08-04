@@ -90,7 +90,8 @@ public enum ExceptionTypeEnum{
     ROLES_COUNT_ERROR(10006,"无法删除，该职务下存在员工"),
     SELECT_DEPT_BAN(10007,"没有查看权限"),
     PERMISSION_SYSN_ERROR(10008,"客户资料未设定查看权限,无法同步客户资料权限"),
-
+    USER_NUMBER_ERROR(10009,"录入失败，客户录入次数不足"),
+    SELECT_CUSTOMER_ERROR(10010,"请选择查询范围"),
     ;
     /**
      * 状态码

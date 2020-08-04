@@ -22,5 +22,7 @@ public interface CustomerContactMapper {
 
     int updateByCustomerIdin(@Param("updated")CustomerContact updated,@Param("customerIdCollection")Collection<Integer> customerIdCollection);
 
+    CustomerContact findAllById(@Param("id")Integer id);
+
 
 }

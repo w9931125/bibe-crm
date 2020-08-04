@@ -45,8 +45,8 @@ public class CustomerController {
      * @return
      */
     @GetMapping("/edit")
-    public RespVO show(Integer id){
-        return customerService.show(id);
+    public RespVO edit(Integer id){
+        return customerService.edit(id);
     }
 
 

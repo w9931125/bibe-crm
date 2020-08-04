@@ -119,4 +119,19 @@ public interface UserMapper {
      List<IdNameVO> findAllByDeptId(@Param("deptId")Integer deptId);
 
 
+    /**
+     * 减少录入次数
+     * @param id
+     * @return
+     */
+    int updateNumberById(@Param("id")Integer id);
+
+
+    /**
+     * 当前部门所有员工id
+     * @param deptId
+     * @return
+     */
+    List<Integer> findIdByDeptId(@Param("deptId")Integer deptId);
+
 }

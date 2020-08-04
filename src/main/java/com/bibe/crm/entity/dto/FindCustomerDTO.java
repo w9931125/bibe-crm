@@ -3,6 +3,8 @@ package com.bibe.crm.entity.dto;
 import com.bibe.crm.common.base.BasePage;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class FindCustomerDTO  extends BasePage {
 
@@ -29,6 +31,11 @@ public class FindCustomerDTO  extends BasePage {
      * 用户id
      */
     private Integer userId;
+
+    /**
+     * 部门id
+     */
+    private Integer deptId;
 
     /**
      * 城市id

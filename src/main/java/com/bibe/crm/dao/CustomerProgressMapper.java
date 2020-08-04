@@ -14,4 +14,5 @@ public interface CustomerProgressMapper {
     int updateByPrimaryKeySelective(CustomerProgress record);
 
     int updateByPrimaryKey(CustomerProgress record);
+
 }

@@ -249,9 +249,6 @@
       <if test="updated.areaId != null">
         area_id = #{updated.areaId,jdbcType=INTEGER},
       </if>
-      <if test="updated.publicCustomerId != null">
-        public_customer_id = #{updated.publicCustomerId,jdbcType=INTEGER},
-      </if>
       <if test="updated.intention != null">
         intention = #{updated.intention,jdbcType=INTEGER},
       </if>
@@ -297,12 +294,52 @@
   </update>
 
   <select id="pageList"  resultType="java.util.Map">
-  SELECT t1.id,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t2.phone,t1.lats_time AS latsTime,t4.name AS userName,t5.next_time AS nextTime,t5.remarks,t1.progress_num AS num,t1.create_time as createTime
-  FROM customer t1
-  LEFT JOIN customer_contact t2 ON t1.id=t2.customer_id
-  LEFT JOIN `area` t3 ON t1.area_id=t3.Id
-  LEFT JOIN users t4 ON t1.user_id=t4.id
-  LEFT JOIN customer_progress t5 ON t1.id=t5.customer_id
-  where t1.status=0
+    SELECT t1.id,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t2.phone,t1.lats_time AS latsTime,t4.name AS userName,t5.next_time AS nextTime,t5.remarks,t1.progress_num AS num,t1.create_time as createTime
+    FROM customer t1
+    LEFT JOIN customer_contact t2 ON t1.id=t2.customer_id
+    LEFT JOIN `area` t3 ON t1.area_id=t3.Id
+    LEFT JOIN users t4 ON t1.user_id=t4.id
+    LEFT JOIN customer_progress t5 ON t1.id=t5.customer_id
+    where t1.status=0
+    <if test="param1.nextDate ==null ">
+      and t5.next_time=(select max(next_time) from customer_progress)
+    </if>
+    <if test="param1.nextDate != null and param1.nextDate != ''">
+      and t5.next_time=#{param1.nextDate}
+    </if>
+    <if test="param1.startDate != null and param1.startDate != '' and param1.endDate != null and param1.endDate != ''">
+      and t1.create_time between #{param1.startDate} and #{param1.endDate}
+    </if>
+    <if test="param1.lastDate != null and param1.lastDate != ''">
+      and t1.lats_time= #{param1.lastDate}
+    </if>
+    <if test="param1.progressNum != null">
+      and t1.progress_num=#{param1.progressNum}
+    </if>
+    <if test="param1.phone != null and param1.phone != ''">
+      and t2.phone=#{param1.phone}
+    </if>
+    <if test="param1.intention!=null ">
+      and t1.intention=#{param1.intention}
+    </if>
+    <if test="param1.type != null">
+      and t1.type=#{param1.type}
+    </if>
+    <if test="param1.areaId != null">
+      and t3.id=#{param1.areaId}
+    </if>
+    <if test="param1.name != null and param1.name != ''">
+      and t1.name like concat('%',#{param1.name},'%')
+    </if>
+    <if test="param1.userId != null">
+      and t1.user_id = #{param1.userId}
+    </if>
+    <if test="userIds != null and userIds.size() != 0">
+      and t1.user_id in
+      <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+    </if>
+    order by t1.create_time desc
   </select>
 </mapper>
