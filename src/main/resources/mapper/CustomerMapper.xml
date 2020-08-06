@@ -14,17 +14,17 @@
     <result column="progress_num" jdbcType="INTEGER" property="progressNum" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="customer_type" jdbcType="INTEGER" property="customerType" />
+    <result column="use_type" jdbcType="INTEGER" property="useType" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="lats_time" jdbcType="TIMESTAMP" property="latsTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, `name`, industry, user_id, group_id, area_id, intention, progress_num, `type`, 
-    customer_type, address, remarks, `status`, lats_time, create_time, update_time
+    customer_type, use_type, address, remarks, `status`, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -43,14 +43,14 @@
     insert into customer (`name`, industry, user_id, 
       group_id, area_id, intention, 
       progress_num, `type`, customer_type, 
-      address, remarks, `status`, 
-      lats_time, create_time, update_time
+      use_type, address, remarks, 
+      `status`, create_time, update_time
       )
     values (#{name,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
       #{groupId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{intention,jdbcType=INTEGER}, 
       #{progressNum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{customerType,jdbcType=INTEGER}, 
-      #{address,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{latsTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      #{useType,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.Customer" useGeneratedKeys="true">
@@ -84,6 +84,9 @@
       <if test="customerType != null">
         customer_type,
       </if>
+      <if test="useType != null">
+        use_type,
+      </if>
       <if test="address != null">
         address,
       </if>
@@ -92,9 +95,6 @@
       </if>
       <if test="status != null">
         `status`,
-      </if>
-      <if test="latsTime != null">
-        lats_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -131,6 +131,9 @@
       <if test="customerType != null">
         #{customerType,jdbcType=INTEGER},
       </if>
+      <if test="useType != null">
+        #{useType,jdbcType=INTEGER},
+      </if>
       <if test="address != null">
         #{address,jdbcType=VARCHAR},
       </if>
@@ -139,9 +142,6 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
-      </if>
-      <if test="latsTime != null">
-        #{latsTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -182,6 +182,9 @@
       <if test="customerType != null">
         customer_type = #{customerType,jdbcType=INTEGER},
       </if>
+      <if test="useType != null">
+        use_type = #{useType,jdbcType=INTEGER},
+      </if>
       <if test="address != null">
         address = #{address,jdbcType=VARCHAR},
       </if>
@@ -190,9 +193,6 @@
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="latsTime != null">
-        lats_time = #{latsTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -215,10 +215,10 @@
       progress_num = #{progressNum,jdbcType=INTEGER},
       `type` = #{type,jdbcType=INTEGER},
       customer_type = #{customerType,jdbcType=INTEGER},
+      use_type = #{useType,jdbcType=INTEGER},
       address = #{address,jdbcType=VARCHAR},
       remarks = #{remarks,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=INTEGER},
-      lats_time = #{latsTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -293,17 +293,14 @@
     </foreach>
   </update>
 
-  <select id="pageList"  resultType="java.util.Map">
-    SELECT t1.id,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t2.phone,t1.lats_time AS latsTime,t4.name AS userName,t5.next_time AS nextTime,t5.remarks,t1.progress_num AS num,t1.create_time as createTime
+  <select id="pageList" resultType="com.bibe.crm.entity.vo.CustomerVO">
+    SELECT distinct t1.id,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t2.phone,t1.customer_type AS customerType,t4.name AS userName,t1.use_type as useType,t1.progress_num AS progressNum,t1.create_time as createTime
     FROM customer t1
     LEFT JOIN customer_contact t2 ON t1.id=t2.customer_id
     LEFT JOIN `area` t3 ON t1.area_id=t3.Id
     LEFT JOIN users t4 ON t1.user_id=t4.id
     LEFT JOIN customer_progress t5 ON t1.id=t5.customer_id
     where t1.status=0
-    <if test="param1.nextDate ==null ">
-      and t5.next_time=(select max(next_time) from customer_progress)
-    </if>
     <if test="param1.nextDate != null and param1.nextDate != ''">
       and t5.next_time=#{param1.nextDate}
     </if>
@@ -333,6 +330,9 @@
     </if>
     <if test="param1.userId != null">
       and t1.user_id = #{param1.userId}
+    </if>
+    <if test="param1.useType != null ">
+      and t1.use_type = #{param1.useType}
     </if>
     <if test="userIds != null and userIds.size() != 0">
       and t1.user_id in

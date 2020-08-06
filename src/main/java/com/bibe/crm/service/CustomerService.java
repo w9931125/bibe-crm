@@ -7,6 +7,7 @@ import com.bibe.crm.dao.*;
 import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.po.*;
+import com.bibe.crm.entity.vo.CustomerVO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.utils.ShiroUtils;
 import org.apache.ibatis.annotations.Param;
@@ -42,7 +43,7 @@ public class CustomerService {
 
     public RespVO add(CustomerDTO record) {
         User userInfo = ShiroUtils.getUserInfo();
-        if (userInfo.getNumber().equals(0)){
+        if (userInfo.getNumber().equals(0)) {
             return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
         }
         Customer customer = new Customer();
@@ -55,7 +56,7 @@ public class CustomerService {
         CustomerContact customerContact = record.getCustomerContact();
         int i = customerContactMapper.insertSelective(customerContact);
         //减少录入次数
-        if (i>1&&!userInfo.getNumber().equals(-1)){
+        if (i > 1 && !userInfo.getNumber().equals(-1)) {
             userMapper.updateNumberById(userInfo.getId());
         }
         return RespVO.ofSuccess();
@@ -78,7 +79,7 @@ public class CustomerService {
 
         //联系人
         CustomerContact customerContact = record.getCustomerContact();
-        customerContactMapper.updateByCustomerIdin(customerContact,ids);
+        customerContactMapper.updateByCustomerIdin(customerContact, ids);
         return RespVO.ofSuccess();
     }
 
@@ -87,15 +88,30 @@ public class CustomerService {
 /*        if (dto.getUserId()==null||dto.getDeptId()==null){
             return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
         }*/
-        List<Integer> userIds=new ArrayList<>();
-        if (null!=dto.getDeptId()){
-             userIds = userMapper.findIdByDeptId(dto.getDeptId());
+        List<Integer> userIds = new ArrayList<>();
+        if (null != dto.getDeptId()) {
+            userIds = userMapper.findIdByDeptId(dto.getDeptId());
         }
-        IPage<Map<String, Object>> pageList = customerMapper.pageList(dto,page,userIds);
-
+        IPage<CustomerVO> pageList = customerMapper.pageList(dto, page, userIds);
+        List<CustomerVO> records = pageList.getRecords();
+        records.forEach(i -> {
+            CustomerProgress newInfo = customerProgressMapper.findNewInfo(i.getId());
+            if (newInfo!=null){
+                if (newInfo.getRemarks()!=null){
+                    i.setRemarks(newInfo.getRemarks());
+                }
+                if (newInfo.getNextTime()!=null){
+                    i.setNextTime(newInfo.getNextTime());
+                }
+                i.setLatsTime(newInfo.getCreateTime());
+            }
+        });
+        pageList.setRecords(records);
         return RespVO.ofSuccess(pageList);
     }
 }
+
+
 
 
 

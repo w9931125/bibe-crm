@@ -56,6 +56,11 @@ public class Customer {
     private Integer customerType;
 
     /**
+     * 0未使用 1使用过
+     */
+    private Integer useType;
+
+    /**
      * 客户地址
      */
     private String address;
@@ -69,11 +74,6 @@ public class Customer {
      * 删除状态1:已删除
      */
     private Integer status;
-
-    /**
-     * 最后跟进时间
-     */
-    private Date latsTime;
 
     /**
      * 创建时间
