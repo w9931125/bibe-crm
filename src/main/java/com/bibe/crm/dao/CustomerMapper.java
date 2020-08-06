@@ -1,8 +1,6 @@
 package com.bibe.crm.dao;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.po.Customer;import org.apache.ibatis.annotations.Param;import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.po.Customer;import com.bibe.crm.entity.vo.CustomerVO;import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;
 
 public interface CustomerMapper {
     int deleteByPrimaryKey(Integer id);
@@ -37,15 +35,15 @@ public interface CustomerMapper {
      * @param ids
      * @return
      */
-    int updateStatusByIdIn(@Param("ids")Integer[] ids);
-
+    int updateStatusByIdIn(@Param("ids") Integer[] ids);
 
     /**
      * 客户分页列表
+     *
      * @param dto
      * @param page
      * @param userIds
      * @return
      */
-    IPage<Map<String, Object>> pageList(FindCustomerDTO dto, Page page, @Param("userIds")List<Integer> userIds);
+    IPage<CustomerVO> pageList(FindCustomerDTO dto, Page page, @Param("userIds") List<Integer> userIds);
 }

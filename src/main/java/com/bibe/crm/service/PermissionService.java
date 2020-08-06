@@ -164,6 +164,10 @@ public class PermissionService {
      */
     public RespVO permissionDeptList(){
         User userInfo = ShiroUtils.getUserInfo();
+        if (userInfo.getRoleId().equals(1)){
+            List<TreeData> tree = departmentMapper.tree();
+            return RespVO.ofSuccess(TreeUtil.getTreeList(tree,0));
+        }
         //客户资料查询权限
         List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
         if (rolesDepartmentRelationList.size()>1){

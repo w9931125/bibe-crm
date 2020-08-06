@@ -175,4 +175,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="findNewInfo" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from  customer_progress where next_time=(select max(next_time) from customer_progress where customer_id=#{customerId} )
+  </select>
 </mapper>

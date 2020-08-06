@@ -63,6 +63,11 @@ public class FindCustomerDTO  extends BasePage {
      */
     private Integer type;
 
+    /**
+     * 是否使用过产品 0未使用 1使用
+     */
+    private Integer useType;
+
 
     /**
      * 联系人手机号
