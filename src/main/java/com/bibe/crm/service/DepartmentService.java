@@ -81,19 +81,18 @@ public class DepartmentService{
 
 
     public RespVO  deptNameList(String name,Integer deptId) {
-        List<Integer> deptIds=new ArrayList<>();
-        User userInfo = ShiroUtils.getUserInfo();
-        //客户资料查询权限
-        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
-        if (rolesDepartmentRelationList.size()>1) {
-            rolesDepartmentRelationList.forEach(i -> deptIds.add(i.getDeptId()));
-        }
-
-        List<Integer> list = departmentUtil.getChildDeptId(deptId);
-        //过滤掉没有权限的值
-        list.removeAll(deptIds);
-        List<DeptNameVO> deptNameVOS = userMapper.selectNameDeptNameList(name, list);
-
+//        List<Integer> deptIds=new ArrayList<>();
+//        User userInfo = ShiroUtils.getUserInfo();
+//        //客户资料查询权限
+//        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
+//        if (rolesDepartmentRelationList.size()>1) {
+//            rolesDepartmentRelationList.forEach(i -> deptIds.add(i.getDeptId()));
+//        }
+//
+//        List<Integer> list = departmentUtil.getChildDeptId(deptId);
+//        //过滤掉没有权限的值
+//        list.removeAll(deptIds);
+        List<DeptNameVO> deptNameVOS = userMapper.selectNameDeptName(name, deptId);
         return RespVO.ofSuccess(deptNameVOS);
     }
 

@@ -15,8 +15,10 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.Date;
 
 
@@ -94,6 +96,16 @@ public class IndexController {
     public RespVO logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
+        return RespVO.ofSuccess();
+    }
+
+    @PostMapping("/upload")
+    public RespVO upload(MultipartFile file) throws Exception{
+        String filename = file.getOriginalFilename();
+        String path="/file/";
+        String a=path+filename;
+        File sc=new File(a);
+        file.transferTo(sc);
         return RespVO.ofSuccess();
     }
 }
