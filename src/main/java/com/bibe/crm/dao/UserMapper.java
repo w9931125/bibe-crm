@@ -94,10 +94,12 @@ public interface UserMapper {
     /**
      * 选择团队成员
      * @param name
-     * @param deptIds
+     * @param deptId
      * @return
      */
-     List<DeptNameVO> selectNameDeptNameList(@Param("name") String name, @Param("ids")List<Integer> deptIds);
+//     List<DeptNameVO> selectNameDeptNameList(@Param("name") String name, @Param("ids")List<Integer> deptIds);
+
+     List<DeptNameVO> selectNameDeptName(@Param("name") String name, @Param("deptId") Integer deptId);
 
     /**
      * 指定人员-按人员浏览

@@ -45,6 +45,12 @@ public interface PermissionMapper {
     List<Permission> loadPermission(@Param("roleId")Integer roleId);
 
     /**
+     * 初始化管理员权限
+     * @return
+     */
+    List<Permission> loadAdminPermission();
+
+    /**
      * 启用 禁止 子权限
      * @param updatedStatus
      * @param parentId

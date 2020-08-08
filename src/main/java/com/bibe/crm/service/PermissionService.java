@@ -55,14 +55,34 @@ public class PermissionService {
      */
     public RespVO findInput(Integer flag){
         User user = ShiroUtils.getUserInfo();
-        //客户资料查询权限
-        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(user.getRoleId(), flag);
         //指定人员
         Map<String,Object> userMap=new HashMap<>();
         //指定部门
         Map<String,Object> deptMap=new HashMap<>();
         //最后封装map
         Map<String,Object> map=new HashMap<>();
+        //管理员直接返回全部
+        if (user.getRoleId().equals(1)){
+            //按人员
+            List<Map<String, Object>> baseInfo = userMapper.findBaseInfo(null);
+            userMap.put("users",baseInfo);
+            //按部门
+            List<DeptInputVO> baseDept = departmentMapper.findBaseDept();
+            for (DeptInputVO deptInputVO : baseDept) {
+                List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
+                deptInputVO.setUsers(allByDeptId);
+            }
+            userMap.put("users",baseInfo);
+            userMap.put("depts",baseDept);
+            //指定部门
+            deptMap.put("dept",TreeUtil.getTreeList(departmentMapper.tree(),0));
+            //最后封装
+            map.put("appointUser",userMap);
+            map.put("appointDept",deptMap);
+            return RespVO.ofSuccess(map);
+        }
+        //客户资料查询权限
+        List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(user.getRoleId(), flag);
         if (rolesDepartmentRelationList.size()>1){
             //按人员浏览
             List<Integer> deptIds=new ArrayList<>();
@@ -408,6 +428,10 @@ public class PermissionService {
      * @return
      */
     public RespVO loadPermission(Integer roleId){
+        if (roleId.equals(1)){
+            List<Permission> permissions = permissionMapper.loadAdminPermission();
+            return RespVO.ofSuccess(permissions);
+        }
         List<Permission> permissions = permissionMapper.loadPermission(roleId);
         return RespVO.ofSuccess(permissions);
     }
