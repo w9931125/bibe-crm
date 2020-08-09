@@ -1,6 +1,6 @@
 package com.bibe.crm.dao;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.po.Customer;import com.bibe.crm.entity.vo.CustomerVO;import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;
+import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;import com.bibe.crm.entity.vo.CustomerVO;import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;
 
 public interface CustomerMapper {
     int deleteByPrimaryKey(Integer id);
@@ -46,4 +46,12 @@ public interface CustomerMapper {
      * @return
      */
     IPage<CustomerVO> pageList(FindCustomerDTO dto, Page page, @Param("userIds") List<Integer> userIds);
+
+    /**
+     * 公客分组分页列表
+     * @param dto
+     * @param page
+     * @return
+     */
+    IPage<CustomerVO> customerGroupPageList(FindCustomerGroupDTO dto, Page page);
 }

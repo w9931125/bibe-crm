@@ -62,13 +62,22 @@ public class PermissionController {
 
 
     /**
-     * 查询权限下拉框
+     * 当前角色查询权限下拉框
      * flag 0客户资料 1联系跟进
      * @return
      */
     @GetMapping("/findInput")
     public RespVO findInput(Integer flag) {
         return permissionService.findInput(flag);
+    }
+
+    /**
+     * 当前角色公客分组
+     * @return
+     */
+    @GetMapping("/findCustomerGroup")
+    public RespVO findCustomerGroup() {
+        return permissionService.permissionCustomerGroupList();
     }
 
     /**

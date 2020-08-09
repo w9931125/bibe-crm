@@ -51,6 +51,11 @@ public class CustomerVO {
     private Date nextTime;
 
     /**
+     * 转为公客时间
+     */
+    private Date changeTime;
+
+    /**
      * 跟进结果
      */
     private String remarks;
@@ -69,4 +74,9 @@ public class CustomerVO {
      * 0未使用 1使用过
      */
     private Integer useType;
+
+    /**
+     * 录入时间
+     */
+    private Date createTime;
 }

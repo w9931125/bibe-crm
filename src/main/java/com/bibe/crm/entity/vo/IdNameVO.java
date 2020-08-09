@@ -6,5 +6,5 @@ import lombok.Data;
 public class IdNameVO {
     private Integer id;
 
-    private String name;
+    private String title;
 }

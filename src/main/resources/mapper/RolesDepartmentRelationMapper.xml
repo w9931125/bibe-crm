@@ -75,4 +75,6 @@
         from roles_department_relation
         where role_id=#{roleId,jdbcType=INTEGER} and `type`=#{type,jdbcType=INTEGER}
     </select>
+
+
 </mapper>

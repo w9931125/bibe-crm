@@ -69,15 +69,13 @@
     INSERT INTO roles_permission_relation(
     role_id,
     permission_id,
-    type,
-    status
+    type
     )VALUES
     <foreach collection="list" item="element" index="index" separator=",">
       (
       #{element.roleId,jdbcType=INTEGER},
       #{element.permissionId,jdbcType=INTEGER},
-      #{element.type,jdbcType=INTEGER},
-      #{element.status,jdbcType=INTEGER}
+      #{element.type,jdbcType=INTEGER}
       )
     </foreach>
   </insert>
@@ -88,4 +86,12 @@
     set `status`=#{updatedStatus,jdbcType=INTEGER}
     where permission_id=#{permissionId,jdbcType=INTEGER} and role_id=#{roleId,jdbcType=INTEGER}
   </update>
+
+  <select id="findStatus" resultType="java.lang.Integer">
+    select
+    `status`
+    from roles_permission_relation
+    where role_id=#{roleId,jdbcType=INTEGER} and permission_id=#{permissionId}
+  </select>
+
 </mapper>

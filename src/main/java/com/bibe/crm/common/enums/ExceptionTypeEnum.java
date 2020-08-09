@@ -88,10 +88,12 @@ public enum ExceptionTypeEnum{
     DEPT_USER_COUNT_ERROR(10004,"无法删除,该部门下存在员工"),
     CHECK_PASSWORD_ERROR(10005,"密码不正确"),
     ROLES_COUNT_ERROR(10006,"无法删除，该职务下存在员工"),
-    SELECT_DEPT_BAN(10007,"没有查看权限"),
+    SELECT_DEPT_BAN(10007,"所属职务没有查看权限,请联系管理员"),
     PERMISSION_SYSN_ERROR(10008,"客户资料未设定查看权限,无法同步客户资料权限"),
     USER_NUMBER_ERROR(10009,"录入失败，客户录入次数不足"),
     SELECT_CUSTOMER_ERROR(10010,"请选择查询范围"),
+    PERMISSION_ROSE_ERROR(10011,"该职务权限已被禁用，请联系管理员"),
+    DELETE_CUSTOMER_GROUP_ERROR(10012,"无法删除，该分组下存在部门"),
     ;
     /**
      * 状态码

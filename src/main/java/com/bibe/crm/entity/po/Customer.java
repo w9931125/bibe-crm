@@ -76,6 +76,16 @@ public class Customer {
     private Integer status;
 
     /**
+     * 转为公客时间
+     */
+    private Date changeTime;
+
+    /**
+     * 最后跟进时间
+     */
+    private Date latsTime;
+
+    /**
      * 创建时间
      */
     private Date createTime;

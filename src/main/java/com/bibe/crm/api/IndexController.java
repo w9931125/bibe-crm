@@ -75,7 +75,7 @@ public class IndexController {
      */
     @GetMapping("/areaList")
     public RespVO area(Integer pid) {
-        return RespVO.ofSuccess(areaService.list(pid));
+        return areaService.list(pid);
     }
 
     /**

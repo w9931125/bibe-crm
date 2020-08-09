@@ -13,5 +13,5 @@ public class DeptInputVO {
 
     private String  title;
 
-    private List<IdNameVO> users;
+    private List<IdNameVO> children;
 }

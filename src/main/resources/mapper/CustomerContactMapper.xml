@@ -249,4 +249,11 @@
     from customer_contact
     where id=#{id,jdbcType=INTEGER} and `type`=1
   </select>
+
+  <select id="findAllByCustomerId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from customer_contact
+    where customer_id=#{customerId,jdbcType=INTEGER} and `type`=1
+  </select>
 </mapper>

@@ -36,6 +36,9 @@ public class PermissionService {
     private RolesPermissionRelationMapper rolesPermissionRelationMapper;
 
     @Resource
+    private CustomerGroupDepartmentRelationMapper customerGroupDepartmentRelationMapper;
+
+    @Resource
     private UserMapper userMapper;
 
     @Resource
@@ -47,13 +50,16 @@ public class PermissionService {
     @Resource
     private DepartmentUtil departmentUtil;
 
+    @Resource
+    private CustomerGroupMapper customerGroupMapper;
+
 
     /**
      *
      * @param flag 0客户资料 1联系跟进
      * @return
      */
-    public RespVO findInput(Integer flag){
+    public RespVO findInput(int flag){
         User user = ShiroUtils.getUserInfo();
         //指定人员
         Map<String,Object> userMap=new HashMap<>();
@@ -70,7 +76,7 @@ public class PermissionService {
             List<DeptInputVO> baseDept = departmentMapper.findBaseDept();
             for (DeptInputVO deptInputVO : baseDept) {
                 List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
-                deptInputVO.setUsers(allByDeptId);
+                deptInputVO.setChildren(allByDeptId);
             }
             userMap.put("users",baseInfo);
             userMap.put("depts",baseDept);
@@ -81,8 +87,15 @@ public class PermissionService {
             map.put("appointDept",deptMap);
             return RespVO.ofSuccess(map);
         }
+        //验证权限是否被禁用
+        int pId = 0;
+        int status = rolesPermissionRelationMapper.findStatus(user.getRoleId(), pId = flag == 0 ? 3 : 4);
+        if (status!=0) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
         //客户资料查询权限
         List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(user.getRoleId(), flag);
+        if (rolesDepartmentRelationList.size()==0||rolesDepartmentRelationList==null){
+            return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+        }
         if (rolesDepartmentRelationList.size()>1){
             //按人员浏览
             List<Integer> deptIds=new ArrayList<>();
@@ -92,7 +105,7 @@ public class PermissionService {
             List<DeptInputVO> deptInputVOS = departmentMapper.selectAllBYIdIn(deptIds);
             for (DeptInputVO deptInputVO : deptInputVOS) {
                 List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
-                deptInputVO.setUsers(allByDeptId);
+                deptInputVO.setChildren(allByDeptId);
             }
 
             userMap.put("users",userDeptVO);
@@ -126,7 +139,7 @@ public class PermissionService {
                 List<DeptInputVO> baseDept = departmentMapper.findBaseDept();
                 for (DeptInputVO deptInputVO : baseDept) {
                     List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
-                    deptInputVO.setUsers(allByDeptId);
+                    deptInputVO.setChildren(allByDeptId);
                 }
                 userMap.put("users",baseInfo);
                 userMap.put("depts",baseDept);
@@ -143,7 +156,7 @@ public class PermissionService {
                 List<Map<String, Object>> allByDeptId = userMapper.findBaseInfo(user.getDeptId());
                 //按部门
                 DeptInputVO baseDeptById = departmentMapper.findBaseDeptById(user.getDeptId());
-                baseDeptById.setUsers(userMapper.findAllByDeptId(baseDeptById.getId()));
+                baseDeptById.setChildren(userMapper.findAllByDeptId(baseDeptById.getId()));
                 userMap.put("users",allByDeptId);
                 userMap.put("depts",baseDeptById);
                 //指定部门
@@ -160,7 +173,7 @@ public class PermissionService {
                 List<DeptInputVO> deptInputVOS = departmentMapper.selectAllBYIdIn(childDeptIds);
                 for (DeptInputVO deptInputVO : deptInputVOS) {
                     List<IdNameVO> allByDeptId = userMapper.findAllByDeptId(deptInputVO.getId());
-                    deptInputVO.setUsers(allByDeptId);
+                    deptInputVO.setChildren(allByDeptId);
                 }
                 userMap.put("users",userByDeptId);
                 userMap.put("depts",deptInputVOS);
@@ -174,10 +187,6 @@ public class PermissionService {
             return null;
         }
     }
-
-
-
-
     /**
      * 当前角色拥有的权限部门列表
      * @return
@@ -187,9 +196,15 @@ public class PermissionService {
         if (userInfo.getRoleId().equals(1)){
             List<TreeData> tree = departmentMapper.tree();
             return RespVO.ofSuccess(TreeUtil.getTreeList(tree,0));
-        }//
+        }
+        //验证权限是否被禁用
+        int status = rolesPermissionRelationMapper.findStatus(userInfo.getRoleId(), 3);
+        if (status!=0) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
         //客户资料查询权限
         List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
+        if (rolesDepartmentRelationList.size()==0||rolesDepartmentRelationList==null){
+            return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+        }
         if (rolesDepartmentRelationList.size()>1){
             List<Integer> deptIds=new ArrayList<>();
             rolesDepartmentRelationList.forEach(i->deptIds.add(i.getDeptId()));
@@ -200,6 +215,44 @@ public class PermissionService {
             Integer deptId = rolesDepartmentRelation.getDeptId();
             return checkFindDeptPermission(deptId,userInfo);
         }
+    }
+
+
+    public RespVO  permissionCustomerGroupList(){
+        User userInfo = ShiroUtils.getUserInfo();
+        //管理直接返回全部
+        if (userInfo.getRoleId().equals(1)){
+            List<Map<String, Object>> maps = customerGroupMapper.mapList();
+            return RespVO.ofSuccess(maps);
+        }
+        //验证权限是否被禁用
+        int status = rolesPermissionRelationMapper.findStatus(userInfo.getRoleId(), 3);
+        if (status!=0) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
+
+        List<RolesCustomerGroupRelation> rolesCustomerGroupRelations = rolesCustomerGroupRelationMapper.selectAllByRoleId(userInfo.getRoleId());
+        if (rolesCustomerGroupRelations.size()==0||rolesCustomerGroupRelations==null){
+            return RespVO.fail(ExceptionTypeEnum.SELECT_DEPT_BAN);
+        }
+        if (rolesCustomerGroupRelations.size()>1){
+            List<Integer> groupIds=new ArrayList<>();
+            rolesCustomerGroupRelations.forEach(i->groupIds.add(i.getCustomerGroupId()));
+            List<Map<String, Object>> mapList = customerGroupMapper.findAllByIdIn(groupIds);
+            return RespVO.ofSuccess(mapList);
+        }else {
+            RolesCustomerGroupRelation rolesCustomerGroupRelation = rolesCustomerGroupRelations.get(0);
+            Integer customerGroupId = rolesCustomerGroupRelation.getCustomerGroupId();
+            //查询全部
+            if (customerGroupId.equals(-1)){
+                List<Map<String, Object>> maps = customerGroupMapper.mapList();
+                return RespVO.ofSuccess(maps);
+                //查找所属部门公客分组
+            }else if (customerGroupId.equals(-2)){
+                List<Integer>  groupIds = customerGroupDepartmentRelationMapper.findCustomerGroupIdByDeptId(userInfo.getDeptId());
+                List<Map<String, Object>> mapList = customerGroupMapper.findAllByIdIn(groupIds);
+                return RespVO.ofSuccess(mapList);
+            }
+        }
+        return null;
     }
 
 
@@ -302,18 +355,10 @@ public class PermissionService {
                 }
                 //设置录入人数
                 rolesMapper.updateNumberById(dto.getNumber(),dto.getRoleId());
+                // TODO: 2020/8/8 可能会有问题，重复设置权限会产生录入人数的刷新
                 userMapper.updateNumberByRoleId(dto.getNumber(),dto.getRoleId());
                 break;
             case 2:
-                //授权接口
-                List<RolesPermissionRelation> permissionRelationList = dto.getPermissionList();
-
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
-
-                if (permissionRelationList.size()>0){
-                    permissionRelationList.forEach(i->i.setType(flag));
-                    rolesPermissionRelationMapper.insertList(permissionRelationList);
-                }
                 //为null说明是指定部门
                 if (null==dto.getRolesDepartId()){
                     //授权查看部门
@@ -335,14 +380,24 @@ public class PermissionService {
                         rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
                         rolesDepartmentRelationList.forEach(o->o.setType(1));
                         rolesDepartmentRelationMapper.insertList(rolesDepartmentRelationList);
+                    }else {
+                        rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
+                        //   部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户资料 -4与自己同一个部门 -5与自己同一个部门及下级部门
+                        RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
+                        rolesDepartmentRelation.setType(1);
+                        rolesDepartmentRelation.setDeptId(dto.getRolesDepartId());
+                        rolesDepartmentRelation.setRoleId(dto.getRoleId());
+                        rolesDepartmentRelationMapper.insert(rolesDepartmentRelation);
                     }
-                    rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
-                    //   部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户资料 -4与自己同一个部门 -5与自己同一个部门及下级部门
-                    RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
-                    rolesDepartmentRelation.setType(1);
-                    rolesDepartmentRelation.setDeptId(dto.getRolesDepartId());
-                    rolesDepartmentRelation.setRoleId(dto.getRoleId());
-                    rolesDepartmentRelationMapper.insert(rolesDepartmentRelation);
+                }
+                //授权接口
+                List<RolesPermissionRelation> permissionRelationList = dto.getPermissionList();
+
+                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+
+                if (permissionRelationList.size()>0){
+                    permissionRelationList.forEach(i->i.setType(flag));
+                    rolesPermissionRelationMapper.insertList(permissionRelationList);
                 }
                 break;
             case 3:

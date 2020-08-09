@@ -32,4 +32,11 @@ public interface RolesPermissionRelationMapper {
     int updateStatusByPermissionIdAndRoleId(@Param("updatedStatus")Integer updatedStatus,@Param("permissionId")Integer permissionId,@Param("roleId")Integer roleId);
 
 
+    /**
+     * 查看顶级权限状态
+     * @param roleId
+     * @param permissionId  1职位与权限 2部门与员工 3客户资料 4联系跟进
+     * @return
+     */
+    int findStatus(@Param("roleId")Integer roleId,@Param("permissionId")Integer permissionId);
 }

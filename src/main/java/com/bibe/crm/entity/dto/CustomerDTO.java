@@ -10,4 +10,9 @@ public class CustomerDTO extends Customer {
      * 联系人相关
      */
     private CustomerContact customerContact;
+
+    /**
+     * 录入时间
+     */
+    private String  createDate;
 }

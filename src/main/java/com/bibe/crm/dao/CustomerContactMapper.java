@@ -24,5 +24,5 @@ public interface CustomerContactMapper {
 
     CustomerContact findAllById(@Param("id")Integer id);
 
-
+    CustomerContact findAllByCustomerId(@Param("customerId")Integer cId);
 }
