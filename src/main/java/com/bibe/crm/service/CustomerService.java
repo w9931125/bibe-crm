@@ -166,6 +166,11 @@ public class CustomerService {
         pageList.setRecords(records);
         return RespVO.ofSuccess(pageList);
     }
+
+    public RespVO move(Integer userId,Integer groupId,List<Integer> ids){
+        customerMapper.updateUserIdAndGroupIdByIdIn(userId,groupId,ids);
+        return RespVO.ofSuccess();
+    }
 }
 
 

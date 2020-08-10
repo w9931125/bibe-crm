@@ -4,6 +4,7 @@ import com.bibe.crm.common.base.BasePage;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class FindCustomerGroupDTO extends BasePage {
@@ -30,7 +31,7 @@ public class FindCustomerGroupDTO extends BasePage {
     /**
      * 公客分组id
      */
-    private Integer groupId;
+    private List<Integer> groupIds;
 
     /**
      * 城市id

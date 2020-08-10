@@ -3,13 +3,17 @@ package com.bibe.crm.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.entity.dto.CustomerGroupDTO;
+import com.bibe.crm.entity.dto.CustomerMoveDTO;
 import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
+import com.bibe.crm.entity.po.User;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerGroupService;
 import com.bibe.crm.service.CustomerService;
+import com.bibe.crm.utils.ShiroUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/customerGroup")
@@ -85,31 +89,18 @@ public class CustomerGroupController {
      */
     @DeleteMapping("/delete")
     public RespVO delete(Integer id){
-         customerGroupService.delete(id);
-         return RespVO.ofSuccess();
+       return customerGroupService.delete(id);
     }
 
-//
-//    /**
-//     * 树部门
-//     * @return
-//     */
-//    @GetMapping("/tree")
-//    public RespVO<List<TreeData>> tree(){
-//        return RespVO.ofSuccess(customerGroupService.tree());
-//    }
-//
-//
-//    /**
-//     * 选择团队成员
-//     * @param name
-//     * @param deptId
-//     * @return
-//     */
-//    @GetMapping("/selectUserDept")
-//    public RespVO selectUserDept(String name,Integer deptId){
-//        return customerGroupService.deptNameList(name,deptId);
-//    }
 
-
+    /**
+     * 领取公客
+     * @param ids
+     * @return
+     */
+    @PutMapping("/getCustomer")
+    public RespVO getCustomer(@RequestBody List<Integer> ids){
+        User userInfo = ShiroUtils.getUserInfo();
+        return customerService.move(userInfo.getId(),null,ids);
+    }
 }

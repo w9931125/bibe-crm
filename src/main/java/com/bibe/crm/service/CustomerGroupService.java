@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.bibe.crm.entity.po.CustomerGroup;
 import com.bibe.crm.dao.CustomerGroupMapper;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +45,7 @@ public class CustomerGroupService{
         CustomerGroup customerGroup=new CustomerGroup();
 
         BeanUtils.copyProperties(record,customerGroup);
-        customerGroupMapper.insertSelective(record);
+        customerGroupMapper.insertSelective(customerGroup);
         //分组关联部门
         List<CustomerGroupDepartmentRelation> groupList = record.getGroupList();
         groupList.forEach(i->i.setCustomerGroupId(customerGroup.getId()));

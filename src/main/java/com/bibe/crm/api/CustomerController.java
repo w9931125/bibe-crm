@@ -3,6 +3,7 @@ package com.bibe.crm.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.entity.dto.CustomerDTO;
+import com.bibe.crm.entity.dto.CustomerMoveDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerService;
@@ -18,13 +19,27 @@ public class CustomerController {
 
     @Resource
     private CustomerService customerService;
+
+
     /**
-     * 修改
+     * 修改自己
      * @param dto
      * @return
      */
     @PutMapping("/update")
     public RespVO update(@RequestBody CustomerDTO dto,List<Integer> ids){
+        return customerService.update(dto,ids);
+    }
+
+
+    /**
+     * 修改别人
+     * @param dto
+     * @param ids
+     * @return
+     */
+    @PutMapping("/updateHe")
+    public RespVO updateHe(@RequestBody CustomerDTO dto,List<Integer> ids){
         return customerService.update(dto,ids);
     }
 
@@ -64,7 +79,7 @@ public class CustomerController {
 
 
     /**
-     * 删除
+     * 删除自己
      * @param ids
      * @return
      */
@@ -74,27 +89,54 @@ public class CustomerController {
          return RespVO.ofSuccess();
     }
 
-//
-//    /**
-//     * 树部门
-//     * @return
-//     */
-//    @GetMapping("/tree")
-//    public RespVO<List<TreeData>> tree(){
-//        return RespVO.ofSuccess(customerService.tree());
-//    }
-//
-//
-//    /**
-//     * 选择团队成员
-//     * @param name
-//     * @param deptId
-//     * @return
-//     */
-//    @GetMapping("/selectUserDept")
-//    public RespVO selectUserDept(String name,Integer deptId){
-//        return customerService.deptNameList(name,deptId);
-//    }
+    /**
+     * 删除他人
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/deleteHe")
+    public RespVO deleteHe(Integer[] ids){
+         customerService.delete(ids);
+         return RespVO.ofSuccess();
+    }
 
 
+    /**
+     * 转交自己客户(其他成员)
+     * @return
+     */
+    @PutMapping("/move")
+    public RespVO move(@RequestBody CustomerMoveDTO dto){
+       return customerService.move(dto.getUserId(),null,dto.getIds());
+    }
+
+    /**
+     * 转交他人客户(其他成员)
+     * @return
+     */
+    @PutMapping("/moveHe")
+    public RespVO moveHe(@RequestBody CustomerMoveDTO dto){
+        return customerService.move(dto.getUserId(),null,dto.getIds());
+    }
+
+
+    /**
+     * 转交他人客户(公共客户)
+     * @param dto
+     * @return
+     */
+    @PutMapping("/movePublicHe")
+    public RespVO movePublicHe(@RequestBody CustomerMoveDTO dto){
+        return customerService.move(null,dto.getGroupId(),dto.getIds());
+    }
+
+    /**
+     * 转交自己客户(公共客户)
+     * @param dto
+     * @return
+     */
+    @PutMapping("/movePublic")
+    public RespVO movePublic(@RequestBody CustomerMoveDTO dto){
+        return customerService.move(null,dto.getGroupId(),dto.getIds());
+    }
 }

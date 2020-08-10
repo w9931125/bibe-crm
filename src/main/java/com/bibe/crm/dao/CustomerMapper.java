@@ -54,4 +54,14 @@ public interface CustomerMapper {
      * @return
      */
     IPage<CustomerVO> customerGroupPageList(FindCustomerGroupDTO dto, Page page);
+
+
+    /**
+     * 领取/转交/
+     * @param updatedUserId
+     * @param updatedGroupId
+     * @param idCollection
+     * @return
+     */
+    int updateUserIdAndGroupIdByIdIn(@Param("updatedUserId")Integer updatedUserId,@Param("updatedGroupId")Integer updatedGroupId,@Param("idCollection")Collection<Integer> idCollection);
 }
