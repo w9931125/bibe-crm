@@ -15,6 +15,8 @@ public class CustomerVO {
      */
     private String name;
 
+    private Integer userId;
+
     /**
      * 地区
      */

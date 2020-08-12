@@ -31,7 +31,7 @@
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
-    select 
+    select
     <include refid="Base_Column_List" />
     from customer
     where id = #{id,jdbcType=INTEGER}
@@ -246,6 +246,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <select id="selectCountByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
      select  count(1) from  customer where user_id=#{userId}
   </select>
@@ -317,7 +318,7 @@
   </update>
 
   <select id="pageList" resultType="com.bibe.crm.entity.vo.CustomerVO">
-    SELECT distinct t1.id,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t1.customer_type AS customerType,t4.name AS userName,t1.use_type as useType,t1.progress_num AS progressNum,t1.create_time as createTime
+    SELECT distinct t1.id,t1.user_id as userId,t1.name,t3.name AS areaName,t1.intention,t1.`type`,t1.customer_type AS customerType,t4.name AS userName,t1.use_type as useType,t1.progress_num AS progressNum,t1.create_time as createTime
     FROM customer t1
     LEFT JOIN customer_contact t2 ON t1.id=t2.customer_id
     LEFT JOIN `area` t3 ON t1.area_id=t3.Id
@@ -365,7 +366,7 @@
 
 
   <select id="customerGroupPageList" resultType="com.bibe.crm.entity.vo.CustomerVO">
-    SELECT distinct t1.id,t1.name,t3.name AS areaName,t1.change_time as changeTime ,t1.intention,t1.`type`,t1.customer_type AS customerType,t4.name AS userName,t1.use_type as useType,t1.progress_num AS progressNum,t1.create_time as createTime
+    SELECT distinct t1.id,t1.user_id as userId,t1.name,t3.name AS areaName,t1.change_time as changeTime ,t1.intention,t1.`type`,t1.customer_type AS customerType,t4.name AS userName,t1.use_type as useType,t1.progress_num AS progressNum,t1.create_time as createTime
     FROM customer t1
     LEFT JOIN customer_contact t2 ON t1.id=t2.customer_id
     LEFT JOIN `area` t3 ON t1.area_id=t3.Id

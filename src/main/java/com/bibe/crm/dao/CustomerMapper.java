@@ -1,6 +1,7 @@
 package com.bibe.crm.dao;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;import com.bibe.crm.entity.vo.CustomerVO;import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;
+import java.util.Map;
 
 public interface CustomerMapper {
     int deleteByPrimaryKey(Integer id);
