@@ -65,4 +65,11 @@ public interface CustomerMapper {
      * @return
      */
     int updateUserIdAndGroupIdByIdIn(@Param("updatedUserId")Integer updatedUserId,@Param("updatedGroupId")Integer updatedGroupId,@Param("idCollection")Collection<Integer> idCollection);
+
+    /**
+     * 模糊查询客户
+     * @param name
+     * @return
+     */
+    Map<String,Object> findLikeName(@Param("name") String name);
 }

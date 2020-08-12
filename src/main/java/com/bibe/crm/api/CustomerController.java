@@ -10,7 +10,6 @@ import com.bibe.crm.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
@@ -27,20 +26,19 @@ public class CustomerController {
      * @return
      */
     @PutMapping("/update")
-    public RespVO update(@RequestBody CustomerDTO dto,List<Integer> ids){
-        return customerService.update(dto,ids);
+    public RespVO update(@RequestBody CustomerDTO dto){
+        return customerService.update(dto);
     }
 
 
     /**
      * 修改别人
      * @param dto
-     * @param ids
      * @return
      */
     @PutMapping("/updateHe")
-    public RespVO updateHe(@RequestBody CustomerDTO dto,List<Integer> ids){
-        return customerService.update(dto,ids);
+    public RespVO updateHe(@RequestBody CustomerDTO dto){
+        return customerService.update(dto);
     }
 
     /**
@@ -138,5 +136,16 @@ public class CustomerController {
     @PutMapping("/movePublic")
     public RespVO movePublic(@RequestBody CustomerMoveDTO dto){
         return customerService.move(null,dto.getGroupId(),dto.getIds());
+    }
+
+
+    /**
+     * 模糊查询客户名称
+     * @param name
+     * @return
+     */
+    @GetMapping("/findLikeName")
+    public RespVO findLikeName(String name){
+        return customerService.findLikeName(name);
     }
 }

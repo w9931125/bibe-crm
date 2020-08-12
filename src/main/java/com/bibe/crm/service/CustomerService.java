@@ -79,7 +79,7 @@ public class CustomerService {
     }
 
 
-    public RespVO update(CustomerDTO record, List<Integer> ids) {
+    public RespVO update(CustomerDTO record) {
         Customer customer = new Customer();
         BeanUtils.copyProperties(record, customer);
         try {
@@ -88,10 +88,10 @@ public class CustomerService {
         } catch (Exception e) {
             log.info("客户添加出现异常{}",e);
         }
-        customerMapper.updateByIdIn(customer, ids);
-        //联系人
+        customerMapper.updateByIdIn(customer,record.getIds());
+/*        //联系人
         CustomerContact customerContact = record.getCustomerContact();
-        customerContactMapper.updateByCustomerIdin(customerContact, ids);
+        customerContactMapper.updateByCustomerIdin(customerContact, ids);*/
         return RespVO.ofSuccess();
     }
 
@@ -171,6 +171,14 @@ public class CustomerService {
         customerMapper.updateUserIdAndGroupIdByIdIn(userId,groupId,ids);
         return RespVO.ofSuccess();
     }
+
+
+
+    public RespVO findLikeName(String name){
+        Map<String, Object> likeName = customerMapper.findLikeName(name);
+        return RespVO.ofSuccess(likeName);
+    }
+
 }
 
 

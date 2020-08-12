@@ -4,6 +4,8 @@ import com.bibe.crm.entity.po.Customer;
 import com.bibe.crm.entity.po.CustomerContact;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CustomerDTO extends Customer {
     /**
@@ -15,4 +17,6 @@ public class CustomerDTO extends Customer {
      * 录入时间
      */
     private String  createDate;
+
+    private  List<Integer> ids;
 }
