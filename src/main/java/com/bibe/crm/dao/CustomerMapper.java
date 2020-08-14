@@ -1,7 +1,6 @@
 package com.bibe.crm.dao;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;import com.bibe.crm.entity.vo.CustomerVO;import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;import com.bibe.crm.entity.vo.CustomerVO;import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;import java.util.Map;
 
 public interface CustomerMapper {
     int deleteByPrimaryKey(Integer id);
@@ -50,26 +49,28 @@ public interface CustomerMapper {
 
     /**
      * 公客分组分页列表
+     *
      * @param dto
      * @param page
      * @return
      */
     IPage<CustomerVO> customerGroupPageList(FindCustomerGroupDTO dto, Page page);
 
-
     /**
      * 领取/转交/
+     *
      * @param updatedUserId
      * @param updatedGroupId
      * @param idCollection
      * @return
      */
-    int updateUserIdAndGroupIdByIdIn(@Param("updatedUserId")Integer updatedUserId,@Param("updatedGroupId")Integer updatedGroupId,@Param("idCollection")Collection<Integer> idCollection);
+    int updateUserIdAndGroupIdByIdIn(@Param("updatedUserId") Integer updatedUserId, @Param("updatedGroupId") Integer updatedGroupId, @Param("idCollection") Collection<Integer> idCollection);
 
     /**
      * 模糊查询客户
+     *
      * @param name
      * @return
      */
-    Map<String,Object> findLikeName(@Param("name") String name);
+    Map<String, Object> findLikeName(@Param("name") String name);
 }

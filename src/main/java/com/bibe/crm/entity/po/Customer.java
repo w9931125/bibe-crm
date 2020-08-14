@@ -56,7 +56,7 @@ public class Customer {
     private Integer customerType;
 
     /**
-     * 0未使用 1使用过
+     * 使用产品0未使用 1使用过
      */
     private Integer useType;
 
@@ -74,6 +74,11 @@ public class Customer {
      * 删除状态1:已删除
      */
     private Integer status;
+
+    /**
+     * 文件id
+     */
+    private String filesId;
 
     /**
      * 转为公客时间

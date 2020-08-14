@@ -36,6 +36,9 @@ public class CustomerService {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private FilesMapper filesMapper;
+
 
     public int delete(Integer[] ids) {
         return customerMapper.updateStatusByIdIn(ids);
@@ -71,10 +74,16 @@ public class CustomerService {
 
     public RespVO edit(Integer id) {
         Map<String, Object> map = new HashMap<>();
+        List<Map<String,Object>> files=new ArrayList<>();
         Customer customer = customerMapper.selectByPrimaryKey(id);
+        if (customer.getFilesId()!=null){
+            String[] fileIds = customer.getFilesId().split(",");
+            files = filesMapper.findFileByIds(fileIds);
+        }
         CustomerContact customerContact = customerContactMapper.findAllById(customer.getId());
         map.put("customer", customer);
         map.put("customerContact", customerContact);
+        map.put("files",files);
         return RespVO.ofSuccess(map);
     }
 

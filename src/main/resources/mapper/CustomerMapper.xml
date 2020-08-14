@@ -18,6 +18,7 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="files_id" jdbcType="VARCHAR" property="filesId" />
     <result column="change_time" jdbcType="TIMESTAMP" property="changeTime" />
     <result column="lats_time" jdbcType="TIMESTAMP" property="latsTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -26,12 +27,12 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, `name`, industry, user_id, group_id, area_id, intention, progress_num, `type`, 
-    customer_type, use_type, address, remarks, `status`, change_time, lats_time, create_time, 
-    update_time
+    customer_type, use_type, address, remarks, `status`, files_id, change_time, lats_time, 
+    create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
-    select
+    select 
     <include refid="Base_Column_List" />
     from customer
     where id = #{id,jdbcType=INTEGER}
@@ -47,14 +48,16 @@
       group_id, area_id, intention, 
       progress_num, `type`, customer_type, 
       use_type, address, remarks, 
-      `status`, change_time, lats_time, 
-      create_time, update_time)
+      `status`, files_id, change_time, 
+      lats_time, create_time, update_time
+      )
     values (#{name,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
       #{groupId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{intention,jdbcType=INTEGER}, 
       #{progressNum,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{customerType,jdbcType=INTEGER}, 
       #{useType,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{changeTime,jdbcType=TIMESTAMP}, #{latsTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{status,jdbcType=INTEGER}, #{filesId,jdbcType=VARCHAR}, #{changeTime,jdbcType=TIMESTAMP}, 
+      #{latsTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.Customer" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -98,6 +101,9 @@
       </if>
       <if test="status != null">
         `status`,
+      </if>
+      <if test="filesId != null">
+        files_id,
       </if>
       <if test="changeTime != null">
         change_time,
@@ -151,6 +157,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="filesId != null">
+        #{filesId,jdbcType=VARCHAR},
       </if>
       <if test="changeTime != null">
         #{changeTime,jdbcType=TIMESTAMP},
@@ -209,6 +218,9 @@
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
       </if>
+      <if test="filesId != null">
+        files_id = #{filesId,jdbcType=VARCHAR},
+      </if>
       <if test="changeTime != null">
         change_time = #{changeTime,jdbcType=TIMESTAMP},
       </if>
@@ -240,6 +252,7 @@
       address = #{address,jdbcType=VARCHAR},
       remarks = #{remarks,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=INTEGER},
+      files_id = #{filesId,jdbcType=VARCHAR},
       change_time = #{changeTime,jdbcType=TIMESTAMP},
       lats_time = #{latsTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -421,8 +434,7 @@
       </if>
     </set>
     where id in
-    <foreach item="item" index="index" collection="idCollection"
-             open="(" separator="," close=")">
+    <foreach close=")" collection="idCollection" index="index" item="item" open="(" separator=",">
       #{item,jdbcType=INTEGER}
     </foreach>
   </update>
