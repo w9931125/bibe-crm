@@ -2,6 +2,7 @@ package com.bibe.crm.dao;
 import java.util.Collection;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
+import java.util.Map;
 
 import com.bibe.crm.entity.po.CustomerContact;
 
@@ -25,4 +26,8 @@ public interface CustomerContactMapper {
     CustomerContact findAllById(@Param("id")Integer id);
 
     CustomerContact findAllByCustomerId(@Param("customerId")Integer cId);
+
+    List<CustomerContact> list();
+
+    Map<String,Object> show(Integer id);
 }

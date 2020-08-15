@@ -51,6 +51,16 @@ public class CustomerProgress {
     private Integer userId;
 
     /**
+     * 文件id
+     */
+    private String filesId;
+
+    /**
+     * 指定跟进人id
+     */
+    private Integer appointUserId;
+
+    /**
      * 下次跟进时间
      */
     private Date nextTime;

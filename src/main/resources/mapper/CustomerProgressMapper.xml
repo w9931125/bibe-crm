@@ -13,6 +13,8 @@
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="satisfied" jdbcType="INTEGER" property="satisfied" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="files_id" jdbcType="VARCHAR" property="filesId" />
+    <result column="appoint_user_id" jdbcType="INTEGER" property="appointUserId" />
     <result column="next_time" jdbcType="TIMESTAMP" property="nextTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -20,7 +22,7 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, customer_id, `name`, contact_type, `position`, speak_time, remarks, satisfied, 
-    user_id, next_time, create_time, update_time
+    user_id, files_id, appoint_user_id, next_time, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -38,12 +40,14 @@
     <!--@mbg.generated-->
     insert into customer_progress (customer_id, `name`, contact_type, 
       `position`, speak_time, remarks, 
-      satisfied, user_id, next_time, 
-      create_time, update_time)
+      satisfied, user_id, files_id, 
+      appoint_user_id, next_time, create_time, 
+      update_time)
     values (#{customerId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{contactType,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{speakTime,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
-      #{satisfied,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{nextTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{satisfied,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{filesId,jdbcType=VARCHAR}, 
+      #{appointUserId,jdbcType=INTEGER}, #{nextTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.bibe.crm.entity.po.CustomerProgress" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -72,6 +76,12 @@
       </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="filesId != null">
+        files_id,
+      </if>
+      <if test="appointUserId != null">
+        appoint_user_id,
       </if>
       <if test="nextTime != null">
         next_time,
@@ -107,6 +117,12 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="filesId != null">
+        #{filesId,jdbcType=VARCHAR},
+      </if>
+      <if test="appointUserId != null">
+        #{appointUserId,jdbcType=INTEGER},
       </if>
       <if test="nextTime != null">
         #{nextTime,jdbcType=TIMESTAMP},
@@ -147,6 +163,12 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
+      <if test="filesId != null">
+        files_id = #{filesId,jdbcType=VARCHAR},
+      </if>
+      <if test="appointUserId != null">
+        appoint_user_id = #{appointUserId,jdbcType=INTEGER},
+      </if>
       <if test="nextTime != null">
         next_time = #{nextTime,jdbcType=TIMESTAMP},
       </if>
@@ -170,6 +192,8 @@
       remarks = #{remarks,jdbcType=VARCHAR},
       satisfied = #{satisfied,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
+      files_id = #{filesId,jdbcType=VARCHAR},
+      appoint_user_id = #{appointUserId,jdbcType=INTEGER},
       next_time = #{nextTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -177,6 +201,14 @@
   </update>
 
   <select id="findNewInfo" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List"/> from  customer_progress where next_time=(select max(next_time) from customer_progress where customer_id=#{customerId} )
+    select <include refid="Base_Column_List" /> from  customer_progress where next_time=(select max(next_time) from customer_progress where customer_id=#{customerId} )
+  </select>
+
+  <select id="show" parameterType="java.lang.Integer" resultType="java.util.Map">
+select t1.id as id,t2.id as customerId, t1.name as name,t2.create_time as createTime,t2.name as customerName,t3.name as userName,t1.contact_type as contactType,t1.position as position,t1.create_time as progressTime,
+t1.speak_time as speakTime ,t1.remarks as remarks , t1.satisfied as satisfied,t1.next_time as nextTime ,t1.appoint_user_id as appointUserId ,t1.files_id as filesId
+from customer_progress t1 left join customer t2 on t1.customer_id=t2.id
+left join users t3 on t2.user_id=t3.id
+where t1.id=#{id}
   </select>
 </mapper>

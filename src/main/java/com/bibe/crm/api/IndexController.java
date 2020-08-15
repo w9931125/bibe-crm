@@ -124,23 +124,25 @@ public class IndexController {
     /**
      * 删除文件
      *
-     * @param id
+     * @param ids
      * @return
      */
     @PostMapping("/file/delete")
-    public RespVO delete(@RequestParam("id") int id) {
-        Files files = filesMapper.selectByPrimaryKey(id);
-        //    path = ResourceUtils.getURL("classpath:").getPath() + "static" + files.getPath() + "/" + files.getAlias();
-        //
-        //    String a=path+files.getAlias();
-        String decode = URLDecoder.decode(path+files.getPath() + "/"+files.getAlias());
-        File file = new File(decode);
-        boolean delete = file.delete();
-        if (delete) {
-            int b = filesMapper.deleteByPrimaryKey(id);
-            if (b > 0) {
-                log.info("文件删除成功");
-                return RespVO.ofSuccess();
+    public RespVO delete(@RequestParam("ids") Integer [] ids) {
+        for (Integer id : ids) {
+            Files files = filesMapper.selectByPrimaryKey(id);
+            //    path = ResourceUtils.getURL("classpath:").getPath() + "static" + files.getPath() + "/" + files.getAlias();
+            //
+            //    String a=path+files.getAlias();
+            String decode = URLDecoder.decode(path+files.getPath() + "/"+files.getAlias());
+            File file = new File(decode);
+            boolean delete = file.delete();
+            if (delete) {
+                int b = filesMapper.deleteByPrimaryKey(id);
+                if (b > 0) {
+                    log.info("文件删除成功");
+                    return RespVO.ofSuccess();
+                }
             }
         }
         log.info("文件删除失败");

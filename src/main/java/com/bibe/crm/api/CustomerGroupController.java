@@ -2,6 +2,7 @@ package com.bibe.crm.api;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.CustomerGroupDTO;
 import com.bibe.crm.entity.dto.CustomerMoveDTO;
 import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
@@ -68,6 +69,40 @@ public class CustomerGroupController {
     public RespVO pageList(@RequestBody FindCustomerGroupDTO dto){
         Page page = dto.getPage();
         return customerService.customerGroupPageList(dto,page);
+    }
+
+
+    /**
+     * 删除公客
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/deleteCustomer")
+    public RespVO delete(Integer[] ids){
+        customerService.delete(ids);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 修改公客
+     * @param dto
+     * @return
+     */
+    @PutMapping("/updateCustomer")
+    public RespVO update(@RequestBody CustomerDTO dto){
+        return customerService.update(dto);
+    }
+
+
+    /**
+     * 转交公客
+     * @param dto
+     * @return
+     */
+    @PutMapping("/move")
+    public RespVO move(@RequestBody CustomerMoveDTO dto){
+        return customerService.move(dto.getUserId(),null,dto.getIds());
     }
 
 
