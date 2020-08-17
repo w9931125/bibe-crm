@@ -115,7 +115,7 @@ public class ProgressController {
      * @param id
      * @return
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping("/deleteComment")
     public RespVO deleteComment(Integer id){
         customerProgressService.deleteComment(id);
         return RespVO.ofSuccess();
