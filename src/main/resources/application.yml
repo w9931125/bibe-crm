@@ -9,9 +9,9 @@ spring:
       date-format: yyyy-MM-dd HH:mm:ss
       time-zone: GMT+8
   datasource:
-    username: root
-    password: hknmsl#666
-    url: jdbc:mysql://106.55.35.69:3306/bibe_crm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=TRUE&failOverReadOnly=false&serverTimezone=GMT%2B8
+    username: wxf#123
+    password: fmima123#
+    url: jdbc:mysql://106.55.35.69:3302/bibe_crm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=TRUE&failOverReadOnly=false&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
 mybatis-plus:

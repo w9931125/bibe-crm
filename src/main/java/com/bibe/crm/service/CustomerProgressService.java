@@ -1,13 +1,22 @@
 package com.bibe.crm.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.common.enums.ExceptionTypeEnum;
 import com.bibe.crm.dao.*;
+import com.bibe.crm.entity.dto.ProgressDTO;
+import com.bibe.crm.entity.po.CommentInfo;
 import com.bibe.crm.entity.po.CustomerContact;
 import com.bibe.crm.entity.po.User;
+import com.bibe.crm.entity.vo.ProgressVO;
 import com.bibe.crm.entity.vo.RespVO;
+import com.bibe.crm.utils.ShiroUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.bibe.crm.entity.po.CustomerProgress;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +35,9 @@ public class CustomerProgressService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private CommentInfoMapper commentInfoMapper;
 
 
     public int delete(Integer id) {
@@ -96,6 +108,59 @@ public class CustomerProgressService {
         return RespVO.ofSuccess(list);
     }
 
+
+    /**
+     * 分页列表
+     * @param dto
+     * @param page
+     * @return
+     */
+    public RespVO  pageList(ProgressDTO dto,Page page){
+        List<Integer> userIds = new ArrayList<>();
+        if (null != dto.getDeptId()) {
+            userIds = userMapper.findIdByDeptId(dto.getDeptId());
+        }
+        IPage<ProgressVO> pageList = customerProgressMapper.pageList(dto, page, userIds);
+        //评论列表
+        pageList.getRecords().forEach(i->{
+            List<Map<String, Object>> comment = commentInfoMapper.findAllByProgressId(i.getId());
+            i.setCommentInfo(comment);
+        });
+        return RespVO.ofSuccess(pageList);
+    }
+
+    /**
+     * 添加评论
+     * @param commentInfo
+     * @return
+     */
+    public  RespVO addComment(CommentInfo commentInfo){
+        commentInfo.setUserId(ShiroUtils.getUserInfo().getId());
+        commentInfoMapper.insertSelective(commentInfo);
+        return RespVO.ofSuccess();
+    }
+
+    /**
+     * 删除评论
+     * @param id
+     * @return
+     */
+    public  RespVO deleteComment(Integer id){
+        User userInfo = ShiroUtils.getUserInfo();
+        //管理员直接删除
+        if (userInfo.getRoleId().equals(1)){
+            commentInfoMapper.deleteByPrimaryKey(id);
+            return RespVO.ofSuccess();
+        }
+        CommentInfo commentInfo = commentInfoMapper.selectByPrimaryKey(id);
+        if (commentInfo.getUserId().equals(userInfo.getId())){
+            commentInfoMapper.deleteByPrimaryKey(id);
+            return RespVO.ofSuccess();
+        }else {
+            return RespVO.fail(ExceptionTypeEnum.DELETE_COMMENT_ERROR);
+        }
+
+    }
 }
 
 

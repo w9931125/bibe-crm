@@ -1,6 +1,10 @@
 package com.bibe.crm.api;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.entity.dto.FindCustomerDTO;
+import com.bibe.crm.entity.dto.ProgressDTO;
+import com.bibe.crm.entity.po.CommentInfo;
 import com.bibe.crm.entity.po.CustomerProgress;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerProgressService;
@@ -37,7 +41,7 @@ public class ProgressController {
     }
 
     /**
-     * 修改
+     * 修改跟进
      * @param customerProgress
      * @return
      */
@@ -48,7 +52,7 @@ public class ProgressController {
     }
 
     /**
-     * 添加
+     * 添加跟进
      * @param
      * @return
      */
@@ -60,7 +64,7 @@ public class ProgressController {
 
 
     /**
-     * 详情/编辑
+     * 详情/编辑跟进
      * @param id
      * @return
      */
@@ -71,13 +75,49 @@ public class ProgressController {
 
 
     /**
-     * 删除
+     * 删除跟进
      * @param id
      * @return
      */
     @DeleteMapping("/delete")
     public RespVO delete(Integer id){
         customerProgressService.delete(id);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 跟进分页列表
+     * @param dto
+     * @return
+     */
+    @PostMapping("/pageList")
+    public RespVO pageList(@RequestBody ProgressDTO dto){
+        Page page = dto.getPage();
+        return customerProgressService.pageList(dto,page);
+    }
+
+
+    /**
+     * 新增评论
+     * @param commentInfo
+     * @return
+     */
+    @PostMapping("/addComment")
+    public RespVO addComment(@RequestBody CommentInfo commentInfo){
+        customerProgressService.addComment(commentInfo);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 删除评论
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public RespVO deleteComment(Integer id){
+        customerProgressService.deleteComment(id);
         return RespVO.ofSuccess();
     }
 }

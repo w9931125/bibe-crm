@@ -1,5 +1,7 @@
 package com.bibe.crm.dao;
 import java.util.Collection;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;

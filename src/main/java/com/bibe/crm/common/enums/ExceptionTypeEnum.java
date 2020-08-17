@@ -94,6 +94,7 @@ public enum ExceptionTypeEnum{
     SELECT_CUSTOMER_ERROR(10010,"请选择查询范围"),
     PERMISSION_ROSE_ERROR(10011,"该职务权限已被禁用，请联系管理员"),
     DELETE_CUSTOMER_GROUP_ERROR(10012,"无法删除，该分组下存在部门"),
+    DELETE_COMMENT_ERROR(10013,"无法删除其他人评论"),
     ;
     /**
      * 状态码
