@@ -6,6 +6,7 @@ import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.CustomerMoveDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.vo.RespVO;
+import com.bibe.crm.service.CustomerProgressService;
 import com.bibe.crm.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,9 @@ public class CustomerController {
 
     @Resource
     private CustomerService customerService;
+
+    @Resource
+    private CustomerProgressService  customerProgressService;
 
 
     /**
@@ -75,6 +79,15 @@ public class CustomerController {
     }
 
 
+    /**
+     * 联系跟进列表
+     * @param customerId
+     * @return
+     */
+    @GetMapping("/progressList")
+    public RespVO progressList(Integer customerId){
+        return customerProgressService.list(customerId);
+    }
 
     /**
      * 删除自己

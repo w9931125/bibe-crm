@@ -50,4 +50,7 @@ public class ProgressVO {
      * 评论内容
      */
     private List<Map<String,Object>> commentInfo;
+
+
+    private String userName;
 }

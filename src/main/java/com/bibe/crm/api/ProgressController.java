@@ -2,9 +2,11 @@ package com.bibe.crm.api;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.common.base.BasePage;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.dto.ProgressDTO;
 import com.bibe.crm.entity.po.CommentInfo;
+import com.bibe.crm.entity.po.CustomerContact;
 import com.bibe.crm.entity.po.CustomerProgress;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerProgressService;
@@ -38,6 +40,51 @@ public class ProgressController {
     @GetMapping("/contactShow")
     public RespVO contactShow(Integer id){
         return RespVO.ofSuccess(customerProgressService.contactShow(id));
+    }
+
+
+    /**
+     * 联系人分页列表
+     * @param customerId
+     * @return
+     */
+    @GetMapping("/contactPageList")
+    public RespVO contactPageList(Integer customerId,BasePage basePage){
+        Page page = basePage.getPage();
+        return RespVO.ofSuccess(customerProgressService.contactPageList(customerId,page));
+    }
+
+
+    /**
+     * 联系人修改
+     * @param customerContact
+     * @return
+     */
+    @PutMapping("/contactUpdate")
+    public RespVO contactUpdate(@RequestBody CustomerContact customerContact){
+        return RespVO.ofSuccess(customerProgressService.contactUpdate(customerContact));
+    }
+
+
+    /**
+     * 联系人添加
+     * @param customerContact
+     * @return
+     */
+    @PostMapping("/contactAdd")
+    public RespVO contactAdd(@RequestBody CustomerContact customerContact){
+        return RespVO.ofSuccess(customerProgressService.contactAdd(customerContact));
+    }
+
+
+    /**
+     * 联系人删除
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/contactDel")
+    public RespVO contactDel(Integer id){
+        return RespVO.ofSuccess(customerProgressService.contactDel(id));
     }
 
     /**

@@ -95,6 +95,7 @@ public enum ExceptionTypeEnum{
     PERMISSION_ROSE_ERROR(10011,"该职务权限已被禁用，请联系管理员"),
     DELETE_CUSTOMER_GROUP_ERROR(10012,"无法删除，该分组下存在部门"),
     DELETE_COMMENT_ERROR(10013,"无法删除其他人评论"),
+    INSTALL_CONTACT_ERROR(10014,"该客户已经存在主要联系人"),
     ;
     /**
      * 状态码

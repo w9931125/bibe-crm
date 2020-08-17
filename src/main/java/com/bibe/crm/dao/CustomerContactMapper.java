@@ -2,6 +2,7 @@ package com.bibe.crm.dao;
 import java.util.Collection;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
@@ -32,4 +33,9 @@ public interface CustomerContactMapper {
     List<CustomerContact> list();
 
     Map<String,Object> show(Integer id);
+
+    IPage<Map<String,Object>> pageList(@Param("customerId")Integer cId, Page page);
+
+
+    CustomerContact checkCustomerType(@Param("customerId")Integer customerId);
 }

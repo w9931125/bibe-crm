@@ -40,4 +40,6 @@ public interface CustomerProgressMapper {
 
 
     IPage<ProgressVO> pageList(@Param("dto")ProgressDTO dto, Page page, @Param("userIds") List<Integer> userIds);
+
+    List<ProgressVO> list(@Param("customerId") Integer customerId);
 }

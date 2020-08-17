@@ -82,9 +82,30 @@ public class CustomerProgressService {
         return customerProgressMapper.updateByPrimaryKeySelective(record);
     }
 
+    /**
+     * 分页列表
+     * @param dto
+     * @param page
+     * @return
+     */
+    public RespVO  pageList(ProgressDTO dto,Page page){
+        List<Integer> userIds = new ArrayList<>();
+        if (null != dto.getDeptId()) {
+            userIds = userMapper.findIdByDeptId(dto.getDeptId());
+        }
+        IPage<ProgressVO> pageList = customerProgressMapper.pageList(dto, page, userIds);
+        //评论列表
+        pageList.getRecords().forEach(i->{
+            List<Map<String, Object>> comment = commentInfoMapper.findAllByProgressId(i.getId());
+            i.setCommentInfo(comment);
+        });
+        return RespVO.ofSuccess(pageList);
+    }
 
-    public int updateByPrimaryKey(CustomerProgress record) {
-        return customerProgressMapper.updateByPrimaryKey(record);
+
+    public RespVO  list(Integer customerId){
+        List<ProgressVO> list = customerProgressMapper.list(customerId);
+        return RespVO.ofSuccess(list);
     }
 
 
@@ -110,24 +131,56 @@ public class CustomerProgressService {
 
 
     /**
-     * 分页列表
-     * @param dto
+     * 添加联系人
+     * @param customerContact
+     * @return
+     */
+    public RespVO contactAdd(CustomerContact customerContact) {
+        CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
+        if (flag!=null){
+            return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+        }
+        customerContactMapper.insertSelective(customerContact);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 删除联系人
+     * @param id
+     * @return
+     */
+    public RespVO contactDel(Integer id) {
+        customerContactMapper.deleteByPrimaryKey(id);
+        return RespVO.ofSuccess();
+    }
+
+    /**
+     * 修改联系人
+     * @param customerContact
+     * @return
+     */
+    public RespVO contactUpdate(CustomerContact customerContact) {
+        CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
+        if (flag!=null){
+            return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+        }
+        customerContactMapper.updateByPrimaryKeySelective(customerContact);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 联系人分页列表
+     * @param customerId
      * @param page
      * @return
      */
-    public RespVO  pageList(ProgressDTO dto,Page page){
-        List<Integer> userIds = new ArrayList<>();
-        if (null != dto.getDeptId()) {
-            userIds = userMapper.findIdByDeptId(dto.getDeptId());
-        }
-        IPage<ProgressVO> pageList = customerProgressMapper.pageList(dto, page, userIds);
-        //评论列表
-        pageList.getRecords().forEach(i->{
-            List<Map<String, Object>> comment = commentInfoMapper.findAllByProgressId(i.getId());
-            i.setCommentInfo(comment);
-        });
-        return RespVO.ofSuccess(pageList);
+    public  RespVO contactPageList(Integer customerId,Page page){
+        IPage<Map<String, Object>> mapIPage = customerContactMapper.pageList(customerId, page);
+        return RespVO.ofSuccess(mapIPage);
     }
+
 
     /**
      * 添加评论
