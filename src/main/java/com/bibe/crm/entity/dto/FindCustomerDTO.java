@@ -3,6 +3,7 @@ package com.bibe.crm.entity.dto;
 import com.bibe.crm.common.base.BasePage;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,6 +32,8 @@ public class FindCustomerDTO  extends BasePage {
      * 用户id
      */
     private Integer userId;
+
+    private List<Integer> userIds = new ArrayList<>();
 
     /**
      * 部门id
@@ -73,5 +76,4 @@ public class FindCustomerDTO  extends BasePage {
      * 联系人手机号
      */
     private String phone;
-
 }

@@ -48,6 +48,14 @@ public interface CustomerMapper {
     IPage<CustomerVO> pageList(FindCustomerDTO dto, Page page, @Param("userIds") List<Integer> userIds);
 
     /**
+     * 我的客戶
+     * @param dto
+     * @param page
+     * @return
+     */
+    IPage<CustomerVO> myPageList(FindCustomerDTO dto, Page page);
+
+    /**
      * 公客分组分页列表
      *
      * @param dto

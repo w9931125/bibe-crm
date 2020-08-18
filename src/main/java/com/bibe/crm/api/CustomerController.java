@@ -80,6 +80,18 @@ public class CustomerController {
 
 
     /**
+     * 我的客戶分页列表
+     * @param dto
+     * @return
+     */
+    @PostMapping("/myPageList")
+    public RespVO myPageList(@RequestBody FindCustomerDTO dto){
+        Page page = dto.getPage();
+        return customerService.pageList(dto,page);
+    }
+
+
+    /**
      * 联系跟进列表
      * @param customerId
      * @return

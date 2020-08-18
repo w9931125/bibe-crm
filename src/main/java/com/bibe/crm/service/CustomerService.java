@@ -109,11 +109,43 @@ public class CustomerService {
 /*        if (dto.getUserId()==null||dto.getDeptId()==null){
             return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
         }*/
-        List<Integer> userIds = new ArrayList<>();
+        List<Integer> userIds = dto.getUserIds();
         if (null != dto.getDeptId()) {
             userIds = userMapper.findIdByDeptId(dto.getDeptId());
         }
         IPage<CustomerVO> pageList = customerMapper.pageList(dto, page, userIds);
+        List<CustomerVO> records = pageList.getRecords();
+        records.forEach(i -> {
+            //联系跟进
+            CustomerProgress newInfo = customerProgressMapper.findNewInfo(i.getId());
+            if (newInfo!=null){
+                if (newInfo.getRemarks()!=null){
+                    i.setRemarks(newInfo.getRemarks());
+                }
+                if (newInfo.getNextTime()!=null){
+                    i.setNextTime(newInfo.getNextTime());
+                }
+                i.setLatsTime(newInfo.getCreateTime());
+            }
+            //主要联系人
+            CustomerContact customerContact = customerContactMapper.findAllByCustomerId(i.getId());
+            if (customerContact!=null){
+                if (customerContact.getPhone()!=null){
+                    i.setPhone(customerContact.getPhone());
+                }
+            }
+        });
+        pageList.setRecords(records);
+        return RespVO.ofSuccess(pageList);
+    }
+
+
+
+
+    public RespVO myPageList(FindCustomerDTO dto, Page page) {
+        Integer id = ShiroUtils.getUserInfo().getId();
+        dto.setUserId(id);
+        IPage<CustomerVO> pageList = customerMapper.myPageList(dto, page);
         List<CustomerVO> records = pageList.getRecords();
         records.forEach(i -> {
             //联系跟进
