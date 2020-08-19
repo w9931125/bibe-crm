@@ -3,13 +3,15 @@ package com.bibe.crm.entity.dto;
 import com.bibe.crm.common.base.BasePage;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ProgressDTO extends BasePage {
 
     /**
      * 用户id(与部门ID取一个)
      */
-    private Integer userId;
+    private List<Integer> userIds;
 
     /**
      * 部门id(与用户ID取一个)

@@ -89,10 +89,7 @@ public class CustomerProgressService {
      * @return
      */
     public RespVO  pageList(ProgressDTO dto,Page page){
-        List<Integer> userIds = new ArrayList<>();
-        if (null!=dto.getUserId()){
-            userIds.add(dto.getUserId());
-        }
+        List<Integer> userIds = dto.getUserIds();
         if (null != dto.getDeptId()) {
             userIds = userMapper.findIdByDeptId(dto.getDeptId());
         }

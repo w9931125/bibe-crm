@@ -32,8 +32,7 @@ public class FindCustomerDTO  extends BasePage {
     /**
      * 用户ids
      */
-    private List<Integer> userIds = new ArrayList<>();
-
+    private List<Integer> userIds;
     /**
      * 部门id
      */
