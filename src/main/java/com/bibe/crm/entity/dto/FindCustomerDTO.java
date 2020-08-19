@@ -28,11 +28,10 @@ public class FindCustomerDTO  extends BasePage {
      */
     private String nextDate;
 
-    /**
-     * 用户id
-     */
-    private Integer userId;
 
+    /**
+     * 用户ids
+     */
     private List<Integer> userIds = new ArrayList<>();
 
     /**

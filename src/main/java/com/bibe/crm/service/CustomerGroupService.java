@@ -1,16 +1,10 @@
 package com.bibe.crm.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.common.enums.ExceptionTypeEnum;
 import com.bibe.crm.dao.CustomerGroupDepartmentRelationMapper;
 import com.bibe.crm.entity.dto.CustomerGroupDTO;
-import com.bibe.crm.entity.dto.FindCustomerDTO;
-import com.bibe.crm.entity.po.CustomerContact;
 import com.bibe.crm.entity.po.CustomerGroupDepartmentRelation;
-import com.bibe.crm.entity.po.CustomerProgress;
 import com.bibe.crm.entity.vo.CustomerGroupVO;
-import com.bibe.crm.entity.vo.CustomerVO;
 import com.bibe.crm.entity.vo.RespVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

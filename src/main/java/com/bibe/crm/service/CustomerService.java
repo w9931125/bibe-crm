@@ -13,7 +13,6 @@ import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.utils.DateUtils;
 import com.bibe.crm.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -105,7 +104,7 @@ public class CustomerService {
     }
 
 
-    public RespVO pageList(FindCustomerDTO dto, Page page) {
+    public IPage<CustomerVO> pageList(FindCustomerDTO dto, Page page) {
 /*        if (dto.getUserId()==null||dto.getDeptId()==null){
             return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
         }*/
@@ -136,16 +135,14 @@ public class CustomerService {
             }
         });
         pageList.setRecords(records);
-        return RespVO.ofSuccess(pageList);
+        return pageList;
     }
 
 
 
-
-    public RespVO myPageList(FindCustomerDTO dto, Page page) {
+    public IPage<CustomerVO> myPageList(FindCustomerDTO dto, Page page) {
         Integer id = ShiroUtils.getUserInfo().getId();
-        dto.setUserId(id);
-        IPage<CustomerVO> pageList = customerMapper.myPageList(dto, page);
+        IPage<CustomerVO> pageList = customerMapper.myPageList(dto, page,id);
         List<CustomerVO> records = pageList.getRecords();
         records.forEach(i -> {
             //联系跟进
@@ -168,7 +165,7 @@ public class CustomerService {
             }
         });
         pageList.setRecords(records);
-        return RespVO.ofSuccess(pageList);
+        return pageList;
     }
 
 
@@ -216,7 +213,7 @@ public class CustomerService {
 
 
     public RespVO findLikeName(String name){
-        Map<String, Object> likeName = customerMapper.findLikeName(name);
+        List<Map<String, Object>> likeName = customerMapper.findLikeName(name);
         return RespVO.ofSuccess(likeName);
     }
 

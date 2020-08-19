@@ -1,6 +1,7 @@
 package com.bibe.crm.api;
 
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.CustomerMoveDTO;
@@ -11,6 +12,7 @@ import com.bibe.crm.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/customer")
@@ -75,7 +77,7 @@ public class CustomerController {
     @PostMapping("/pageList")
     public RespVO pageList(@RequestBody FindCustomerDTO dto){
         Page page = dto.getPage();
-        return customerService.pageList(dto,page);
+        return RespVO.ofSuccess(customerService.pageList(dto,page));
     }
 
 
@@ -87,7 +89,7 @@ public class CustomerController {
     @PostMapping("/myPageList")
     public RespVO myPageList(@RequestBody FindCustomerDTO dto){
         Page page = dto.getPage();
-        return customerService.pageList(dto,page);
+        return RespVO.ofSuccess(customerService.myPageList(dto,page));
     }
 
 

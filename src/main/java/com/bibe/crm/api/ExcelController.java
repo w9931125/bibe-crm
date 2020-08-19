@@ -1,30 +1,36 @@
 package com.bibe.crm.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.bibe.crm.entity.dto.FindCustomerDTO;
+import com.bibe.crm.entity.vo.CustomerVO;
 import com.bibe.crm.entity.vo.RespVO;
+import com.bibe.crm.service.CustomerService;
+import com.bibe.crm.utils.ExcelUtil;
 import com.bibe.crm.utils.ImportExcelUtil;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * 程序入口
  */
 @RestController
 @RequestMapping("/excel")
+@Slf4j
 public class ExcelController {
 
 
     @Resource
     private ImportExcelUtil importExcelUtil;
 
+    @Resource
+    private CustomerService customerService;
 
     /**
      * 下载模版
@@ -35,6 +41,33 @@ public class ExcelController {
         return importExcelUtil.downloadExcel(resp);
     }
 
+
+
+    @GetMapping("/export/customer")
+    public void  customer (@RequestBody FindCustomerDTO dto,HttpServletResponse resp) {
+        long start = System.currentTimeMillis();
+        IPage<CustomerVO> customerVOIPage = customerService.pageList(dto, dto.getPage());
+        try {
+            ExcelUtil.exportExcel(customerVOIPage.getRecords(), "全部客户表", "全部客户表", CustomerVO.class, "全部客户表", resp);
+        } catch (IOException e) {
+            log.error("全部客户导出失败{}",e);
+        }
+        log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
+
+
+
+    @GetMapping("/export/myCustomer")
+    public void  myCustomer (@RequestBody FindCustomerDTO dto,HttpServletResponse resp) {
+        long start = System.currentTimeMillis();
+        IPage<CustomerVO> customerVOIPage = customerService.myPageList(dto, dto.getPage());
+        try {
+            ExcelUtil.exportExcel(customerVOIPage.getRecords(), "我的客户", "我的客户", CustomerVO.class, "我的客户", resp);
+        } catch (IOException e) {
+            log.error("全部客户导出失败{}",e);
+        }
+        log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
 
 //    public HSSFWorkbook userExcel(List<UserRegisterSum> list) {
 //
