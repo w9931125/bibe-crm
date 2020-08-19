@@ -29,7 +29,7 @@ public class ProgressController {
      */
     @GetMapping("/contactList")
     public RespVO list(){
-        return RespVO.ofSuccess(customerProgressService.contactList());
+        return customerProgressService.contactList();
     }
 
     /**
@@ -39,7 +39,7 @@ public class ProgressController {
      */
     @GetMapping("/contactShow")
     public RespVO contactShow(Integer id){
-        return RespVO.ofSuccess(customerProgressService.contactShow(id));
+        return customerProgressService.contactShow(id);
     }
 
 
@@ -51,7 +51,7 @@ public class ProgressController {
     @GetMapping("/contactPageList")
     public RespVO contactPageList(Integer customerId,BasePage basePage){
         Page page = basePage.getPage();
-        return RespVO.ofSuccess(customerProgressService.contactPageList(customerId,page));
+        return  customerProgressService.contactPageList(customerId,page);
     }
 
 
@@ -62,7 +62,7 @@ public class ProgressController {
      */
     @PutMapping("/contactUpdate")
     public RespVO contactUpdate(@RequestBody CustomerContact customerContact){
-        return RespVO.ofSuccess(customerProgressService.contactUpdate(customerContact));
+        return customerProgressService.contactUpdate(customerContact);
     }
 
 
@@ -73,7 +73,7 @@ public class ProgressController {
      */
     @PostMapping("/contactAdd")
     public RespVO contactAdd(@RequestBody CustomerContact customerContact){
-        return RespVO.ofSuccess(customerProgressService.contactAdd(customerContact));
+        return customerProgressService.contactAdd(customerContact);
     }
 
 
@@ -84,7 +84,7 @@ public class ProgressController {
      */
     @DeleteMapping("/contactDel")
     public RespVO contactDel(Integer id){
-        return RespVO.ofSuccess(customerProgressService.contactDel(id));
+        return customerProgressService.contactDel(id);
     }
 
     /**
@@ -152,8 +152,7 @@ public class ProgressController {
      */
     @PostMapping("/addComment")
     public RespVO addComment(@RequestBody CommentInfo commentInfo){
-        customerProgressService.addComment(commentInfo);
-        return RespVO.ofSuccess();
+        return customerProgressService.addComment(commentInfo);
     }
 
 
@@ -164,7 +163,6 @@ public class ProgressController {
      */
     @DeleteMapping("/deleteComment")
     public RespVO deleteComment(Integer id){
-        customerProgressService.deleteComment(id);
-        return RespVO.ofSuccess();
+        return customerProgressService.deleteComment(id);
     }
 }
