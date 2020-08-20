@@ -472,4 +472,7 @@
     select `name`,id from  customer where `name` like concat('%',#{name},'%')
   </select>
 
+  <select id="test">
+    select DATE_FORMAT( create_time, "%Y-%m-%d" ) as `time`,count(1) from customer group by  DATE_FORMAT( create_time, "%Y-%m-%d" )
+  </select>
 </mapper>

@@ -230,6 +230,9 @@ where t1.id=#{id}
     <if test="param1.contactName!= null and param1.contactName != ''">
       and t1.name =#{param1.contactName}
     </if>
+    <if test="param1.customerId != null">
+      and t1.customer_id =#{param1.customerId}
+    </if>
     <if test="userIds != null and userIds.size() != 0">
       and t2.user_id in
       <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">

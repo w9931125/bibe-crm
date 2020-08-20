@@ -19,6 +19,11 @@ public class ProgressDTO extends BasePage {
     private Integer deptId;
 
     /**
+     * 客户id
+     */
+    private Integer customerId;
+
+    /**
      * 沟通时长/分钟
      */
     private Integer speakTime;

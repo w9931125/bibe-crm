@@ -5,6 +5,10 @@ server:
 spring:
   application:
     name: bibe-crm
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
   jackson:
       date-format: yyyy-MM-dd HH:mm:ss
       time-zone: GMT+8

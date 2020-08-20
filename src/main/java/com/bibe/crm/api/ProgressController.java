@@ -117,7 +117,7 @@ public class ProgressController {
      */
     @GetMapping("/show")
     public RespVO show(Integer id){
-        return  RespVO.ofSuccess(customerProgressService.show(id));
+        return  customerProgressService.show(id);
     }
 
 
