@@ -472,7 +472,120 @@
     select `name`,id from  customer where `name` like concat('%',#{name},'%')
   </select>
 
-  <select id="test">
-    select DATE_FORMAT( create_time, "%Y-%m-%d" ) as `time`,count(1) from customer group by  DATE_FORMAT( create_time, "%Y-%m-%d" )
+
+  <select id="countAddCustomerByYear" resultType="com.bibe.crm.entity.vo.CountVO">
+    <!--新增客户-->
+    <if test="flag eq '1'.toString() ">
+      SELECT DATE_FORMAT(create_time, "%Y") AS `date`, COUNT(1) as `count` FROM customer
+      <if test="userIds != null and userIds.size() != 0">
+        where user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y")
+    </if>
+
+    <!--联系跟进-->
+    <if test="flag eq '2'.toString() ">
+      select DATE_FORMAT(create_time, "%Y") AS `date`, COUNT(1) as `count` from customer_progress
+      <if test="userIds != null and userIds.size() != 0">
+        where user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y")
+    </if>
+
+    <!--跟进客户-->
+    <if test="flag eq '3'.toString() ">
+      SELECT DATE_FORMAT(create_time, "%Y") AS `date`, COUNT(1) as `count` FROM customer where id in (select distinct customer_id from customer_progress )
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y")
+    </if>
+
   </select>
+
+  <select id="countAddCustomerByMonth" resultType="com.bibe.crm.entity.vo.CountVO">
+    <!--新增客户-->
+    <if test="flag eq '1'.toString() ">
+      SELECT DATE_FORMAT(create_time, "%Y-%m") AS `date` ,COUNT(1) as `count` FROM customer where DATE_FORMAT(create_time,"%Y")=#{year}
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y-%m")
+    </if>
+    <!--联系跟进-->
+    <if test="flag eq '2'.toString() ">
+      select DATE_FORMAT(create_time, "%Y-%m") AS `date`, COUNT(1) as `count` from customer_progress where DATE_FORMAT(create_time,"%Y")=#{year}
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y-%m")
+    </if>
+
+    <!--跟进客户-->
+    <if test="flag eq '3'.toString() ">
+      SELECT DATE_FORMAT(create_time, "%Y-%m") AS `date`, COUNT(1) as `count` FROM customer where id in (select distinct customer_id from customer_progress ) and DATE_FORMAT(create_time,"%Y")=#{year}
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y")
+
+    </if>
+  </select>
+
+  <select id="countAddCustomerByDay" resultType="com.bibe.crm.entity.vo.CountVO">
+    <!--新增客户-->
+    <if test="flag eq '1'.toString() ">
+      SELECT DATE_FORMAT(create_time, "%Y-%m-%d") AS `date`, COUNT(1) as `count` FROM customer  where DATE_FORMAT(create_time, "%Y-%m")=#{month}
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y-%m-%d")
+    </if>
+    <!--联系跟进-->
+    <if test="flag eq '2'.toString() ">
+      select DATE_FORMAT(create_time, "%Y-%m-%d") AS `date`, COUNT(1) as `count` from customer_progress where DATE_FORMAT(create_time,"%Y-%m")=#{month}
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y-%m-%d")
+    </if>
+
+    <!--跟进客户-->
+    <if test="flag eq '3'.toString() ">
+      SELECT DATE_FORMAT(create_time, "%Y-%m-%d") AS `date`, COUNT(1) as `count` FROM customer where id in (select distinct customer_id from customer_progress ) and DATE_FORMAT(create_time,"%Y-%m")=#{month}
+      <if test="userIds != null and userIds.size() != 0">
+        and  user_id in
+        <foreach close=")" collection="userIds" index="index" item="item" open="(" separator=",">
+          #{item,jdbcType=INTEGER}
+        </foreach>
+      </if>
+      GROUP BY DATE_FORMAT(create_time, "%Y-%m-%d")
+
+    </if>
+  </select>
+
 </mapper>

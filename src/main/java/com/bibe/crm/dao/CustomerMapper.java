@@ -1,6 +1,7 @@
 package com.bibe.crm.dao;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;
+import com.bibe.crm.entity.vo.CountVO;
 import com.bibe.crm.entity.vo.CustomerVO;
 import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;import java.util.Map;
 
@@ -83,4 +84,19 @@ public interface CustomerMapper {
      * @return
      */
     List<Map<String, Object>> findLikeName(@Param("name") String name);
+
+
+    /**
+     * 客户按年统计
+     * @param userIds
+     * @param flag 1新增客户数 2联系跟进次数 3跟进客户数
+     * @return
+     */
+    CountVO countAddCustomerByYear(@Param("userIds") List<Integer> userIds,@Param("flag") Integer flag);
+
+
+    CountVO countAddCustomerByMonth(@Param("userIds") List<Integer> userIds,@Param("year")String year,@Param("flag") Integer flag);
+
+
+    CountVO countAddCustomerByDay(@Param("userIds") List<Integer> userIds,@Param("month") String month,@Param("flag") Integer flag);
 }
