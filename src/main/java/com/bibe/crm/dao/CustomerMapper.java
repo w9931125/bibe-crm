@@ -56,7 +56,7 @@ public interface CustomerMapper {
      * @param page
      * @return
      */
-    IPage<CustomerVO> myPageList(FindCustomerDTO dto, Page page,Integer userId);
+    IPage<CustomerVO> myPageList(FindCustomerDTO dto, Page page,@Param("userId") Integer userId);
 
     /**
      * 公客分组分页列表
@@ -87,16 +87,16 @@ public interface CustomerMapper {
 
 
     /**
-     * 客户按年统计
+     * 按时间统计
      * @param userIds
      * @param flag 1新增客户数 2联系跟进次数 3跟进客户数
      * @return
      */
-    CountVO countAddCustomerByYear(@Param("userIds") List<Integer> userIds,@Param("flag") Integer flag);
+    List<CountVO> countAddCustomerByYear(@Param("userIds") List<Integer> userIds,@Param("flag") Integer flag);
 
 
-    CountVO countAddCustomerByMonth(@Param("userIds") List<Integer> userIds,@Param("year")String year,@Param("flag") Integer flag);
+    List<CountVO> countAddCustomerByMonth(@Param("userIds") List<Integer> userIds,@Param("year")String year,@Param("flag") Integer flag);
 
 
-    CountVO countAddCustomerByDay(@Param("userIds") List<Integer> userIds,@Param("month") String month,@Param("flag") Integer flag);
+    List<CountVO> countAddCustomerByDay(@Param("userIds") List<Integer> userIds,@Param("month") String month,@Param("flag") Integer flag);
 }

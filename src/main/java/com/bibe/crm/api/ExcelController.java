@@ -8,10 +8,7 @@ import com.bibe.crm.service.CustomerService;
 import com.bibe.crm.utils.ExcelUtil;
 import com.bibe.crm.utils.ImportExcelUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -37,13 +34,17 @@ public class ExcelController {
      * @return
      */
     @GetMapping("/download")
-    public RespVO download(HttpServletResponse resp) {
-        return importExcelUtil.downloadExcel(resp);
+    public void download(HttpServletResponse resp) {
+        importExcelUtil.downloadExcel(resp);
     }
 
 
-
-    @GetMapping("/export/customer")
+    /**
+     * 全部客户导出
+     * @param dto
+     * @param resp
+     */
+    @PostMapping("/export/customer")
     public void  customer (@RequestBody FindCustomerDTO dto,HttpServletResponse resp) {
         long start = System.currentTimeMillis();
         IPage<CustomerVO> customerVOIPage = customerService.pageList(dto, dto.getPage());
@@ -57,7 +58,11 @@ public class ExcelController {
 
 
 
-    @GetMapping("/export/myCustomer")
+    /**
+     * 我的客户-导出
+     * @param dto
+     * */
+    @PostMapping("/export/myCustomer")
     public void  myCustomer (@RequestBody FindCustomerDTO dto,HttpServletResponse resp) {
         long start = System.currentTimeMillis();
         IPage<CustomerVO> customerVOIPage = customerService.myPageList(dto, dto.getPage());

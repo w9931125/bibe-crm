@@ -101,9 +101,9 @@ public class ImportExcelUtil {
      * @param resp
      * @return
      */
-    public RespVO downloadExcel(HttpServletResponse resp) {
+    public void downloadExcel(HttpServletResponse resp) {
         String fileName = null;
-        String fileNames = "企业客户模版.xls";
+        String fileNames = "企业客户模板.xls";
         String downloadName = fileNames; //下载之后的名字
         try {
             fileName = new String(downloadName.getBytes("GBK"), "ISO-8859-1");
@@ -142,7 +142,6 @@ public class ImportExcelUtil {
             }
         }
         log.info("--------Resource:{},fileName:{},OutputStream:{},BufferedInputStream:{}", res, fileName, os.toString(), bis.toString());
-        return RespVO.ofSuccess();
     }
 
 }

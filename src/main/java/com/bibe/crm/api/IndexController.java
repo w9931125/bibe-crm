@@ -43,7 +43,7 @@ public class IndexController {
     @Resource
     private FilesMapper filesMapper;
 
-    private final String path = "/home/bibe-crm/upload/";
+    private final String path = "/home/bibe-crm/upload";
 
     /**
      * 上传文件
@@ -134,16 +134,17 @@ public class IndexController {
             //    path = ResourceUtils.getURL("classpath:").getPath() + "static" + files.getPath() + "/" + files.getAlias();
             //
             //    String a=path+files.getAlias();
-            String decode = URLDecoder.decode(path+files.getPath() + "/"+files.getAlias());
+            log.info("删除文件地址>>>>>>>"+path+files.getPath() + "/"+files.getAlias());
+/*            String decode = URLDecoder.decode(path+files.getPath() + "/"+files.getAlias());
             File file = new File(decode);
-            boolean delete = file.delete();
-            if (delete) {
+            boolean delete = file.delete();*/
+            //if (delete) {
                 int b = filesMapper.deleteByPrimaryKey(id);
                 if (b > 0) {
                     log.info("文件删除成功");
                     return RespVO.ofSuccess();
                 }
-            }
+            //}
         }
         log.info("文件删除失败");
         return RespVO.fail();

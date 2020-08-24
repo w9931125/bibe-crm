@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.common.enums.ExceptionTypeEnum;
 import com.bibe.crm.dao.*;
+import com.bibe.crm.entity.dto.CountDTO;
 import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
 import com.bibe.crm.entity.po.*;
+import com.bibe.crm.entity.vo.CountVO;
 import com.bibe.crm.entity.vo.CustomerVO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.utils.DateUtils;
@@ -41,6 +43,30 @@ public class CustomerService {
 
     public int delete(Integer[] ids) {
         return customerMapper.updateStatusByIdIn(ids);
+    }
+
+
+    /**
+     * 按时间统计客户
+     * @param countDTO
+     * @return
+     */
+    public RespVO findCountByDate(CountDTO countDTO){
+        return RespVO.ofSuccess(getCountByDate(countDTO));
+    }
+
+    public List<CountVO> getCountByDate(CountDTO countDTO){
+        if (countDTO.getYear()==null&&countDTO.getMonth()==null){
+            log.info("全部统计》》》》》");
+            return customerMapper.countAddCustomerByYear(countDTO.getUserIds(),countDTO.getFlag());
+        }else if (countDTO.getYear()!=null){
+            log.info("按月统计》》》》》》》");
+            return customerMapper.countAddCustomerByMonth(countDTO.getUserIds(),countDTO.getYear(),countDTO.getFlag());
+        }else if (countDTO.getMonth()!=null){
+            log.info("按日统计》》》》》");
+            return customerMapper.countAddCustomerByDay(countDTO.getUserIds(),countDTO.getMonth(),countDTO.getFlag());
+        }
+        return null;
     }
 
 

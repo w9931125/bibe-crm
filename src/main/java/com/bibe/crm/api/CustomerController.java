@@ -3,6 +3,7 @@ package com.bibe.crm.api;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.entity.dto.CountDTO;
 import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.CustomerMoveDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
@@ -24,6 +25,20 @@ public class CustomerController {
 
     @Resource
     private CustomerProgressService  customerProgressService;
+
+
+
+    /**
+     * 按时间统计客户
+     * @param countDTO
+     * @return
+     */
+    @PostMapping("/findCountByDate")
+    public RespVO findCountByDate(@RequestBody CountDTO countDTO){
+        return customerService.findCountByDate(countDTO);
+    }
+
+
 
 
     /**

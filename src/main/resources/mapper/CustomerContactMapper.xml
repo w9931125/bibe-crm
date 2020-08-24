@@ -275,13 +275,13 @@ LEFT JOIN users t3 ON t2.user_id=t3.id
     select
     <include refid="Base_Column_List"/>
     from customer_contact
-    where customer_id=#{customerId,jdbcType=INTEGER}
+    where customer_id=#{customerId,jdbcType=INTEGER} and `type` =1
   </select>
 
   <select id="checkCustomerType" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from customer_contact
-    where customer_id=#{customerId,jdbcType=INTEGER} and  type=1
+    where customer_id=#{customerId,jdbcType=INTEGER} and  `type`=1
   </select>
 </mapper>

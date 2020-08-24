@@ -136,9 +136,11 @@ public class CustomerProgressService {
      * @return
      */
     public RespVO contactAdd(CustomerContact customerContact) {
-        CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
-        if (flag!=null){
-            return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+        if (customerContact.getType().equals(1)){
+            CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
+            if (flag!=null){
+                return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+            }
         }
         customerContactMapper.insertSelective(customerContact);
         return RespVO.ofSuccess();
@@ -161,9 +163,11 @@ public class CustomerProgressService {
      * @return
      */
     public RespVO contactUpdate(CustomerContact customerContact) {
-        CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
-        if (flag!=null){
-            return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+        if (customerContact.getType().equals(1)){
+            CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
+            if (flag!=null){
+                return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+            }
         }
         customerContactMapper.updateByPrimaryKeySelective(customerContact);
         return RespVO.ofSuccess();
