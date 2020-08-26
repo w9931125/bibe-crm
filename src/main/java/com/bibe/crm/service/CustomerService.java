@@ -9,7 +9,8 @@ import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
 import com.bibe.crm.entity.po.*;
-import com.bibe.crm.entity.vo.CountVO;
+import com.bibe.crm.entity.vo.CountDayVO;
+import com.bibe.crm.entity.vo.CountSortVO;
 import com.bibe.crm.entity.vo.CustomerVO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.utils.DateUtils;
@@ -55,16 +56,45 @@ public class CustomerService {
         return RespVO.ofSuccess(getCountByDate(countDTO));
     }
 
-    public List<CountVO> getCountByDate(CountDTO countDTO){
+    public List<CountDayVO> getCountByDate(CountDTO countDTO){
         if (countDTO.getYear()==null&&countDTO.getMonth()==null){
-            log.info("全部统计》》》》》");
-            return customerMapper.countAddCustomerByYear(countDTO.getUserIds(),countDTO.getFlag());
+            log.info("全部统计>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerByYear(countDTO.getUserIds(),countDTO.getFlag());
         }else if (countDTO.getYear()!=null){
-            log.info("按月统计》》》》》》》");
-            return customerMapper.countAddCustomerByMonth(countDTO.getUserIds(),countDTO.getYear(),countDTO.getFlag());
+            log.info("按月统计>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerByMonth(countDTO.getUserIds(),countDTO.getYear(),countDTO.getFlag());
         }else if (countDTO.getMonth()!=null){
-            log.info("按日统计》》》》》");
-            return customerMapper.countAddCustomerByDay(countDTO.getUserIds(),countDTO.getMonth(),countDTO.getFlag());
+            log.info("按日统计>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerByDay(countDTO.getUserIds(),countDTO.getMonth(),countDTO.getFlag());
+        }
+        return null;
+    }
+
+
+    /**
+     * 按分类统计
+     * @param countDTO
+     * @return
+     */
+    public RespVO findCountBySort(CountDTO countDTO){
+        return RespVO.ofSuccess(getCountBySort(countDTO));
+    }
+
+
+    public List<CountSortVO> getCountBySort(CountDTO countDTO){
+        //     * 1按城市 2行业 3客户意向度 4客户类别
+        if (countDTO.getSort().equals(1)){
+            log.info("按城市统计>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerBySort1(countDTO);
+        }else if (countDTO.getSort().equals(2)){
+            log.info("按行业统计>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerBySort2(countDTO);
+        }else if (countDTO.getSort().equals(3)){
+            log.info("按客户意向度>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerBySort3(countDTO);
+        }else if (countDTO.getSort().equals(4)){
+            log.info("按4客户类别>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            return customerMapper.countCustomerBySort4(countDTO);
         }
         return null;
     }

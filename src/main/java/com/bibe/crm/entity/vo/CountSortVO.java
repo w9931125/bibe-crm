@@ -3,12 +3,14 @@ package com.bibe.crm.entity.vo;
 import lombok.Data;
 
 /**
- * 统计
+ * 分类统计
  */
 @Data
-public class CountVO {
+public class CountSortVO {
 
-    private String date;
+    private Integer flag;
+
+    private String name;
 
     private Integer count;
 }

@@ -13,7 +13,6 @@ import com.bibe.crm.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/customer")
@@ -36,6 +35,16 @@ public class CustomerController {
     @PostMapping("/findCountByDate")
     public RespVO findCountByDate(@RequestBody CountDTO countDTO){
         return customerService.findCountByDate(countDTO);
+    }
+
+    /**
+     * 按分类统计客户
+     * @param countDTO
+     * @return
+     */
+    @PostMapping("/findCountBySort")
+    public RespVO findCountBySort(@RequestBody CountDTO countDTO){
+        return customerService.findCountBySort(countDTO);
     }
 
 

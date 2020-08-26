@@ -1,7 +1,10 @@
 package com.bibe.crm.dao;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;
-import com.bibe.crm.entity.vo.CountVO;
+import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.entity.dto.CountDTO;
+import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.FindCustomerGroupDTO;import com.bibe.crm.entity.po.Customer;
+import com.bibe.crm.entity.vo.CountDayVO;
+import com.bibe.crm.entity.vo.CountSortVO;
 import com.bibe.crm.entity.vo.CustomerVO;
 import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;import java.util.Map;
 
@@ -92,11 +95,40 @@ public interface CustomerMapper {
      * @param flag 1新增客户数 2联系跟进次数 3跟进客户数
      * @return
      */
-    List<CountVO> countAddCustomerByYear(@Param("userIds") List<Integer> userIds,@Param("flag") Integer flag);
+    List<CountDayVO> countCustomerByYear(@Param("userIds") List<Integer> userIds, @Param("flag") Integer flag);
 
 
-    List<CountVO> countAddCustomerByMonth(@Param("userIds") List<Integer> userIds,@Param("year")String year,@Param("flag") Integer flag);
+    List<CountDayVO> countCustomerByMonth(@Param("userIds") List<Integer> userIds, @Param("year")String year, @Param("flag") Integer flag);
 
 
-    List<CountVO> countAddCustomerByDay(@Param("userIds") List<Integer> userIds,@Param("month") String month,@Param("flag") Integer flag);
+    List<CountDayVO> countCustomerByDay(@Param("userIds") List<Integer> userIds, @Param("month") String month, @Param("flag") Integer flag);
+
+
+    /**
+     * 按分类统计-城市
+     * @param dto
+     * @return
+     */
+    List<CountSortVO> countCustomerBySort1(@Param("dto")CountDTO dto);
+
+    /**
+     * 按分类统计-行业
+     * @param dto
+     * @return
+     */
+    List<CountSortVO> countCustomerBySort2(@Param("dto")CountDTO dto);
+
+    /**
+     * 按分类统计-客户意向度
+     * @param dto
+     * @return
+     */
+    List<CountSortVO> countCustomerBySort3(@Param("dto")CountDTO dto);
+
+    /**
+     * 按分类统计-客户类别
+     * @param dto
+     * @return
+     */
+    List<CountSortVO> countCustomerBySort4(@Param("dto")CountDTO dto);
 }
