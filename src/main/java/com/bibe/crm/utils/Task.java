@@ -1,11 +1,16 @@
 package com.bibe.crm.utils;
 
+import com.bibe.crm.dao.CustomerGroupMapper;
+import com.bibe.crm.entity.po.CustomerGroup;
+import com.bibe.crm.entity.vo.CustomerGroupVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 自动转交公客
@@ -13,6 +18,9 @@ import java.util.Date;
 @Component
 @Slf4j
 public class Task {
+
+    @Resource
+    private CustomerGroupMapper customerGroupMapper;
 
     //凌晨执行
     @Scheduled(cron = "0 0 0 * * ?")
@@ -23,6 +31,12 @@ public class Task {
         log.info("自动转交公客开始执行>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         log.info("当前时间：" + date);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<自动转交公客结束");
+
+        List<CustomerGroup> list = customerGroupMapper.groupList();
+        list.forEach(i->{
+            Integer endDay = i.getEndDay();
+
+        });
     }
 
     //月初

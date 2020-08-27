@@ -26,5 +26,5 @@ public interface CustomerGroupMapper {
 
     List<Map<String,Object>> findAllByIdIn(@Param("idCollection")Collection<Integer> idCollection);
 
-
+    List<CustomerGroup> groupList();
 }

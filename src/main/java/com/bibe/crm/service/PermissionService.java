@@ -89,8 +89,8 @@ public class PermissionService {
         }
         //验证权限是否被禁用
         int pId = 0;
-        int status = rolesPermissionRelationMapper.findStatus(user.getRoleId(), pId = flag == 0 ? 3 : 4);
-        if (status!=0) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
+        Integer status = rolesPermissionRelationMapper.findStatus(user.getRoleId(), pId = flag == 0 ? 3 : 4);
+        if (status!=0 || null==status) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
         //客户资料查询权限
         List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(user.getRoleId(), flag);
         if (rolesDepartmentRelationList.size()==0||rolesDepartmentRelationList==null){
@@ -198,8 +198,8 @@ public class PermissionService {
             return RespVO.ofSuccess(TreeUtil.getTreeList(tree,0));
         }
         //验证权限是否被禁用
-        int status = rolesPermissionRelationMapper.findStatus(userInfo.getRoleId(), 3);
-        if (status!=0) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
+        Integer status = rolesPermissionRelationMapper.findStatus(userInfo.getRoleId(), 3);
+        if (status!=0 || null==status) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
         //客户资料查询权限
         List<RolesDepartmentRelation> rolesDepartmentRelationList = rolesDepartmentRelationMapper.selectAllByRoleIdAndType(userInfo.getRoleId(), 0);
         if (rolesDepartmentRelationList.size()==0||rolesDepartmentRelationList==null){
@@ -226,8 +226,8 @@ public class PermissionService {
             return RespVO.ofSuccess(maps);
         }
         //验证权限是否被禁用
-        int status = rolesPermissionRelationMapper.findStatus(userInfo.getRoleId(), 3);
-        if (status!=0) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
+        Integer status = rolesPermissionRelationMapper.findStatus(userInfo.getRoleId(), 3);
+        if (status!=0 || null==status) return RespVO.fail(ExceptionTypeEnum.PERMISSION_ROSE_ERROR);
 
         List<RolesCustomerGroupRelation> rolesCustomerGroupRelations = rolesCustomerGroupRelationMapper.selectAllByRoleId(userInfo.getRoleId());
         if (rolesCustomerGroupRelations.size()==0||rolesCustomerGroupRelations==null){

@@ -597,7 +597,7 @@
     FROM customer t1
     LEFT JOIN `area` t2 ON t1.area_id=t2.id  where 1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -613,7 +613,7 @@
       FROM  customer_progress t3 left join customer t1 on  t3.customer_id=t1.id
       LEFT JOIN `area` t2 ON t1.area_id=t2.id  where 1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -631,7 +631,7 @@
       LEFT JOIN `area` t2 ON t1.area_id=t2.id
       where t1.id in (select distinct customer_id from customer_progress)
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -651,7 +651,7 @@
       SELECT 2 as flag,t1.industry as name, COUNT(t1.id) AS `count`
       FROM customer t1  where  1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -666,7 +666,7 @@
       SELECT 2 as flag,t1.industry as name, COUNT(t1.id) AS `count`
       FROM  customer_progress t3 left join customer t1 on  t3.customer_id=t1.id  where 1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -683,7 +683,7 @@
       FROM customer t1
       where t1.id in (select distinct customer_id from customer_progress)
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -711,7 +711,7 @@
       when 7 then 'E'  end as `name`, COUNT(t1.id) AS `count`
       FROM customer t1  where  1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -735,7 +735,7 @@
       when 7 then 'E'  end as `name`, COUNT(t1.id) AS `count`
       FROM  customer_progress t3 left join customer t1 on  t3.customer_id=t1.id where 1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -761,7 +761,7 @@
       FROM customer t1
       where t1.id in (select distinct customer_id from customer_progress)
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -785,7 +785,7 @@
       when 2 then '采购方'  end as name, COUNT(t1.id) AS `count`
       FROM customer t1  where  1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -804,7 +804,7 @@
       when 2 then '采购方'  end as name, COUNT(t1.id) AS `count`
       FROM  customer_progress t3 left join customer t1 on  t3.customer_id=t1.id where 1=1
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>
@@ -825,7 +825,7 @@
       FROM customer t1
       where t1.id in (select distinct customer_id from customer_progress)
       <if test="dto.userIds != null and dto.userIds.size() != 0">
-        and  user_id in
+        and  t1.user_id in
         <foreach close=")" collection="dto.userIds" index="index" item="item" open="(" separator=",">
           #{item,jdbcType=INTEGER}
         </foreach>

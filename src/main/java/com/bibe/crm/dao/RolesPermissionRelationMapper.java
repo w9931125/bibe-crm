@@ -38,5 +38,5 @@ public interface RolesPermissionRelationMapper {
      * @param permissionId  1职位与权限 2部门与员工 3客户资料 4联系跟进
      * @return
      */
-    int findStatus(@Param("roleId")Integer roleId,@Param("permissionId")Integer permissionId);
+    Integer findStatus(@Param("roleId")Integer roleId,@Param("permissionId")Integer permissionId);
 }
