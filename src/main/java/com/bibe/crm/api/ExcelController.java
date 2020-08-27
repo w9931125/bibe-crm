@@ -1,9 +1,10 @@
 package com.bibe.crm.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.bibe.crm.entity.dto.CountDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
-import com.bibe.crm.entity.vo.CustomerVO;
-import com.bibe.crm.entity.vo.RespVO;
+import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
+import com.bibe.crm.entity.vo.*;
 import com.bibe.crm.service.CustomerService;
 import com.bibe.crm.utils.ExcelUtil;
 import com.bibe.crm.utils.ImportExcelUtil;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 程序入口
@@ -72,6 +74,74 @@ public class ExcelController {
             log.error("全部客户导出失败{}",e);
         }
         log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
+
+
+    /**
+     * 公共客户-导出
+     * @param dto
+     * */
+    @PostMapping("/export/publicCustomer")
+    public void  publicCustomer (@RequestBody FindCustomerGroupDTO dto, HttpServletResponse resp) {
+        long start = System.currentTimeMillis();
+        IPage<PublicCustomerVO> customerVOIPage = customerService.customerGroupPageList(dto, dto.getPage());
+        try {
+            ExcelUtil.exportExcel(customerVOIPage.getRecords(), "公共客户", "公共客户", PublicCustomerVO.class, "公共客户", resp);
+        } catch (IOException e) {
+            log.error("公共客户导出失败{}",e);
+        }
+        log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
+
+
+    /**
+     * 按日期-导出
+     * @param countDTO
+     * */
+    @PostMapping("/export/countDay")
+    public void  countDay (@RequestBody CountDTO countDTO, HttpServletResponse resp) {
+        long start = System.currentTimeMillis();
+        List<CountDayVO> countByDate = customerService.getCountByDate(countDTO);
+        String title = getTitle(countDTO);
+        try {
+            ExcelUtil.exportExcel(countByDate, title+"日期统计", title+"日期统计", CountDayVO.class, title+"日期统计", resp);
+        } catch (IOException e) {
+            log.error("日期统计导出失败{}",e);
+        }
+        log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
+
+    /**
+     * 按分类-导出
+     * @param countDTO
+     * */
+    @PostMapping("/export/countSort")
+    public void  countSort (@RequestBody CountDTO countDTO, HttpServletResponse resp) {
+        long start = System.currentTimeMillis();
+        List<CountSortVO> countBySort = customerService.getCountBySort(countDTO);
+        try {
+            String title = getTitle(countDTO);
+            ExcelUtil.exportExcel(countBySort, title+"分类统计", title+"分类统计", CountSortVO.class, title+"分类统计", resp);
+        } catch (IOException e) {
+            log.error("分类统计导出失败{}",e);
+        }
+        log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
+
+    private String  getTitle(CountDTO countDTO){
+        String title = null;
+        switch (countDTO.getFlag()){
+            case 1:
+                title="新增客户数";
+                break;
+            case 2:
+                title="联系跟进次数";
+                break;
+            case 3:
+                title="跟进客户数";
+                break;
+        }
+        return title;
     }
 
 //    public HSSFWorkbook userExcel(List<UserRegisterSum> list) {

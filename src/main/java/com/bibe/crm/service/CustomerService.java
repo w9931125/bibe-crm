@@ -9,10 +9,7 @@ import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
 import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
 import com.bibe.crm.entity.po.*;
-import com.bibe.crm.entity.vo.CountDayVO;
-import com.bibe.crm.entity.vo.CountSortVO;
-import com.bibe.crm.entity.vo.CustomerVO;
-import com.bibe.crm.entity.vo.RespVO;
+import com.bibe.crm.entity.vo.*;
 import com.bibe.crm.utils.DateUtils;
 import com.bibe.crm.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -115,10 +112,12 @@ public class CustomerService {
             log.error("客户添加出现异常{}",e);
         }
         //新增客户
+        //customer.setCreateTime(new Date());
         customerMapper.insertSelective(customer);
         //新增联系人
         CustomerContact customerContact = record.getCustomerContact();
         customerContact.setCustomerId(customer.getId());
+        customerContact.setCreateTime(new Date());
         int i = customerContactMapper.insertSelective(customerContact);
         //减少录入次数
         if (i > 1 && !userInfo.getNumber().equals(-1)) {
@@ -231,12 +230,12 @@ public class CustomerService {
      * @param page
      * @return
      */
-    public RespVO customerGroupPageList(FindCustomerGroupDTO dto, Page page) {
+    public IPage<PublicCustomerVO>  customerGroupPageList(FindCustomerGroupDTO dto, Page page) {
 /*        if (dto.getUserId()==null||dto.getDeptId()==null){
             return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
         }*/
-        IPage<CustomerVO> pageList = customerMapper.customerGroupPageList(dto, page);
-        List<CustomerVO> records = pageList.getRecords();
+        IPage<PublicCustomerVO> pageList = customerMapper.customerGroupPageList(dto, page);
+        List<PublicCustomerVO> records = pageList.getRecords();
         records.forEach(i -> {
             //联系跟进
             CustomerProgress newInfo = customerProgressMapper.findNewInfo(i.getId());
@@ -258,7 +257,7 @@ public class CustomerService {
             }
         });
         pageList.setRecords(records);
-        return RespVO.ofSuccess(pageList);
+        return pageList;
     }
 
     public RespVO move(Integer userId,Integer groupId,List<Integer> ids){

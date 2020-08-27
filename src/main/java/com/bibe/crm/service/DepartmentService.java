@@ -17,6 +17,7 @@ import com.bibe.crm.entity.po.Department;
 import com.bibe.crm.dao.DepartmentMapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class DepartmentService{
 
     
     public RespVO insert(Department record) {
+        record.setCreateTime(new Date());
         departmentMapper.insert(record);
         return  RespVO.ofSuccess();
     }
@@ -61,6 +63,7 @@ public class DepartmentService{
 
     
     public RespVO update(Department record) {
+        record.setUpdateTime(new Date());
         departmentMapper.updateByPrimaryKeySelective(record);
         return RespVO.ofSuccess();
     }

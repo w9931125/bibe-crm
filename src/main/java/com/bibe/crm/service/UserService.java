@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import com.bibe.crm.entity.po.User;
 import com.bibe.crm.dao.UserMapper;
 
+import java.util.Date;
+
 @Service
 @Slf4j
 public class UserService {
@@ -54,6 +56,7 @@ public class UserService {
         User user=new User();
         BeanUtils.copyProperties(record,user);
         user.setPassword(getPassword(user.getPassword()));
+        user.setCreateTime(new Date());
         userMapper.insertSelective(user);
         return RespVO.ofSuccess();
     }
@@ -80,6 +83,7 @@ public class UserService {
         if (user.getPassword()!=null){
             user.setPassword(getPassword(user.getPassword()));
         }
+        user.setUpdateTime(new Date());
         userMapper.updateByPrimaryKeySelective(user);
         return RespVO.ofSuccess();
     }

@@ -16,10 +16,7 @@ import javax.annotation.Resource;
 import com.bibe.crm.entity.po.CustomerProgress;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CustomerProgressService {
@@ -39,6 +36,9 @@ public class CustomerProgressService {
     @Resource
     private CommentInfoMapper commentInfoMapper;
 
+    @Resource
+    private CustomerMapper customerMapper;
+
 
     public int delete(Integer id) {
         return customerProgressMapper.deleteByPrimaryKey(id);
@@ -46,6 +46,9 @@ public class CustomerProgressService {
 
 
     public int add(CustomerProgress record) {
+        //新增跟进次数
+        customerMapper.updateProgressNumById(record.getCustomerId());
+        record.setCreateTime(new Date());
         return customerProgressMapper.insertSelective(record);
     }
 
@@ -79,6 +82,7 @@ public class CustomerProgressService {
 
 
     public int update(CustomerProgress record) {
+        record.setUpdateTime(new Date());
         return customerProgressMapper.updateByPrimaryKeySelective(record);
     }
 
@@ -142,6 +146,7 @@ public class CustomerProgressService {
                 return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
             }
         }
+        customerContact.setCreateTime(new Date());
         customerContactMapper.insertSelective(customerContact);
         return RespVO.ofSuccess();
     }
@@ -169,6 +174,7 @@ public class CustomerProgressService {
                 return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
             }
         }
+        customerContact.setUpdateTime(new Date());
         customerContactMapper.updateByPrimaryKeySelective(customerContact);
         return RespVO.ofSuccess();
     }
@@ -193,6 +199,7 @@ public class CustomerProgressService {
      */
     public  RespVO addComment(CommentInfo commentInfo){
         commentInfo.setUserId(ShiroUtils.getUserInfo().getId());
+        commentInfo.setCreateTime(new Date());
         commentInfoMapper.insertSelective(commentInfo);
         return RespVO.ofSuccess();
     }

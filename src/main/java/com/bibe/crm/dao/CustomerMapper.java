@@ -6,6 +6,7 @@ import com.bibe.crm.entity.dto.FindCustomerDTO;import com.bibe.crm.entity.dto.Fi
 import com.bibe.crm.entity.vo.CountDayVO;
 import com.bibe.crm.entity.vo.CountSortVO;
 import com.bibe.crm.entity.vo.CustomerVO;
+import com.bibe.crm.entity.vo.PublicCustomerVO;
 import org.apache.ibatis.annotations.Param;import java.util.Collection;import java.util.List;import java.util.Map;
 
 public interface CustomerMapper {
@@ -68,7 +69,7 @@ public interface CustomerMapper {
      * @param page
      * @return
      */
-    IPage<CustomerVO> customerGroupPageList(FindCustomerGroupDTO dto, Page page);
+    IPage<PublicCustomerVO> customerGroupPageList(FindCustomerGroupDTO dto, Page page);
 
     /**
      * 领取/转交/
@@ -131,4 +132,12 @@ public interface CustomerMapper {
      * @return
      */
     List<CountSortVO> countCustomerBySort4(@Param("dto")CountDTO dto);
+
+
+    /**
+     * 新增跟进次数
+     * @param id
+     * @return
+     */
+    int updateProgressNumById(@Param("id")Integer id);
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.bibe.crm.entity.po.CustomerGroup;
 import com.bibe.crm.dao.CustomerGroupMapper;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ public class CustomerGroupService{
         CustomerGroup customerGroup=new CustomerGroup();
 
         BeanUtils.copyProperties(record,customerGroup);
+        customerGroup.setCreateTime(new Date());
         customerGroupMapper.insertSelective(customerGroup);
         //分组关联部门
         List<CustomerGroupDepartmentRelation> groupList = record.getGroupList();
@@ -60,7 +63,6 @@ public class CustomerGroupService{
 
     public RespVO update(CustomerGroupDTO record) {
         CustomerGroup customerGroup=new CustomerGroup();
-
         BeanUtils.copyProperties(record,customerGroup);
 
         //删除之前的重新
@@ -70,7 +72,7 @@ public class CustomerGroupService{
         if (groupList.size()>0){
             groupList.forEach(i->i.setCustomerGroupId(record.getId()));
             customerGroupDepartmentRelationMapper.insertList(groupList);
-
+            customerGroup.setUpdateTime(new Date());
             customerGroupMapper.updateByPrimaryKeySelective(record);
         }
         return  RespVO.ofSuccess();

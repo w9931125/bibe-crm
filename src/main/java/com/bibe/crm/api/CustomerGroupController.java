@@ -1,12 +1,14 @@
 package com.bibe.crm.api;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.CustomerGroupDTO;
 import com.bibe.crm.entity.dto.CustomerMoveDTO;
 import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
 import com.bibe.crm.entity.po.User;
+import com.bibe.crm.entity.vo.PublicCustomerVO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerGroupService;
 import com.bibe.crm.service.CustomerService;
@@ -68,7 +70,8 @@ public class CustomerGroupController {
     @PostMapping("/pageList")
     public RespVO pageList(@RequestBody FindCustomerGroupDTO dto){
         Page page = dto.getPage();
-        return customerService.customerGroupPageList(dto,page);
+        IPage<PublicCustomerVO> publicCustomerVOIPage = customerService.customerGroupPageList(dto, page);
+        return RespVO.ofSuccess(publicCustomerVOIPage);
     }
 
 
