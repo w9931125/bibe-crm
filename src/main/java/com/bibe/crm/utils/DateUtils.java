@@ -31,16 +31,15 @@ public class DateUtils {
 
 
     /**
-     * 获取指定日期前一天 字符串
-     *
+     * 获取指定日期 字符串
      * @param date
      * @return
      */
-    public static String getAssignBeforeDayString(Date date) {
+    public static String getAssignBeforeDayString(Date date,Integer day) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.DATE, -1);
+        c.add(Calendar.DATE, day);
         return format.format(c.getTime());
     }
 
@@ -136,11 +135,10 @@ public class DateUtils {
      * @return
      */
     public static Date getDateStringToDate(String date) throws Exception {
-        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date parse = s.parse(date);
         return parse;
     }
-
 
 
     public static void zz(String[] args) {

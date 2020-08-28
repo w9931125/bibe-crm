@@ -96,7 +96,27 @@ public class IndexController {
         return RespVO.ofSuccess(map);
     }
 
+    public static void main(String[] args) {
 
+        String sourceString = "哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈";	//待写入字符串
+        byte[] sourceByte = sourceString.getBytes();
+        if(null != sourceByte){
+            try {
+                File file = new File("/Users/xuefengwang/Documents/test.txt");		//文件路径（路径+文件名）
+                if (!file.exists()) {	//文件不存在则创建文件，先创建目录
+                    File dir = new File(file.getParent());
+                    dir.mkdirs();
+                    file.createNewFile();
+
+                }
+                FileOutputStream outStream = new FileOutputStream(file);	//文件输出流用于将数据写入文件
+                outStream.write(sourceByte);
+                outStream.close();	//关闭文件输出流
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     /**
      * 下载文件
      *

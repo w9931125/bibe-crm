@@ -140,4 +140,13 @@ public interface CustomerMapper {
      * @return
      */
     int updateProgressNumById(@Param("id")Integer id);
+
+    /**
+     * 自动转交客户
+     * @param groupId
+     * @return
+     */
+    Customer findAllByGroupId(@Param("groupId")Integer groupId,@Param("date") String date);
+
+    int updateGroupIdById(@Param("updatedGroupId")Integer updatedGroupId,@Param("id")Integer id);
 }

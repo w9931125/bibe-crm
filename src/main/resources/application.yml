@@ -38,12 +38,3 @@ mybatis-plus:
       #驼峰下划线转换
       table-underline: true
     banner: false
-
-#阿里云oss配置
-aliyun:
-  accessKeyId: LTAI4FsDQVkzSCy5WKFZvL59
-  accessKeySecret: Ywz1PXnYUq2JcGLwrli9hO0InuvbHu
-  oss:
-    endpoint: oss-cn-shenzhen.aliyuncs.com
-    bucketName: ibout-file-oss
-    folder: lora-admin/
