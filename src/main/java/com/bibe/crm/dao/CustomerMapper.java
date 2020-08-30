@@ -143,10 +143,11 @@ public interface CustomerMapper {
 
     /**
      * 自动转交客户
-     * @param groupId
+     * @param date
+     * @param  userIds
      * @return
      */
-    Customer findAllByGroupId(@Param("groupId")Integer groupId,@Param("date") String date);
+    Customer findAllByGroupId(@Param("date") String date,@Param("userIds") List<Integer> userIds);
 
     int updateGroupIdById(@Param("updatedGroupId")Integer updatedGroupId,@Param("id")Integer id);
 }

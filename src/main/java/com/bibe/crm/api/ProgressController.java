@@ -1,6 +1,7 @@
 package com.bibe.crm.api;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.common.base.BasePage;
 import com.bibe.crm.entity.dto.FindCustomerDTO;
@@ -8,6 +9,7 @@ import com.bibe.crm.entity.dto.ProgressDTO;
 import com.bibe.crm.entity.po.CommentInfo;
 import com.bibe.crm.entity.po.CustomerContact;
 import com.bibe.crm.entity.po.CustomerProgress;
+import com.bibe.crm.entity.vo.ProgressVO;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.CustomerProgressService;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +30,8 @@ public class ProgressController {
      * @return
      */
     @GetMapping("/contactList")
-    public RespVO list(){
-        return customerProgressService.contactList();
+    public RespVO list(Integer customerId){
+        return customerProgressService.contactList(customerId);
     }
 
     /**
@@ -141,7 +143,8 @@ public class ProgressController {
     @PostMapping("/pageList")
     public RespVO pageList(@RequestBody ProgressDTO dto){
         Page page = dto.getPage();
-        return customerProgressService.pageList(dto,page);
+        IPage<ProgressVO> progressVOIPage = customerProgressService.pageList(dto, page);
+        return  RespVO.ofSuccess(progressVOIPage);
     }
 
 

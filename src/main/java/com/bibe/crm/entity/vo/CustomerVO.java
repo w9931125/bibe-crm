@@ -29,9 +29,9 @@ public class CustomerVO implements Serializable {
     private String areaName;
 
     /**
-     * 意向度:0:成交客户,1:A+,2:A-,3:B+,4:B-,5:C+,6:D+,7:E
+     * 客户满意度,0成交客户,1A+,2A-,3B+,4B-,5C+,6C-,7D,8E
      */
-    @Excel(name = "意向度", replace = { "成交客户_0", "A+_1","A-_2","B+_3","B-_4","C+_5","D+_6","E+_7","无_8" },orderNum = "3",width = 15)
+    @Excel(name = "意向度", replace = { "成交客户_0", "A+_1","A-_2","B+_3","B-_4","C+_5","C-_6","D_7","E_8","无_9" },orderNum = "3",width = 15)
     private Integer intention;
 
     /**

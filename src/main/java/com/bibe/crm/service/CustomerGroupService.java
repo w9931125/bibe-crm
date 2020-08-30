@@ -28,10 +28,10 @@ public class CustomerGroupService{
 
 
     public RespVO delete(Integer id) {
-        int count = customerGroupDepartmentRelationMapper.findCountByCustomerGroupId(id);
+/*        int count = customerGroupDepartmentRelationMapper.findCountByCustomerGroupId(id);
         if (count>0){
             return RespVO.fail(ExceptionTypeEnum.DELETE_CUSTOMER_GROUP_ERROR);
-        }
+        }*/
         customerGroupMapper.deleteByPrimaryKey(id);
         return RespVO.ofSuccess();
     }

@@ -49,6 +49,7 @@ public class CustomerProgressService {
         //新增跟进次数
         customerMapper.updateProgressNumById(record.getCustomerId());
         record.setCreateTime(new Date());
+        record.setUserId(ShiroUtils.getUserInfo().getId());
         return customerProgressMapper.insertSelective(record);
     }
 
@@ -92,7 +93,7 @@ public class CustomerProgressService {
      * @param page
      * @return
      */
-    public RespVO  pageList(ProgressDTO dto,Page page){
+    public IPage<ProgressVO>  pageList(ProgressDTO dto,Page page){
         List<Integer> userIds = dto.getUserIds();
         if (null != dto.getDeptId()) {
             userIds = userMapper.findIdByDeptId(dto.getDeptId());
@@ -103,7 +104,7 @@ public class CustomerProgressService {
             List<Map<String, Object>> comment = commentInfoMapper.findAllByProgressId(i.getId());
             i.setCommentInfo(comment);
         });
-        return RespVO.ofSuccess(pageList);
+        return pageList;
     }
 
 
@@ -117,8 +118,8 @@ public class CustomerProgressService {
      * 联系人列表
      * @return
      */
-    public RespVO contactList() {
-        List<CustomerContact> list = customerContactMapper.list();
+    public RespVO contactList(Integer customerId) {
+        List<CustomerContact> list = customerContactMapper.list(customerId);
         return RespVO.ofSuccess(list);
     }
 
@@ -140,7 +141,7 @@ public class CustomerProgressService {
      * @return
      */
     public RespVO contactAdd(CustomerContact customerContact) {
-        if (customerContact.getType().equals(1)){
+        if (customerContact.getType().equals("1")){
             CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
             if (flag!=null){
                 return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
@@ -168,7 +169,7 @@ public class CustomerProgressService {
      * @return
      */
     public RespVO contactUpdate(CustomerContact customerContact) {
-        if (customerContact.getType().equals(1)){
+        if (customerContact.getType().equals("1")){
             CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
             if (flag!=null){
                 return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);

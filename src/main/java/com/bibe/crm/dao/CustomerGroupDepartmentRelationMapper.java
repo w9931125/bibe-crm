@@ -45,5 +45,5 @@ public interface CustomerGroupDepartmentRelationMapper {
 
     List<Integer> findCustomerGroupIdByDeptId(@Param("deptId")Integer deptId);
 
-
+    List<Integer> getUserIds(@Param("customerGroupId")Integer customerGroupId);
 }

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bibe.crm.dao.TransferMapper">
+  <resultMap id="BaseResultMap" type="com.bibe.crm.entity.po.Transfer">
+    <!--@mbg.generated-->
+    <!--@Table transfer-->
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="intention" jdbcType="VARCHAR" property="intention" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="customer_type" jdbcType="INTEGER" property="customerType" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="landline" jdbcType="VARCHAR" property="landline" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    `name`, industry, user_id, group_id, area_id, intention, `type`, customer_type, address, 
+    `position`, phone, contact_name, qq, landline, email, version
+  </sql>
+  <insert id="insert" parameterType="com.bibe.crm.entity.po.Transfer">
+    <!--@mbg.generated-->
+    insert into transfer (`name`, industry, user_id, 
+      group_id, area_id, intention, 
+      `type`, customer_type, address, 
+      `position`, phone, contact_name, 
+      qq, landline, email, 
+      version)
+    values (#{name,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{groupId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{intention,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{customerType,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{landline,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bibe.crm.entity.po.Transfer">
+    <!--@mbg.generated-->
+    insert into transfer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="industry != null">
+        industry,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="intention != null">
+        intention,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="customerType != null">
+        customer_type,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="position != null">
+        `position`,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="landline != null">
+        landline,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="intention != null">
+        #{intention,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="customerType != null">
+        #{customerType,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="landline != null">
+        #{landline,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+<!--auto generated by MybatisCodeHelper on 2020-08-30-->
+  <insert id="insertList">
+        INSERT INTO transfer(
+        name,
+        industry,
+        user_id,
+        group_id,
+        area_id,
+        intention,
+        type,
+        customer_type,
+        address,
+        position,
+        phone,
+        contact_name,
+        qq,
+        landline,
+        email,
+        version
+        )VALUES
+        <foreach collection="list" item="element" index="index" separator=",">
+            (
+            #{element.name,jdbcType=VARCHAR},
+            #{element.industry,jdbcType=VARCHAR},
+            #{element.userId,jdbcType=INTEGER},
+            #{element.groupId,jdbcType=INTEGER},
+            #{element.areaId,jdbcType=INTEGER},
+            #{element.intention,jdbcType=VARCHAR},
+            #{element.type,jdbcType=VARCHAR},
+            #{element.customerType,jdbcType=INTEGER},
+            #{element.address,jdbcType=VARCHAR},
+            #{element.position,jdbcType=VARCHAR},
+            #{element.phone,jdbcType=VARCHAR},
+            #{element.contactName,jdbcType=VARCHAR},
+            #{element.qq,jdbcType=VARCHAR},
+            #{element.landline,jdbcType=VARCHAR},
+            #{element.email,jdbcType=VARCHAR},
+            #{element.version,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated by MybatisCodeHelper on 2020-08-30-->
+  <delete id="deleteByVersion">
+        delete from transfer
+        where version=#{version,jdbcType=VARCHAR}
+    </delete>
+
+<!--auto generated by MybatisCodeHelper on 2020-08-30-->
+  <select id="findAllByVersion" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer
+        where version=#{version,jdbcType=VARCHAR}
+    </select>
+</mapper>

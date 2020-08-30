@@ -96,6 +96,7 @@ public enum ExceptionTypeEnum{
     DELETE_CUSTOMER_GROUP_ERROR(10012,"无法删除，该分组下存在部门"),
     DELETE_COMMENT_ERROR(10013,"无法删除其他人评论"),
     INSTALL_CONTACT_ERROR(10014,"该客户已经存在主要联系人"),
+    EXCEL_ERROR(10015,"系统错误，请检查excel模板"),
     ;
     /**
      * 状态码

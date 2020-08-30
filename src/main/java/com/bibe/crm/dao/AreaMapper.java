@@ -19,5 +19,5 @@ public interface AreaMapper {
 
     List<Area> list(@Param("pid")Integer pid);
 
-
+    Integer findIdByName(@Param("name")String name);
 }

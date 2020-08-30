@@ -1,20 +1,31 @@
 package com.bibe.crm.api;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.bibe.crm.entity.dto.CountDTO;
-import com.bibe.crm.entity.dto.FindCustomerDTO;
-import com.bibe.crm.entity.dto.FindCustomerGroupDTO;
+import com.bibe.crm.common.enums.ExceptionTypeEnum;
+import com.bibe.crm.entity.dto.*;
+import com.bibe.crm.entity.po.Files;
 import com.bibe.crm.entity.vo.*;
+import com.bibe.crm.service.CustomerProgressService;
 import com.bibe.crm.service.CustomerService;
 import com.bibe.crm.utils.ExcelUtil;
 import com.bibe.crm.utils.ImportExcelUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 程序入口
@@ -30,6 +41,68 @@ public class ExcelController {
 
     @Resource
     private CustomerService customerService;
+
+    @Resource
+    private CustomerProgressService customerProgressService;
+
+
+    /**
+     * 取消导入
+     * @param version
+     * @return
+     */
+    @PostMapping("/cancel")
+    public RespVO cancel(String version){
+        return importExcelUtil.cancel(version);
+    }
+
+    /**
+     * 提交数据
+     * @param version
+     * @return
+     */
+    @PostMapping("/submit")
+    public RespVO submit(String version){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                importExcelUtil.submit(version);
+            }
+        }).start();
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 获取导入行数
+     * @param file
+     * @return
+     */
+    @PostMapping("/importSum")
+    public RespVO importSum(@RequestParam("file") MultipartFile file) {
+        List<ImportSumDTO> personVoList = null;
+        try {
+            personVoList = ExcelUtil.importExcel(file, ImportSumDTO.class);
+        } catch (IOException e) {
+            log.error("客户导入失败{}",e);
+            return RespVO.fail(ExceptionTypeEnum.EXCEL_ERROR);
+        }
+        return RespVO.ofSuccess(personVoList.size());
+    }
+
+
+    /**
+     * 导入客户
+     * @param file
+     * @param userId
+     * @param groupId
+     * @return
+     */
+    @PostMapping("/import")
+    public RespVO importExcel(@RequestParam("file") MultipartFile file,Integer userId,Integer groupId){
+        return importExcelUtil.importExcel(file,userId,groupId);
+    }
+
 
     /**
      * 下载模版
@@ -93,6 +166,22 @@ public class ExcelController {
         log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
     }
 
+
+    /**
+     * 联系跟进-导出
+     * @param dto
+     * */
+    @PostMapping("/export/progress")
+    public void  progress (@RequestBody ProgressDTO dto, HttpServletResponse resp) {
+        long start = System.currentTimeMillis();
+        IPage<ProgressVO> customerVOIPage = customerProgressService.pageList(dto, dto.getPage());
+        try {
+            ExcelUtil.exportExcel(customerVOIPage.getRecords(), "联系跟进", "联系跟进", ProgressVO.class, "联系跟进", resp);
+        } catch (IOException e) {
+            log.error("公共客户导出失败{}",e);
+        }
+        log.debug("导出excel所花时间：" + (System.currentTimeMillis() - start));
+    }
 
     /**
      * 按日期-导出

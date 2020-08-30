@@ -30,7 +30,7 @@ public interface CustomerContactMapper {
 
     CustomerContact findAllByCustomerId(@Param("customerId")Integer cId);
 
-    List<CustomerContact> list();
+    List<CustomerContact> list(@Param("customerId")Integer cId);
 
     Map<String,Object> show(Integer id);
 

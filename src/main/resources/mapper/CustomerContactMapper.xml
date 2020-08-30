@@ -255,6 +255,9 @@
         select
         <include refid="Base_Column_List"/>
         from customer_contact
+    <if test="customerId != null">
+      where  customer_id=#{customerId}
+    </if>
     </select>
 
   <select id="show" resultType="java.util.Map" parameterType="java.lang.Integer">

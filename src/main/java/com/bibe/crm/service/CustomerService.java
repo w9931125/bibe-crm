@@ -182,6 +182,7 @@ public class CustomerService {
                 i.setLatsTime(newInfo.getCreateTime());
             }
             //主要联系人
+            System.out.printf("看下id"+i.getId().toString());
             CustomerContact customerContact = customerContactMapper.findAllByCustomerId(i.getId());
             if (customerContact!=null){
                 if (customerContact.getPhone()!=null){
