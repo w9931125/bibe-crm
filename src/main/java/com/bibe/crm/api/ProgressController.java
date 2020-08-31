@@ -90,7 +90,7 @@ public class ProgressController {
     }
 
     /**
-     * 修改跟进
+     * 修改跟进自己
      * @param customerProgress
      * @return
      */
@@ -99,6 +99,31 @@ public class ProgressController {
         customerProgressService.update(customerProgress);
         return RespVO.ofSuccess();
     }
+
+    /**
+     * 修改别人
+     * @param customerProgress
+     * @return
+     */
+    @PutMapping("/updateHe")
+    public RespVO updateHe(@RequestBody CustomerProgress customerProgress){
+        customerProgressService.update(customerProgress);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 修改公客跟进
+     * @param customerProgress
+     * @return
+     */
+    @PutMapping("/updatePublic")
+    public RespVO updatePublic(@RequestBody CustomerProgress customerProgress){
+        customerProgressService.update(customerProgress);
+        return RespVO.ofSuccess();
+    }
+
+
 
     /**
      * 添加跟进
@@ -124,12 +149,35 @@ public class ProgressController {
 
 
     /**
-     * 删除跟进
+     * 删除跟进自己
      * @param id
      * @return
      */
     @DeleteMapping("/delete")
     public RespVO delete(Integer id){
+        customerProgressService.delete(id);
+        return RespVO.ofSuccess();
+    }
+
+
+    /**
+     * 删除跟进他人
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/deleteHe")
+    public RespVO deleteHe(Integer id){
+        customerProgressService.delete(id);
+        return RespVO.ofSuccess();
+    }
+
+    /**
+     * 删除公客跟进
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/deletePublic")
+    public RespVO deletePublic(Integer id){
         customerProgressService.delete(id);
         return RespVO.ofSuccess();
     }

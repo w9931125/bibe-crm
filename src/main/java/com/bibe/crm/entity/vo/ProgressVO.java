@@ -26,6 +26,16 @@ public class ProgressVO implements Serializable {
     @Excel(name = "联系人名称", orderNum = "2", width = 15)
     private String contactName;
 
+    /**
+     * 用户id
+     */
+    private Integer userId;
+
+    /**
+     * 分组id
+     */
+    private Integer groupId;
+
 
     /**
      * 沟通时长/分钟

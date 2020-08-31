@@ -171,7 +171,7 @@ public class ExcelController {
      * 联系跟进-导出
      * @param dto
      * */
-    @PostMapping("/export/progress")
+    @PostMapping("/exportProgress")
     public void  progress (@RequestBody ProgressDTO dto, HttpServletResponse resp) {
         long start = System.currentTimeMillis();
         IPage<ProgressVO> customerVOIPage = customerProgressService.pageList(dto, dto.getPage());
