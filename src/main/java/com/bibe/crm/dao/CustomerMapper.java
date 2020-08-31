@@ -147,7 +147,7 @@ public interface CustomerMapper {
      * @param  userIds
      * @return
      */
-    Customer findAllByGroupId(@Param("date") String date,@Param("userIds") List<Integer> userIds);
+    List<Customer> findAllByGroupId(@Param("date") String date,@Param("userIds") List<Integer> userIds);
 
     int updateGroupIdById(@Param("updatedGroupId")Integer updatedGroupId,@Param("id")Integer id);
 }

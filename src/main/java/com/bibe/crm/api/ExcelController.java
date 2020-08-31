@@ -109,7 +109,7 @@ public class ExcelController {
      * @return
      */
     @GetMapping("/download")
-    public void download(HttpServletResponse resp) {
+    public void download(HttpServletResponse resp) throws Exception {
         importExcelUtil.downloadExcel(resp);
     }
 

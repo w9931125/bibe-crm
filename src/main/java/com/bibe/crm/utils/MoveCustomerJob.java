@@ -43,15 +43,17 @@ public class MoveCustomerJob {
             //公客转交天数
             Integer endDay = i.getEndDay();
             String dayString = DateUtils.getAssignBeforeDayString(new Date(), -endDay);
-            Customer vo = customerMapper.findAllByGroupId(dayString,userIds);
+            List<Customer> vo = customerMapper.findAllByGroupId(dayString,userIds);
             if (null==vo){
                 log.info(dayString+"没有自动转交客户");
             }else {
-                CustomerProgress newInfo = customerProgressMapper.findNewInfo(vo.getId());
-                if (null==newInfo){
-                    customerMapper.updateGroupIdById(0,vo.getId());
-                    log.info(vo.getName()+"已被转交");
-                    y=y+1;
+                for (Customer customer : vo) {
+                    CustomerProgress newInfo = customerProgressMapper.findNewInfo(customer.getId());
+                    if (null==newInfo){
+                        customerMapper.updateGroupIdById(0,customer.getId());
+                        log.info(customer.getName()+"已被转交");
+                        y=y+1;
+                    }
                 }
             }
         }

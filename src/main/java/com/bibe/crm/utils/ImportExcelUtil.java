@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.*;
 
 /**
@@ -168,22 +169,20 @@ public class ImportExcelUtil {
      * @param resp
      * @return
      */
-    public void downloadExcel(HttpServletResponse resp) {
+    public void downloadExcel(HttpServletResponse resp) throws Exception {
         String fileName = null;
         String fileNames = "企业客户模板.xls";
-        String downloadName = fileNames; //下载之后的名字
-        try {
-            fileName = new String(downloadName.getBytes("GBK"), "ISO-8859-1");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            fileName = new String(downloadName.getBytes("UTF-8"), "ISO-8859-1");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
         Resource res = new ClassPathResource("excel/" + fileNames);
-
         resp.reset();
         resp.setContentType("application/octet-stream");
         resp.setCharacterEncoding("utf-8");
         //resp.setContentLength((int) file.length());
-        resp.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        resp.setHeader("Content-Disposition", "attachment;filename=" + URLDecoder.decode(fileNames, "UTF-8"));
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os = null;

@@ -49,7 +49,7 @@ public class UserDTO {
     /**
      * 0启用 1禁止
      */
-    private String status;
+    private Integer status;
 
     private Integer id;
 }
