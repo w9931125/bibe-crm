@@ -6,6 +6,7 @@ import com.bibe.crm.entity.po.Files;
 import com.bibe.crm.entity.po.User;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.service.AreaService;
+import com.bibe.crm.service.PermissionService;
 import com.bibe.crm.service.UserService;
 import com.bibe.crm.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,9 @@ public class IndexController {
 
     @Resource
     private FilesMapper filesMapper;
+
+    @Resource
+    private PermissionService permissionService;
 
     private final String path = "/home/bibe-crm/upload";
 
@@ -214,6 +218,14 @@ public class IndexController {
     public RespVO logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
+        return RespVO.ofSuccess();
+    }
+
+
+
+    @GetMapping("/deleteCache")
+    public RespVO deleteCache(String roleId) {
+        permissionService.deleteCache(roleId,true);
         return RespVO.ofSuccess();
     }
 

@@ -7,10 +7,17 @@ import com.bibe.crm.entity.dto.PermissionUpdateDTO;
 import com.bibe.crm.entity.po.*;
 import com.bibe.crm.entity.vo.*;
 import com.bibe.crm.utils.DepartmentUtil;
+import com.bibe.crm.utils.SessionService;
 import com.bibe.crm.utils.ShiroUtils;
 import com.bibe.crm.utils.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.Authenticator;
+import org.apache.shiro.authc.LogoutAware;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +60,51 @@ public class PermissionService {
     @Resource
     private CustomerGroupMapper customerGroupMapper;
 
+    @Resource
+    private SessionService sessionMapper;
+    /**
+     * 删除用户缓存信息
+     * @Param  username  用户名称
+     * @Param  isRemoveSession 是否删除Session，删除后用户需重新登录
+     */
+    public void deleteCache(String roleId, boolean isRemoveSession){
+        //从缓存中获取Session
+        Session session = null;
+        // 获取当前已登录的用户session列表
+        Collection<Session> sessions = sessionMapper.getActiveSessions();
+        User sysUserEntity;
+        Object attribute = null;
+        // 遍历Session,找到该用户名称对应的Session
+        for(Session sessionInfo : sessions){
+            attribute = sessionInfo.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+            if (attribute == null) {
+                continue;
+            }
+            sysUserEntity = (User) ((SimplePrincipalCollection) attribute).getPrimaryPrincipal();
+            if (sysUserEntity == null) {
+                continue;
+            }
+            if (Objects.equals(sysUserEntity.getRoleId(), roleId)) {
+                session=sessionInfo;
+                // 清除该用户以前登录时保存的session，强制退出  -> 单用户登录处理
+                if (isRemoveSession) {
+                    sessionMapper.delete(session);
+                }
+            }
+        }
+
+        if (session == null||attribute == null) {
+            return;
+        }
+        //删除session
+        if (isRemoveSession) {
+            sessionMapper.delete(session);
+        }
+        //删除Cache，再访问受限接口时会重新授权
+        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
+        Authenticator authc = securityManager.getAuthenticator();
+        ((LogoutAware) authc).onLogout((SimplePrincipalCollection) attribute);
+    }
 
     /**
      *

@@ -1,11 +1,26 @@
 package com.bibe.crm.utils;
 
+import com.bibe.crm.common.config.ShiroRealm;
+import com.bibe.crm.dao.UserMapper;
 import com.bibe.crm.entity.po.User;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.Authenticator;
+import org.apache.shiro.authc.LogoutAware;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.Objects;
+
 
 public class ShiroUtils {
-
     /** 私有构造器 **/
     private ShiroUtils(){ }
 
@@ -33,49 +48,25 @@ public class ShiroUtils {
         return (User) SecurityUtils.getSubject().getPrincipal();
     }
 
-//    /**
-//     * 删除用户缓存信息
-//     * @Param  username  用户名称
-//     * @Param  isRemoveSession 是否删除Session，删除后用户需重新登录
-//     */
-//    public static void deleteCache(String username, boolean isRemoveSession){
-//        //从缓存中获取Session
-//        Session session = null;
-//        // 获取当前已登录的用户session列表
-//        Collection<Session> sessions = redisSessionDAO.getActiveSessions();
-//        User sysUserEntity;
-//        Object attribute = null;
-//        // 遍历Session,找到该用户名称对应的Session
-//        for(Session sessionInfo : sessions){
-//            attribute = sessionInfo.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-//            if (attribute == null) {
-//                continue;
-//            }
-//            sysUserEntity = (User) ((SimplePrincipalCollection) attribute).getPrimaryPrincipal();
-//            if (sysUserEntity == null) {
-//                continue;
-//            }
-//            if (Objects.equals(sysUserEntity.getUsername(), username)) {
-//                session=sessionInfo;
-//                // 清除该用户以前登录时保存的session，强制退出  -> 单用户登录处理
-//                if (isRemoveSession) {
-//                    redisSessionDAO.delete(session);
-//                }
-//            }
-//        }
-//
-//        if (session == null||attribute == null) {
-//            return;
-//        }
-//        //删除session
-//        if (isRemoveSession) {
-//            redisSessionDAO.delete(session);
-//        }
-//        //删除Cache，再访问受限接口时会重新授权
-//        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
-//        Authenticator authc = securityManager.getAuthenticator();
-//        ((LogoutAware) authc).onLogout((SimplePrincipalCollection) attribute);
-//    }
+    public static void  reloadAuthorizing(Object principal) throws Exception{
+        RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
+        ShiroRealm myShiroRealm = (ShiroRealm) rsm.getRealms().iterator().next();
+
+        Subject subject = SecurityUtils.getSubject();
+        String realmName = subject.getPrincipals().getRealmNames().iterator().next();
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(principal, realmName);
+        subject.runAs(principals);
+        if(myShiroRealm.isAuthenticationCachingEnabled()) {
+            myShiroRealm.getAuthenticationCache().remove(principals);
+        }
+        if(myShiroRealm.isAuthorizationCachingEnabled()) {
+            // 删除指定用户shiro权限
+            myShiroRealm.getAuthorizationCache().remove(principals);
+        }
+        // 刷新权限
+        subject.releaseRunAs();
+    }
+
 //
 //    /**
 //     * 从缓存中获取指定用户名的Session

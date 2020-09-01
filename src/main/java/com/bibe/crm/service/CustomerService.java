@@ -152,7 +152,7 @@ public class CustomerService {
             log.info("客户添加出现异常{}",e);
         }
         customerMapper.updateByIdIn(customer,record.getIds());
-/*        //联系人
+        /*        //联系人
         CustomerContact customerContact = record.getCustomerContact();
         customerContactMapper.updateByCustomerIdin(customerContact, ids);*/
         return RespVO.ofSuccess();

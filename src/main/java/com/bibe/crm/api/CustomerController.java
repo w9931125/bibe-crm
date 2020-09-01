@@ -1,7 +1,6 @@
 package com.bibe.crm.api;
 
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.entity.dto.CountDTO;
 import com.bibe.crm.entity.dto.CustomerDTO;

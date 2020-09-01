@@ -150,4 +150,11 @@ public interface CustomerMapper {
     List<Customer> findAllByGroupId(@Param("date") String date,@Param("userIds") List<Integer> userIds);
 
     int updateGroupIdById(@Param("updatedGroupId")Integer updatedGroupId,@Param("id")Integer id);
+
+    /**
+     * 获取客户用户ID
+     * @param idCollection
+     * @return
+     */
+    List<Integer> findUserIdByIdIn(@Param("idCollection")Collection<Integer> idCollection);
 }

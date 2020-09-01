@@ -244,7 +244,7 @@ where t1.id=#{id}
 
   <select id="list" resultType="com.bibe.crm.entity.vo.ProgressVO">
         select t1.id as id, t1.name as name,t2.name as customerName,t3.name as userName,t1.contact_type as contactType,t1.create_time as progressTime,
-    t1.speak_time as speakTime ,t1.remarks as remarks , t1.satisfied as satisfied
+    t1.speak_time as speakTime ,t1.remarks as remarks , t1.satisfied as satisfied,t2.user_id as userId,t2.group_id as groupId
     from customer_progress t1 left join customer t2 on t1.customer_id=t2.id
     left join users t3 on t2.user_id=t3.id  where t2.status=0
     and t1.customer_id=#{customerId}
