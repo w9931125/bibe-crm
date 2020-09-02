@@ -157,4 +157,11 @@ public interface CustomerMapper {
      * @return
      */
     List<Integer> findUserIdByIdIn(@Param("idCollection")Collection<Integer> idCollection);
+
+    /**
+     * 用户拥有的客户数量
+     * @param userId
+     * @return
+     */
+    Integer countByUserId(@Param("userId")Integer userId);
 }

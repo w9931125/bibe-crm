@@ -44,8 +44,6 @@ public class IndexController {
     @Resource
     private FilesMapper filesMapper;
 
-    @Resource
-    private PermissionService permissionService;
 
     private final String path = "/home/bibe-crm/upload";
 
@@ -220,6 +218,7 @@ public class IndexController {
         subject.logout();
         return RespVO.ofSuccess();
     }
+/*
 
 
 
@@ -228,5 +227,6 @@ public class IndexController {
         permissionService.deleteCache(roleId,true);
         return RespVO.ofSuccess();
     }
+*/
 
 }

@@ -1,5 +1,4 @@
 package com.bibe.crm.dao;
-import java.util.Collection;
 
 import org.apache.ibatis.annotations.Param;
 

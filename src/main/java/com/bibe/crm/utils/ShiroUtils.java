@@ -48,7 +48,13 @@ public class ShiroUtils {
         return (User) SecurityUtils.getSubject().getPrincipal();
     }
 
-    public static void  reloadAuthorizing(Object principal) throws Exception{
+
+    /**
+     * 刷新权限
+     * @param principal
+     * @throws Exception
+     */
+    public static void  reloadAuthorizing(Object principal){
         RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
         ShiroRealm myShiroRealm = (ShiroRealm) rsm.getRealms().iterator().next();
 
@@ -67,6 +73,15 @@ public class ShiroUtils {
         subject.releaseRunAs();
     }
 
+/*    public static void reloadAuthorizing(MyRealm myRealm,String username){
+        Subject subject = SecurityUtils.getSubject();
+        String realmName = subject.getPrincipals().getRealmNames().iterator().next();
+        //第一个参数为用户名,第二个参数为realmName,test想要操作权限的用户
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(username,realmName);
+        subject.runAs(principals);
+        myRealm.getAuthorizationCache().remove(subject.getPrincipals());
+        subject.releaseRunAs();
+    }*/
 //
 //    /**
 //     * 从缓存中获取指定用户名的Session

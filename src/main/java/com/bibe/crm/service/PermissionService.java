@@ -67,7 +67,7 @@ public class PermissionService {
      * @Param  username  用户名称
      * @Param  isRemoveSession 是否删除Session，删除后用户需重新登录
      */
-    public void deleteCache(String roleId, boolean isRemoveSession){
+/*    public void deleteCache(String roleId, boolean isRemoveSession){
         //从缓存中获取Session
         Session session = null;
         // 获取当前已登录的用户session列表
@@ -104,7 +104,7 @@ public class PermissionService {
         DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
         Authenticator authc = securityManager.getAuthenticator();
         ((LogoutAware) authc).onLogout((SimplePrincipalCollection) attribute);
-    }
+    }*/
 
     /**
      *
@@ -469,6 +469,7 @@ public class PermissionService {
                 }
                 break;
         }
+        //ShiroUtils.reloadAuthorizing();
         return RespVO.ofSuccess();
     }
 

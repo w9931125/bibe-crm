@@ -96,14 +96,31 @@ public class CustomerService {
         return null;
     }
 
+    /**
+     * 验证用户录入数量
+     * @param userId
+     * @return
+     */
+    private  boolean checkUserCustomer(Integer userId){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user.getNumber().equals(-1)){
+            return true;
+        }
+        //用户客户数量
+        Integer count = customerMapper.countByUserId(userId);
+        //用户
+        if (count<user.getNumber()){
+            return true;
+        }else {
+            return false;
+        }
+    }
 
     public RespVO add(CustomerDTO record) {
-        User userInfo = ShiroUtils.getUserInfo();
-        if (userInfo.getNumber().equals(0)) {
+        if (!checkUserCustomer(record.getUserId())) {
             return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
         }
         Customer customer = new Customer();
-
         BeanUtils.copyProperties(record, customer);
         try {
             Date date = DateUtils.getDateStringToDate(record.getCreateDate());
@@ -118,11 +135,11 @@ public class CustomerService {
         CustomerContact customerContact = record.getCustomerContact();
         customerContact.setCustomerId(customer.getId());
         customerContact.setCreateTime(new Date());
-        int i = customerContactMapper.insertSelective(customerContact);
-        //减少录入次数
+        customerContactMapper.insertSelective(customerContact);
+/*        //减少录入次数
         if (i > 1 && !userInfo.getNumber().equals(-1)) {
             userMapper.updateNumberById(userInfo.getId());
-        }
+        }*/
         return RespVO.ofSuccess();
     }
 
