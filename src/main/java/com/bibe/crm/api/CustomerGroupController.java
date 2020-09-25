@@ -113,9 +113,9 @@ public class CustomerGroupController {
      * 设置公客分组列表
      * @return
      */
-    @GetMapping("/list")
-    public RespVO list(){
-        return customerGroupService.list();
+    @PostMapping("/list")
+    public RespVO list(@RequestBody List<Integer> ids){
+        return customerGroupService.list(ids);
     }
 
 

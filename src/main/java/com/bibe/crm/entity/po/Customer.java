@@ -36,7 +36,7 @@ public class Customer {
     private Integer areaId;
 
     /**
-     * 意向度:0:成交客户,1:A+,2:A-,3:B+,4:B-,5:C+,6:D+,7:E
+     * 意向度,0成交客户,1A+,2A-,3B+,4B-,5C+,6C-,7D,8E
      */
     private Integer intention;
 

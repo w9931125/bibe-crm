@@ -45,6 +45,10 @@ public class UserService {
 
 
     public RespVO insert(UserDTO record) {
+        User allByPhone = userMapper.findAllByPhone(record.getPhone());
+        if (allByPhone!=null){
+            return RespVO.fail(ExceptionTypeEnum.USER_BY_PHONE);
+        }
         if (!record.getPassword().equals(record.getRepeatPassword())){
             return RespVO.fail(ExceptionTypeEnum.PASSWORD_ERROR);
         }
@@ -74,10 +78,10 @@ public class UserService {
 
 
     public RespVO update(UserDTO record) {
-//        int i = userMapper.selectCountByName(record.getName());
-//        if (i>0){
-//            return RespVO.fail(ExceptionTypeEnum.USER_COUNT_ERROR);
-//        }
+        User allByPhone = userMapper.findAllByPhone(record.getPhone());
+        if (allByPhone!=null&&!record.getId().equals(allByPhone.getId())){
+            return RespVO.fail(ExceptionTypeEnum.USER_BY_PHONE);
+        }
         User user=new User();
         BeanUtils.copyProperties(record,user);
         if (user.getPassword()!=null){

@@ -40,6 +40,9 @@ public class MoveCustomerJob {
         for (CustomerGroup i : list) {
             //获取公客分组下的用户id
             List<Integer> userIds = customerGroupDepartmentRelationMapper.getUserIds(i.getId());
+            if (userIds.size()==0){
+                continue;
+            }
             //公客转交天数
             Integer endDay = i.getEndDay();
             String dayString = DateUtils.getAssignBeforeDayString(new Date(), -endDay);
@@ -50,7 +53,7 @@ public class MoveCustomerJob {
                 for (Customer customer : vo) {
                     CustomerProgress newInfo = customerProgressMapper.findNewInfo(customer.getId());
                     if (null==newInfo){
-                        customerMapper.updateGroupIdById(0,customer.getId());
+                        customerMapper.updateGroupIdById(i.getId(),customer.getId());
                         log.info(customer.getName()+"已被转交");
                         y=y+1;
                     }

@@ -9,15 +9,20 @@ import com.bibe.crm.entity.dto.ImportDTO;
 import com.bibe.crm.entity.po.*;
 import com.bibe.crm.entity.vo.RespVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -36,6 +41,8 @@ public class ImportExcelUtil {
     private CustomerContactMapper customerContactMapper;
     @javax.annotation.Resource
     private FilesMapper filesMapper;
+    @javax.annotation.Resource
+    private UserMapper userMapper;
 
     public  RespVO cancel(String version){
         transferMapper.deleteByVersion(version);
@@ -72,10 +79,35 @@ public class ImportExcelUtil {
             customerContactMapper.insertSelective(customerContact);
         });
         log.info("导入数据同步完成。。。。。。。。。");
-        //transferMapper.deleteByVersion(version);
+        transferMapper.deleteByVersion(version);
     }
 
-    public RespVO importExcel(MultipartFile file,Integer userId,Integer groupId){
+    /**
+     * 验证用户录入数量
+     * @param userId
+     * @return
+     */
+    private  boolean checkUserCustomer(Integer userId,Integer sum){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user.getNumber().equals(-1)){
+            return true;
+        }
+        //用户客户数量
+        Integer count = customerMapper.countByUserId(userId);
+        if (user.getNumber()-count-sum>-1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public RespVO importExcel(MultipartFile file,Integer userId,Integer groupId,Integer sum){
+        if (userId!=null){
+            //验证录入数量
+            if (!checkUserCustomer(userId,sum)) {
+                return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
+            }
+        }
         boolean flag=true;
         StringBuffer sourceString=new StringBuffer();
         ImportParams params = new ImportParams();
@@ -87,8 +119,7 @@ public class ImportExcelUtil {
         params.setNeedVerfiy(true);
         ExcelImportResult<ImportDTO> result = null;
         try {
-            result = ExcelImportUtil.importExcelMore(file.getInputStream(),
-                    ImportDTO.class, params);
+            result = ExcelImportUtil.importExcelMore(file.getInputStream(), ImportDTO.class, params);
         } catch (Exception e) {
             return RespVO.fail(ExceptionTypeEnum.EXCEL_ERROR);
         }
@@ -125,6 +156,7 @@ public class ImportExcelUtil {
                 files.setPath("/logs");
                 files.setAlias(aliasName);
                 files.setName(fileName);
+                files.setCreateTime(new Date());
                 filesMapper.insertSelective(files);
                 map.put("fileId",files.getId());
                 map.put("fileName",fileName);
@@ -135,10 +167,10 @@ public class ImportExcelUtil {
                 log.error("excel日志文件出错"+e);
             }
         }
-        //正确处理
-        Transfer transfer=new Transfer();
         List<Transfer> data=new ArrayList<>();
         list.forEach(i->{
+            //正确处理
+            Transfer transfer=new Transfer();
             String areaName = i.getAreaName();
             //excel中转数据
             BeanUtils.copyProperties(i,transfer);
@@ -169,20 +201,26 @@ public class ImportExcelUtil {
      * @param resp
      * @return
      */
-    public void downloadExcel(HttpServletResponse resp) throws Exception {
-        String fileName = null;
-        String fileNames = "企业客户模板.xls";
+    public void downloadExcel(HttpServletResponse resp, HttpServletRequest request) throws Exception {
+        String fileName = "企业客户模板.xls";
 //        try {
 //            fileName = new String(downloadName.getBytes("UTF-8"), "ISO-8859-1");
 //        } catch (UnsupportedEncodingException e) {
 //            e.printStackTrace();
 //        }
-        Resource res = new ClassPathResource("excel/" + fileNames);
+        Resource res = new ClassPathResource("excel/" + fileName);
         resp.reset();
-        resp.setContentType("application/octet-stream");
-        resp.setCharacterEncoding("utf-8");
-        //resp.setContentLength((int) file.length());
-        resp.setHeader("Content-Disposition", "attachment;filename=" + URLDecoder.decode(fileNames, "UTF-8"));
+        String userAgent =request.getHeader("USER-AGENT");
+        if(userAgent.indexOf("MSIE")!=-1||userAgent.indexOf("Edge")!=-1||userAgent.indexOf("Trident")!=-1){
+            fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+            resp.setHeader("Content-Disposition","attachment;filename="+fileName);
+        }else if(userAgent.indexOf("Firefox")!=-1){
+            fileName = "=?UTF-8?B?" + (new String(Base64.encodeBase64(fileName.getBytes("UTF-8")))) + "?=";
+            resp.setHeader("Content-Disposition","attachment;filename="+fileName);
+        }else{
+            fileName = URLEncoder.encode(fileName, "UTF-8");
+            resp.setHeader("Content-Disposition","attachment;filename="+fileName);
+        }
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os = null;
@@ -207,7 +245,21 @@ public class ImportExcelUtil {
                 e.printStackTrace();
             }
         }
-        log.info("--------Resource:{},fileName:{},OutputStream:{},BufferedInputStream:{}", res, fileName, os.toString(), bis.toString());
+//        log.info("--------Resource:{},fileName:{},OutputStream:{},BufferedInputStream:{}", res, fileName, os.toString(), bis.toString());
+//        String fileNames = "企业客户模板.xls";
+//        Resource res = new ClassPathResource("excel/" + fileNames);
+//        try {
+//            FileInputStream in = new FileInputStream(res.getFile());
+//            resp.setHeader("Content-Disposition", "attachment;filename=" + URLDecoder.decode(fileNames, "UTF-8"));
+//            ServletOutputStream os = resp.getOutputStream();
+//            IOUtils.copy(in, os);
+//            IOUtils.closeQuietly(in);
+//            IOUtils.closeQuietly(os);
+//            log.info("新模版下载--------------");
+//        } catch (Exception e) {
+//            log.error("模版下载失败");
+//        }
     }
+
 
 }

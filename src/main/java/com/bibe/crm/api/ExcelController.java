@@ -1,13 +1,8 @@
 package com.bibe.crm.api;
 
-import cn.afterturn.easypoi.excel.ExcelImportUtil;
-import cn.afterturn.easypoi.excel.entity.ImportParams;
-import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.bibe.crm.common.enums.ExceptionTypeEnum;
 import com.bibe.crm.entity.dto.*;
-import com.bibe.crm.entity.po.Files;
 import com.bibe.crm.entity.vo.*;
 import com.bibe.crm.service.CustomerProgressService;
 import com.bibe.crm.service.CustomerService;
@@ -18,14 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * 程序入口
@@ -96,11 +87,12 @@ public class ExcelController {
      * @param file
      * @param userId
      * @param groupId
+     * @param sum
      * @return
      */
     @PostMapping("/import")
-    public RespVO importExcel(@RequestParam("file") MultipartFile file,Integer userId,Integer groupId){
-        return importExcelUtil.importExcel(file,userId,groupId);
+    public RespVO importExcel(@RequestParam("file") MultipartFile file,Integer userId,Integer groupId,Integer sum){
+        return importExcelUtil.importExcel(file,userId,groupId,sum);
     }
 
 
@@ -109,8 +101,8 @@ public class ExcelController {
      * @return
      */
     @GetMapping("/download")
-    public void download(HttpServletResponse resp) throws Exception {
-        importExcelUtil.downloadExcel(resp);
+    public void download(HttpServletResponse resp, HttpServletRequest request) throws Exception {
+        importExcelUtil.downloadExcel(resp,request);
     }
 
 

@@ -20,7 +20,7 @@ public interface CustomerGroupMapper {
 
     int updateByPrimaryKey(CustomerGroup record);
 
-    List<CustomerGroupVO> list();
+    List<CustomerGroupVO> list(@Param("ids") List<Integer> ids);
 
     List<Map<String,Object>> mapList();
 

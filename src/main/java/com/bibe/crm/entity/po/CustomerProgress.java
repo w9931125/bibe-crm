@@ -16,6 +16,11 @@ public class CustomerProgress {
     private Integer customerId;
 
     /**
+     * 联系人ID
+     */
+    private Integer contactId;
+
+    /**
      * 联系人
      */
     private String name;

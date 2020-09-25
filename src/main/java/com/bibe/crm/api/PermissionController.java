@@ -82,11 +82,12 @@ public class PermissionController {
 
     /**
      * 当前角色拥有的权限部门列表
+     * @param move 1转交查看
      * @return
      */
     @GetMapping("/findPermissionDept")
-    public RespVO findPermissionDept() {
-        return permissionService.permissionDeptList();
+    public RespVO findPermissionDept(Integer move) {
+        return permissionService.permissionDeptList(move);
     }
 
     /**

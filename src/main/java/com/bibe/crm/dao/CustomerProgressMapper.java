@@ -1,14 +1,6 @@
 package com.bibe.crm.dao;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.bibe.crm.entity.dto.ProgressDTO;
-import com.bibe.crm.entity.po.CustomerProgress;
-import com.bibe.crm.entity.vo.ProgressVO;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.metadata.IPage;import com.baomidou.mybatisplus.extension.plugins.pagination.Page;import com.bibe.crm.entity.dto.ProgressDTO;import com.bibe.crm.entity.po.CustomerProgress;import com.bibe.crm.entity.vo.ProgressVO;import org.apache.ibatis.annotations.Param;import java.util.List;import java.util.Map;
 
 public interface CustomerProgressMapper {
     int deleteByPrimaryKey(Integer id);
@@ -33,13 +25,13 @@ public interface CustomerProgressMapper {
 
     /**
      * 详情
+     *
      * @param id
      * @return
      */
-    Map<String,Object> show(Integer id);
+    Map<String, Object> show(Integer id);
 
-
-    IPage<ProgressVO> pageList(@Param("dto")ProgressDTO dto, Page page, @Param("userIds") List<Integer> userIds);
+    IPage<ProgressVO> pageList(@Param("dto") ProgressDTO dto, Page page, @Param("userIds") List<Integer> userIds);
 
     List<ProgressVO> list(@Param("customerId") Integer customerId);
 }

@@ -82,10 +82,10 @@ public enum ExceptionTypeEnum{
     USERNAME_LOCK(9, "账号已被禁用，请联系管理员"),
 
     PASSWORD_ERROR(10000, "两次密码不一致，请检查"),
-    USER_CUSTOMER_ERROR(10001, "无法删除，请先转移客户"),
+    USER_CUSTOMER_ERROR(10001, "无法删除，请先转移该成员名下客户！"),
     USER_COUNT_ERROR(10002,"该员工已经存在"),
     DEPT_COUNT_ERROR(10003,"无法删除,请先删除子部门"),
-    DEPT_USER_COUNT_ERROR(10004,"无法删除,该部门下存在员工"),
+    DEPT_USER_COUNT_ERROR(10004,"无法删除,请先将部门下成员移出部门"),
     CHECK_PASSWORD_ERROR(10005,"密码不正确"),
     ROLES_COUNT_ERROR(10006,"无法删除，该职务下存在员工"),
     SELECT_DEPT_BAN(10007,"所属职务没有查看权限,请联系管理员"),
@@ -97,6 +97,9 @@ public enum ExceptionTypeEnum{
     DELETE_COMMENT_ERROR(10013,"无法删除其他人评论"),
     INSTALL_CONTACT_ERROR(10014,"该客户已经存在主要联系人"),
     EXCEL_ERROR(10015,"系统错误，请检查excel模板"),
+    CUSTOMER_BY_NAME(10016,"该客户名称已经存在，请检查"),
+    CUSTOMER_BY_PHONE(10017,"该客户联系人手机号已经存在，请检查"),
+    USER_BY_PHONE(10018,"用户手机号已经注册，请检查")
     ;
     /**
      * 状态码

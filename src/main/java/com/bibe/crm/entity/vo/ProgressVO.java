@@ -76,4 +76,8 @@ public class ProgressVO implements Serializable {
 
     @Excel(name = "跟进人", orderNum = "8", width = 15)
     private String userName;
+
+    private  Integer contactId;
+
+    private Integer customerType;
 }

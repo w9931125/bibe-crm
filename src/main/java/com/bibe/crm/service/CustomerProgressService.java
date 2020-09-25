@@ -50,6 +50,10 @@ public class CustomerProgressService {
         customerMapper.updateProgressNumById(record.getCustomerId());
         record.setCreateTime(new Date());
         record.setUserId(ShiroUtils.getUserInfo().getId());
+        //同步客户意向度
+        if (record.getSatisfied()!=null){
+            customerMapper.updateIntentionById(record.getSatisfied(),record.getCustomerId());
+        }
         return customerProgressMapper.insertSelective(record);
     }
 
@@ -142,10 +146,12 @@ public class CustomerProgressService {
      */
     public RespVO contactAdd(CustomerContact customerContact) {
         if (customerContact.getType().equals("1")){
-            CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
-            if (flag!=null){
-                return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
-            }
+//            CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId(),null);
+//            if (flag!=null){
+//                return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+//            }
+            //如果这个为主要联系人其他全部修改成次要
+            customerContactMapper.updateTypeByCustomerId(customerContact.getCustomerId());
         }
         customerContact.setCreateTime(new Date());
         customerContactMapper.insertSelective(customerContact);
@@ -170,10 +176,11 @@ public class CustomerProgressService {
      */
     public RespVO contactUpdate(CustomerContact customerContact) {
         if (customerContact.getType().equals("1")){
-            CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId());
-            if (flag!=null){
-                return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
-            }
+//            CustomerContact flag = customerContactMapper.checkCustomerType(customerContact.getCustomerId(),customerContact.getId());
+//            if (flag==null){
+//                return RespVO.fail(ExceptionTypeEnum.INSTALL_CONTACT_ERROR);
+//            }
+            customerContactMapper.updateTypeByCustomerId(customerContact.getCustomerId());
         }
         customerContact.setUpdateTime(new Date());
         customerContactMapper.updateByPrimaryKeySelective(customerContact);

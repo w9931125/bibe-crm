@@ -38,11 +38,11 @@ public class DepartmentService{
     
     public RespVO deleteByPrimaryKey(Integer id) {
         int i = departmentMapper.selectCountByParentId(id);
-        if (i>1){
+        if (i>0){
             return RespVO.fail(ExceptionTypeEnum.DEPT_COUNT_ERROR);
         }
         int t = userMapper.selectCountByDeptId(id);
-        if (t>1){
+        if (t>0){
             return RespVO.fail(ExceptionTypeEnum.DEPT_USER_COUNT_ERROR);
         }
         departmentMapper.deleteByPrimaryKey(id);
@@ -83,7 +83,7 @@ public class DepartmentService{
     }
 
 
-    public RespVO  deptNameList(String name,Integer deptId) {
+    public RespVO  deptNameList(String name,List<Integer> deptId) {
 //        List<Integer> deptIds=new ArrayList<>();
 //        User userInfo = ShiroUtils.getUserInfo();
 //        //客户资料查询权限

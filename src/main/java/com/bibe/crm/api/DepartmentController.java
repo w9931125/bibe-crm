@@ -1,6 +1,7 @@
 package com.bibe.crm.api;
 
 
+import com.bibe.crm.entity.dto.UserPageDTO;
 import com.bibe.crm.entity.po.Department;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.entity.vo.TreeData;
@@ -85,13 +86,11 @@ public class DepartmentController {
 
     /**
      * 选择团队成员
-     * @param name
-     * @param deptId
      * @return
      */
-    @GetMapping("/selectUserDept")
-    public RespVO selectUserDept(String name,Integer deptId){
-        return departmentService.deptNameList(name,deptId);
+    @PostMapping("/selectUserDept")
+    public RespVO selectUserDept(@RequestBody UserPageDTO dto){
+        return departmentService.deptNameList(dto.getName(),dto.getDeptIds());
     }
 
 

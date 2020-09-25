@@ -19,4 +19,10 @@ public class CustomerDTO extends Customer {
     private String  createDate;
 
     private  List<Integer> ids;
+
+
+    /**
+     * 批量修改标示 0为普通修改 1批量修改
+     */
+    private Integer updateFlag=0;
 }

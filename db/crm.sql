@@ -3599,7 +3599,7 @@ CREATE TABLE IF NOT EXISTS `comment_info` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COMMENT='跟进评论内容';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='跟进评论内容';
 
 -- 正在导出表  bibe_crm.comment_info 的数据：~0 rows (大约)
 DELETE FROM `comment_info`;
@@ -3615,9 +3615,9 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `user_id` int(11) DEFAULT NULL COMMENT '负责人id',
   `group_id` int(11) DEFAULT '0' COMMENT '客户分组id 0代表无',
   `area_id` int(11) DEFAULT NULL COMMENT '城市id',
-  `intention` int(11) DEFAULT '9' COMMENT '意向度:0:成交客户,1:A+,2:A-,3:B+,4:B-,5:C+,6:D+,7:E',
+  `intention` int(11) DEFAULT NULL COMMENT '意向度:0:成交客户,1:A+,2:A-,3:B+,4:B-,5:C+,6:D+,7:E',
   `progress_num` int(11) DEFAULT '0' COMMENT '跟进次数',
-  `type` int(11) DEFAULT '3' COMMENT '客户类别:0代理商 1直客 2采购方',
+  `type` int(11) DEFAULT NULL COMMENT '客户类别:0代理商 1直客 2采购方',
   `customer_type` int(11) DEFAULT NULL COMMENT '1公客',
   `use_type` int(11) DEFAULT '0' COMMENT '使用产品0未使用 1使用过',
   `address` varchar(100) DEFAULT NULL COMMENT '客户地址',
@@ -3628,7 +3628,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COMMENT='客户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户表';
 
 -- 正在导出表  bibe_crm.customer 的数据：~0 rows (大约)
 DELETE FROM `customer`;
@@ -3650,7 +3650,7 @@ CREATE TABLE IF NOT EXISTS `customer_contact` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COMMENT='客户联系人信息';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='客户联系人信息';
 
 -- 正在导出表  bibe_crm.customer_contact 的数据：~0 rows (大约)
 DELETE FROM `customer_contact`;
@@ -3667,7 +3667,7 @@ CREATE TABLE IF NOT EXISTS `customer_group` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='公客分组';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='公客分组';
 
 -- 正在导出表  bibe_crm.customer_group 的数据：~0 rows (大约)
 DELETE FROM `customer_group`;
@@ -3691,6 +3691,7 @@ DROP TABLE IF EXISTS `customer_progress`;
 CREATE TABLE IF NOT EXISTS `customer_progress` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) DEFAULT NULL COMMENT '客户id',
+  `contact_id` int(11) DEFAULT NULL COMMENT '联系人ID',
   `name` varchar(80) DEFAULT NULL COMMENT '联系人',
   `contact_type` varchar(30) DEFAULT NULL COMMENT '联系方式0:电话,1:QQ,2:微信,3:登门拜访,4:邮件',
   `position` varchar(30) DEFAULT NULL COMMENT '职务',
@@ -3704,7 +3705,7 @@ CREATE TABLE IF NOT EXISTS `customer_progress` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='客户进度表（联系跟进）';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='客户进度表（联系跟进）';
 
 -- 正在导出表  bibe_crm.customer_progress 的数据：~0 rows (大约)
 DELETE FROM `customer_progress`;
@@ -3722,7 +3723,7 @@ CREATE TABLE IF NOT EXISTS `department` (
   `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COMMENT='部门';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='部门';
 
 -- 正在导出表  bibe_crm.department 的数据：~0 rows (大约)
 DELETE FROM `department`;
@@ -3739,7 +3740,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
 
 -- 正在导出表  bibe_crm.files 的数据：~0 rows (大约)
 DELETE FROM `files`;
@@ -3758,7 +3759,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COMMENT='权限表';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='权限表';
 
 -- 正在导出表  bibe_crm.permission 的数据：~32 rows (大约)
 DELETE FROM `permission`;
@@ -3787,8 +3788,8 @@ INSERT INTO `permission` (`id`, `name`, `path`, `status`, `type`, `parent_id`, `
 	(23, '可以将他人客户转交给其他成员', '/customer/moveHe', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
 	(24, '可以将自己的客户转为公共客户', '/customer/movePublic', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
 	(25, '可以将他人的客户转为公共客户', '/customer/movePublicHe', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
-	(26, '可以修改公客', '/customerGroup/updateCustomer', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
-	(27, '可以删除公客', '/updateCustomer/deleteCustomer', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
+	(26, '可以修改公客/公客分组', '/customerGroup/updateCustomer', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
+	(27, '可以删除公客/公客分组', '/updateCustomer/deleteCustomer', 0, 1, 3, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
 	(28, '可以修改录入人为自己的联系跟进', '/customerProgress/update', 0, 1, 4, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
 	(29, '可以修改录入人为他人的联系跟进', '/customerProgress/updateHe', 0, 1, 4, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
 	(30, '可以修改录入人为公客的联系跟进', '/customerProgress/updatePublic', 0, 1, 4, '2020-07-18 05:54:15', '2020-07-18 05:54:15'),
@@ -3808,7 +3809,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='职务角色';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='职务角色';
 
 -- 正在导出表  bibe_crm.roles 的数据：~1 rows (大约)
 DELETE FROM `roles`;
@@ -3899,13 +3900,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `user_index` (`name`,`phone`,`dept_id`,`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COMMENT='用户';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='用户';
 
 -- 正在导出表  bibe_crm.users 的数据：~1 rows (大约)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `phone`, `password`, `name`, `role_id`, `dept_id`, `host`, `number`, `status`, `login_time`, `create_time`, `update_time`) VALUES
-	(1, 'root', '533466f28a9a5d93fd4dfca96cf2b863', 'admin', 1, 0, '172.17.0.1', -1, 0, '2020-08-31 20:09:51', '2020-07-18 06:23:18', '2020-07-18 06:23:18');
+	(1, 'root', 'bc73dbfcdf2e5ef99e99407fc8ae8de3', 'admin', 1, 0, '172.17.0.1', -1, 0, '2020-08-31 20:09:51', '2020-07-18 06:23:18', '2020-07-18 06:23:18');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

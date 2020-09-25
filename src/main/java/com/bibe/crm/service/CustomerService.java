@@ -38,6 +38,9 @@ public class CustomerService {
     @Resource
     private FilesMapper filesMapper;
 
+    @Resource
+    private AreaMapper areaMapper;
+
 
     public int delete(Integer[] ids) {
         return customerMapper.updateStatusByIdIn(ids);
@@ -117,8 +120,21 @@ public class CustomerService {
     }
 
     public RespVO add(CustomerDTO record) {
-        if (!checkUserCustomer(record.getUserId())) {
-            return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
+        if (record.getId()!=null){
+            //验证录入数量
+            if (!checkUserCustomer(record.getUserId())) {
+                return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
+            }
+        }
+        //验证客户重复名
+        Integer checkByName = customerMapper.checkByName(record.getName());
+        if (checkByName>0){
+            return RespVO.fail(ExceptionTypeEnum.CUSTOMER_BY_NAME);
+        }
+        //验证手机号重复
+        Integer checkByPhone = customerContactMapper.checkByPhone(record.getCustomerContact().getPhone());
+        if (checkByPhone>0){
+            return RespVO.fail(ExceptionTypeEnum.CUSTOMER_BY_PHONE);
         }
         Customer customer = new Customer();
         BeanUtils.copyProperties(record, customer);
@@ -152,7 +168,11 @@ public class CustomerService {
             files = filesMapper.findFileByIds(fileIds);
         }
         CustomerContact customerContact = customerContactMapper.findAllById(customer.getId());
+        String name = areaMapper.selectByPrimaryKey(customer.getAreaId()).getName();
         map.put("customer", customer);
+        if (name!=null){
+            map.put("areaName",name);
+        }
         map.put("customerContact", customerContact);
         map.put("files",files);
         return RespVO.ofSuccess(map);
@@ -160,6 +180,13 @@ public class CustomerService {
 
 
     public RespVO update(CustomerDTO record) {
+        //批量修改不走验证
+        if (record.getUpdateFlag().equals(0)){
+            //验证录入数量
+            if (!checkUserCustomer(record.getUserId())) {
+                return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
+            }
+        }
         Customer customer = new Customer();
         BeanUtils.copyProperties(record, customer);
         try {
@@ -279,6 +306,12 @@ public class CustomerService {
     }
 
     public RespVO move(Integer userId,Integer groupId,List<Integer> ids){
+        if (userId!=null){
+            //验证录入数量
+            if (!checkUserCustomer(userId)) {
+                return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
+            }
+        }
         customerMapper.updateUserIdAndGroupIdByIdIn(userId,groupId,ids);
         return RespVO.ofSuccess();
     }

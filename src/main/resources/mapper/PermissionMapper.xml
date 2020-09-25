@@ -135,6 +135,7 @@
     from permission
     where parent_id=#{parentId,jdbcType=INTEGER}
     and  `type` = #{type,jdbcType=INTEGER}
+    and `status` =0
   </select>
 
 

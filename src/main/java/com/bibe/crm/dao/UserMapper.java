@@ -94,12 +94,12 @@ public interface UserMapper {
     /**
      * 选择团队成员
      * @param name
-     * @param deptId
+     * @param deptIds
      * @return
      */
 //     List<DeptNameVO> selectNameDeptNameList(@Param("name") String name, @Param("ids")List<Integer> deptIds);
 
-     List<DeptNameVO> selectNameDeptName(@Param("name") String name, @Param("deptId") Integer deptId);
+     List<DeptNameVO> selectNameDeptName(@Param("name") String name, @Param("deptIds") List<Integer> deptIds);
 
     /**
      * 指定人员-按人员浏览
@@ -112,6 +112,7 @@ public interface UserMapper {
      * @return
      */
      List<Map<String,Object>> findBaseInfo(@Param("deptId")Integer deptId);
+     List<Map<String,Object>> findBaseInfoByUserId(@Param("userId")Integer userId);
 
     /**
      * 根据部门

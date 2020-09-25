@@ -164,4 +164,20 @@ public interface CustomerMapper {
      * @return
      */
     Integer countByUserId(@Param("userId")Integer userId);
+
+    /**
+     * 验证客户重名
+     * @param name
+     * @return
+     */
+    Integer checkByName(@Param("name")String name);
+
+
+    /**
+     * 修改客户意向
+     * @param updatedIntention
+     * @param id
+     * @return
+     */
+    int updateIntentionById(@Param("updatedIntention")Integer updatedIntention,@Param("id")Integer id);
 }

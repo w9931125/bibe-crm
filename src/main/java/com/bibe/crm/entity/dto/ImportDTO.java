@@ -22,10 +22,10 @@ public class ImportDTO  implements IExcelDataModel, IExcelModel {
      * 地区
      */
     @Excel(name = "所在城市")
+    @NotBlank(message = "[所在城市]不能为空")
     private String areaName;
 
     @Excel(name = "行业")
-    @NotBlank(message = "[行业]不能为空")
     private String industry;
 
 
@@ -33,7 +33,7 @@ public class ImportDTO  implements IExcelDataModel, IExcelModel {
      * 客户地址
      */
     @Excel(name = "公司地址")
-    @NotBlank(message = "[公司地址]不能为空")
+    //@NotBlank(message = "[公司地址]不能为空")
     private String address;
 
 

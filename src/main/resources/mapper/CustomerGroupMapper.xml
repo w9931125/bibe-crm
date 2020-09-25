@@ -109,7 +109,14 @@
   <select id="list"  resultType="com.bibe.crm.entity.vo.CustomerGroupVO">
         select
         <include refid="Base_Column_List"/>
-        from customer_group
+        from customer_group where 1=1
+    <if test="ids != null and ids.size() != 0">
+      and id in
+      <foreach item="item" index="index" collection="ids"
+               open="(" separator="," close=")">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+    </if>
     </select>
 
   <select id="mapList" resultType="java.util.Map">

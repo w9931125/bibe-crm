@@ -3,6 +3,8 @@ package com.bibe.crm.entity.dto;
 import com.bibe.crm.common.base.BasePage;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserPageDTO extends BasePage {
 
@@ -19,7 +21,7 @@ public class UserPageDTO extends BasePage {
     /**
      * 部门id
      */
-    private Integer deptId;
+    private List<Integer> deptIds;
 
     /**
      * 0 启用 1禁止

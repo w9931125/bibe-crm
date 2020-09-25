@@ -33,6 +33,7 @@ public class CustomerGroupService{
             return RespVO.fail(ExceptionTypeEnum.DELETE_CUSTOMER_GROUP_ERROR);
         }*/
         customerGroupMapper.deleteByPrimaryKey(id);
+        customerGroupDepartmentRelationMapper.deleteByCustomerGroupId(id);
         return RespVO.ofSuccess();
     }
 
@@ -79,8 +80,8 @@ public class CustomerGroupService{
     }
 
     
-    public RespVO list() {
-        List<CustomerGroupVO> list = customerGroupMapper.list();
+    public RespVO list( List<Integer> ids) {
+        List<CustomerGroupVO> list = customerGroupMapper.list(ids);
         list.forEach(i->{
             String deptNames = customerGroupDepartmentRelationMapper.findDeptNamesByGroupId(i.getId());
             i.setDeptNames(deptNames);

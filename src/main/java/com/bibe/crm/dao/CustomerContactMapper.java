@@ -37,5 +37,11 @@ public interface CustomerContactMapper {
     IPage<Map<String,Object>> pageList(@Param("customerId")Integer cId, Page page);
 
 
-    CustomerContact checkCustomerType(@Param("customerId")Integer customerId);
+    CustomerContact checkCustomerType(@Param("customerId")Integer customerId,@Param("id")Integer id);
+
+    Integer checkByPhone(@Param("phone")String phone);
+
+    int updateTypeByCustomerId(@Param("customerId")Integer customerId);
+
+
 }

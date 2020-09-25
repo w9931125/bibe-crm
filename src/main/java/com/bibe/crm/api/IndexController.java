@@ -10,6 +10,7 @@ import com.bibe.crm.service.PermissionService;
 import com.bibe.crm.service.UserService;
 import com.bibe.crm.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.poi.util.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -23,9 +24,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -104,19 +107,31 @@ public class IndexController {
      * @param id
      */
     @PostMapping("/download")
-    public void download(HttpServletResponse response, Integer id) {
+    public void download(HttpServletResponse response, HttpServletRequest request, Integer id) {
         try {
             Files files = filesMapper.selectByPrimaryKey(id);
             // String Path = ResourceUtils.getURL("classpath:").getPath() + "/static" + files.getPath();
             String Path = path + files.getPath();
             FileInputStream in = new FileInputStream(new File(URLDecoder.decode(Path), files.getAlias()));
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLDecoder.decode(files.getName(), "UTF-8"));
+            String userAgent =request.getHeader("USER-AGENT");
+            String fileName=files.getName();
+            if(userAgent.indexOf("MSIE")!=-1||userAgent.indexOf("Edge")!=-1||userAgent.indexOf("Trident")!=-1){
+                fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+                response.setHeader("Content-Disposition","attachment;filename="+fileName);
+            }else if(userAgent.indexOf("Firefox")!=-1){
+                fileName = "=?UTF-8?B?" + (new String(Base64.encodeBase64(fileName.getBytes("UTF-8")))) + "?=";
+                response.setHeader("Content-Disposition","attachment;filename="+fileName);
+            }else{
+                fileName = URLEncoder.encode(fileName, "UTF-8");
+                response.setHeader("Content-Disposition","attachment;filename="+fileName);
+            }
+            //response.addHeader("Content-Disposition", " attachment;filename=" + new String(files.getName().getBytes("UTF-8"),"iso-8859-1"));
             ServletOutputStream os = response.getOutputStream();
             IOUtils.copy(in, os);
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(os);
         } catch (Exception e) {
-            log.error("文件下载失败");
+            log.error("文件下载失败"+e);
         }
     }
 
