@@ -42,8 +42,11 @@ public class CustomerService {
     private AreaMapper areaMapper;
 
 
-    public int delete(Integer[] ids) {
-        return customerMapper.updateStatusByIdIn(ids);
+    public RespVO delete(Integer[] ids) {
+        customerMapper.updateStatusByIdIn(ids);
+        customerContactMapper.deleteByCustomerIdIn(ids);
+        customerProgressMapper.deleteByCustomerIdIn(ids);
+        return RespVO.ofSuccess();
     }
 
 
@@ -127,8 +130,8 @@ public class CustomerService {
             }
         }
         //验证客户重复名
-        Integer checkByName = customerMapper.checkByName(record.getName());
-        if (checkByName>0){
+        Customer checkByName = customerMapper.checkByName(record.getName());
+        if (checkByName!=null){
             return RespVO.fail(ExceptionTypeEnum.CUSTOMER_BY_NAME);
         }
         //验证手机号重复
@@ -168,11 +171,13 @@ public class CustomerService {
             files = filesMapper.findFileByIds(fileIds);
         }
         CustomerContact customerContact = customerContactMapper.findAllById(customer.getId());
-        String name = areaMapper.selectByPrimaryKey(customer.getAreaId()).getName();
-        map.put("customer", customer);
-        if (name!=null){
-            map.put("areaName",name);
+        if(customer.getAreaId()!=null){
+            String name = areaMapper.selectByPrimaryKey(customer.getAreaId()).getName();
+            if (name!=null){
+                map.put("areaName",name);
+            }
         }
+        map.put("customer", customer);
         map.put("customerContact", customerContact);
         map.put("files",files);
         return RespVO.ofSuccess(map);
@@ -185,6 +190,11 @@ public class CustomerService {
             //验证录入数量
             if (!checkUserCustomer(record.getUserId())) {
                 return RespVO.fail(ExceptionTypeEnum.USER_NUMBER_ERROR);
+            }
+            //验证客户重复名
+            Customer checkByName = customerMapper.checkByName(record.getName());
+            if (checkByName!=null&&!record.getIds().contains(checkByName.getId())){
+                return RespVO.fail(ExceptionTypeEnum.CUSTOMER_BY_NAME);
             }
         }
         Customer customer = new Customer();
@@ -202,14 +212,14 @@ public class CustomerService {
         return RespVO.ofSuccess();
     }
 
-
     public IPage<CustomerVO> pageList(FindCustomerDTO dto, Page page) {
 /*        if (dto.getUserId()==null||dto.getDeptId()==null){
             return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
         }*/
         List<Integer> userIds = dto.getUserIds();
         if (null != dto.getDeptId()) {
-            userIds = userMapper.findIdByDeptId(dto.getDeptId());
+            userIds = userMapper.findIdByDeptIdIn(dto.getDeptId());
+            userIds.add(ShiroUtils.getUserInfo().getId());
         }
         IPage<CustomerVO> pageList = customerMapper.pageList(dto, page, userIds);
         List<CustomerVO> records = pageList.getRecords();

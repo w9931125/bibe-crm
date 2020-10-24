@@ -36,6 +36,32 @@ public class TreeUtil {
         }
         return rootNode;
     }
+/*
+    public static void main(String[] args) {
+        List<TreeData> list=new ArrayList<>();
+        TreeData a=new TreeData();
+        a.setId(52);
+        a.setPid(51);
+        a.setTitle("王代理商1");
+        TreeData b=new TreeData();
+        b.setId(53);
+        b.setPid(51);
+        b.setTitle("王代理商2");
+        TreeData c=new TreeData();
+        c.setId(93);
+        c.setPid(52);
+        c.setTitle("销售一部");
+        TreeData d=new TreeData();
+        d.setId(94);
+        d.setPid(52);
+        d.setTitle("销售二部");
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        list.add(d);
+        List<TreeData> treeList = getTreeList(list, 51);
+
+    }*/
 
     private static List<TreeData> getChild(Integer id,List<TreeData> list){
         //找到id节点子节点

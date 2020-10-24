@@ -11,6 +11,8 @@ public class CountDTO {
      */
     private List<Integer> userIds;
 
+    private Integer deptId;
+
     /**
      * 年 yyyy
      */

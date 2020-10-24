@@ -99,7 +99,9 @@ public enum ExceptionTypeEnum{
     EXCEL_ERROR(10015,"系统错误，请检查excel模板"),
     CUSTOMER_BY_NAME(10016,"该客户名称已经存在，请检查"),
     CUSTOMER_BY_PHONE(10017,"该客户联系人手机号已经存在，请检查"),
-    USER_BY_PHONE(10018,"用户手机号已经注册，请检查")
+    USER_BY_PHONE(10018,"用户手机号已经注册，请检查"),
+    ROLES_UPDATE_NAME_ERROR(10019,"该职位已经存在，请检查"),
+    DEPT_NAME_ERROR(10020,"该部门已经存在，请检查")
     ;
     /**
      * 状态码

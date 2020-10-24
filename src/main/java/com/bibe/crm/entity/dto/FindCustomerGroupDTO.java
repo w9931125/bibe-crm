@@ -17,11 +17,19 @@ public class FindCustomerGroupDTO extends BasePage {
      * 结束时间
      */
     private String endDate;
-
     /**
      * 最后跟进时间
      */
     private String lastDate;
+    private String startLastDate;
+    private String endLastDate;
+
+    /**
+     * 下次跟进时间
+     */
+    private String nextDate;
+    private String startNextDate;
+    private String endNextDate;
 
     /**
      * 转为公客时间

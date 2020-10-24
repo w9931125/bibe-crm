@@ -21,4 +21,5 @@ public interface RolesMapper {
     //设置录入次数
     int updateNumberById(@Param("updatedNumber")Integer updatedNumber,@Param("id")Integer id);
 
+    Roles findAllByName(@Param("name")String name);
 }

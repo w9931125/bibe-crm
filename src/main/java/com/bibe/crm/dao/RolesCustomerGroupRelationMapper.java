@@ -14,6 +14,4 @@ public interface RolesCustomerGroupRelationMapper {
     int deleteByRoleId(@Param("roleId")Integer roleId);
 
     List<RolesCustomerGroupRelation> selectAllByRoleId(@Param("roleId")Integer roleId);
-
-
 }

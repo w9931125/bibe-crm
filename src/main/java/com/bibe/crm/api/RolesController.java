@@ -35,8 +35,7 @@ public class RolesController {
      */
     @PutMapping("/update")
     public RespVO update(@RequestBody Roles roles){
-        rolesService.update(roles);
-        return RespVO.ofSuccess();
+        return rolesService.update(roles);
     }
 
     /**
@@ -46,8 +45,7 @@ public class RolesController {
      */
     @PostMapping("/add")
     public RespVO add(@RequestBody Roles roles){
-        rolesService.add(roles);
-        return RespVO.ofSuccess();
+        return rolesService.add(roles);
     }
 
 

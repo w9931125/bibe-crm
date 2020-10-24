@@ -19,7 +19,7 @@ public interface RolesPermissionRelationMapper {
 
     int insertList(@Param("list")List<RolesPermissionRelation> list);
 
-    int deleteByRoleId(@Param("roleId") Integer roleId, @Param("type")Integer type);
+    int deleteByRoleIdAndType(@Param("roleId") Integer roleId, @Param("type")Integer type);
 
 
     /**
@@ -39,4 +39,8 @@ public interface RolesPermissionRelationMapper {
      * @return
      */
     Integer findStatus(@Param("roleId")Integer roleId,@Param("permissionId")Integer permissionId);
+
+    int deleteByRoleId(@Param("roleId")Integer roleId);
+
+
 }

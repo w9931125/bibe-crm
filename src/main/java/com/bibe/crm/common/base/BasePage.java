@@ -2,9 +2,6 @@ package com.bibe.crm.common.base;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 
 @Data
 public class BasePage {

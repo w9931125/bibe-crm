@@ -43,5 +43,5 @@ public interface CustomerContactMapper {
 
     int updateTypeByCustomerId(@Param("customerId")Integer customerId);
 
-
+    int deleteByCustomerIdIn(@Param("customerIdCollection")Integer[]  customerIdCollection);
 }

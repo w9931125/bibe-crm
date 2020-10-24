@@ -1,4 +1,5 @@
 package com.bibe.crm.dao;
+import com.bibe.crm.entity.vo.VerifyVO;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface TransferMapper {
 
     List<Transfer> findAllByVersion(@Param("version")String version);
 
-
+   int count(@Param("name")String name,@Param("phone")String phone);
 }

@@ -22,11 +22,15 @@ public class FindCustomerDTO  extends BasePage {
      * 最后跟进时间
      */
     private String lastDate;
+    private String startLastDate;
+    private String endLastDate;
 
     /**
      * 下次跟进时间
      */
     private String nextDate;
+    private String startNextDate;
+    private String endNextDate;
 
 
     /**
@@ -36,7 +40,12 @@ public class FindCustomerDTO  extends BasePage {
     /**
      * 部门id
      */
-    private Integer deptId;
+    //private Integer deptId;
+
+    /**
+     * 部门id组
+     */
+    private List<Integer> deptId;
 
     /**
      * 城市id

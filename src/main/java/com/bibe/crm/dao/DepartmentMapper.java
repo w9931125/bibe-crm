@@ -57,4 +57,5 @@ public interface DepartmentMapper {
 
     List<Integer> findIdByParentIdIn(@Param("parentIdCollection")Collection<Integer> parentIdCollection);
 
+    Department findAllByName(@Param("name")String name);
 }

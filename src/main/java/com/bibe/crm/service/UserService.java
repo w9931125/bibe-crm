@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bibe.crm.common.enums.ExceptionTypeEnum;
 import com.bibe.crm.dao.CustomerMapper;
+import com.bibe.crm.dao.RolesMapper;
 import com.bibe.crm.entity.dto.UserDTO;
 import com.bibe.crm.entity.dto.UserPageDTO;
+import com.bibe.crm.entity.po.Roles;
 import com.bibe.crm.entity.vo.RespVO;
 import com.bibe.crm.entity.vo.UserVO;
 import com.bibe.crm.utils.ShiroUtils;
@@ -28,6 +30,9 @@ public class UserService {
 
     @Resource
     private CustomerMapper customerMapper;
+
+    @Resource
+    private RolesMapper rolesMapper;
 
 
     public RespVO deleteByPrimaryKey(Integer[] ids) {
@@ -61,6 +66,8 @@ public class UserService {
         BeanUtils.copyProperties(record,user);
         user.setPassword(getPassword(user.getPassword()));
         user.setCreateTime(new Date());
+        Roles roles = rolesMapper.selectByPrimaryKey(record.getRoleId());
+        user.setNumber(roles.getNumber());
         userMapper.insertSelective(user);
         return RespVO.ofSuccess();
     }
@@ -87,7 +94,9 @@ public class UserService {
         if (user.getPassword()!=null){
             user.setPassword(getPassword(user.getPassword()));
         }
+        Roles roles = rolesMapper.selectByPrimaryKey(record.getRoleId());
         user.setUpdateTime(new Date());
+        user.setNumber(roles.getNumber());
         userMapper.updateByPrimaryKeySelective(user);
         return RespVO.ofSuccess();
     }

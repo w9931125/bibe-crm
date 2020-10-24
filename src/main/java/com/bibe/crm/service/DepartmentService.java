@@ -1,6 +1,7 @@
 package com.bibe.crm.service;
 
 import com.bibe.crm.common.enums.ExceptionTypeEnum;
+import com.bibe.crm.dao.CustomerGroupDepartmentRelationMapper;
 import com.bibe.crm.dao.RolesDepartmentRelationMapper;
 import com.bibe.crm.dao.UserMapper;
 import com.bibe.crm.entity.po.RolesDepartmentRelation;
@@ -35,6 +36,8 @@ public class DepartmentService{
 
     @Resource
     private RolesDepartmentRelationMapper rolesDepartmentRelationMapper;
+    @Resource
+    private CustomerGroupDepartmentRelationMapper customerGroupDepartmentRelationMapper;
     
     public RespVO deleteByPrimaryKey(Integer id) {
         int i = departmentMapper.selectCountByParentId(id);
@@ -46,11 +49,17 @@ public class DepartmentService{
             return RespVO.fail(ExceptionTypeEnum.DEPT_USER_COUNT_ERROR);
         }
         departmentMapper.deleteByPrimaryKey(id);
+        rolesDepartmentRelationMapper.deleteByDeptId(id);
+        customerGroupDepartmentRelationMapper.deleteByDeptId(id);
         return  RespVO.ofSuccess();
     }
 
     
     public RespVO insert(Department record) {
+        Department allByName = departmentMapper.findAllByName(record.getName());
+        if (allByName!=null){
+            return RespVO.fail(ExceptionTypeEnum.DEPT_NAME_ERROR);
+        }
         record.setCreateTime(new Date());
         departmentMapper.insert(record);
         return  RespVO.ofSuccess();
@@ -63,6 +72,10 @@ public class DepartmentService{
 
     
     public RespVO update(Department record) {
+        Department allByName = departmentMapper.findAllByName(record.getName());
+        if (allByName!=null&&!allByName.getId().equals(record.getId())){
+            return RespVO.fail(ExceptionTypeEnum.DEPT_NAME_ERROR);
+        }
         record.setUpdateTime(new Date());
         departmentMapper.updateByPrimaryKeySelective(record);
         return RespVO.ofSuccess();

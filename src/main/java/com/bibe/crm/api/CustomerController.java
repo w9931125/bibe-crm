@@ -2,6 +2,7 @@ package com.bibe.crm.api;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bibe.crm.dao.UserMapper;
 import com.bibe.crm.entity.dto.CountDTO;
 import com.bibe.crm.entity.dto.CustomerDTO;
 import com.bibe.crm.entity.dto.CustomerMoveDTO;
@@ -24,6 +25,8 @@ public class CustomerController {
     @Resource
     private CustomerProgressService  customerProgressService;
 
+    @Resource
+    private UserMapper userMapper;
 
 
     /**
@@ -33,6 +36,9 @@ public class CustomerController {
      */
     @PostMapping("/findCountByDate")
     public RespVO findCountByDate(@RequestBody CountDTO countDTO){
+        if (countDTO.getDeptId()!=null){
+            countDTO.setUserIds(userMapper.findIdByDeptId(countDTO.getDeptId()));
+        }
         return customerService.findCountByDate(countDTO);
     }
 
@@ -43,6 +49,9 @@ public class CustomerController {
      */
     @PostMapping("/findCountBySort")
     public RespVO findCountBySort(@RequestBody CountDTO countDTO){
+        if (countDTO.getDeptId()!=null){
+            countDTO.setUserIds(userMapper.findIdByDeptId(countDTO.getDeptId()));
+        }
         return customerService.findCountBySort(countDTO);
     }
 

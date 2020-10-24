@@ -170,7 +170,7 @@ public interface CustomerMapper {
      * @param name
      * @return
      */
-    Integer checkByName(@Param("name")String name);
+    Customer checkByName(@Param("name")String name);
 
 
     /**

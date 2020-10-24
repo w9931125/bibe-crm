@@ -59,53 +59,6 @@ public class PermissionService {
 
     @Resource
     private CustomerGroupMapper customerGroupMapper;
-
-    @Resource
-    private SessionService sessionMapper;
-    /**
-     * 删除用户缓存信息
-     * @Param  username  用户名称
-     * @Param  isRemoveSession 是否删除Session，删除后用户需重新登录
-     */
-/*    public void deleteCache(String roleId, boolean isRemoveSession){
-        //从缓存中获取Session
-        Session session = null;
-        // 获取当前已登录的用户session列表
-        Collection<Session> sessions = sessionMapper.getActiveSessions();
-        User sysUserEntity;
-        Object attribute = null;
-        // 遍历Session,找到该用户名称对应的Session
-        for(Session sessionInfo : sessions){
-            attribute = sessionInfo.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-            if (attribute == null) {
-                continue;
-            }
-            sysUserEntity = (User) ((SimplePrincipalCollection) attribute).getPrimaryPrincipal();
-            if (sysUserEntity == null) {
-                continue;
-            }
-            if (Objects.equals(sysUserEntity.getRoleId(), roleId)) {
-                session=sessionInfo;
-                // 清除该用户以前登录时保存的session，强制退出  -> 单用户登录处理
-                if (isRemoveSession) {
-                    sessionMapper.delete(session);
-                }
-            }
-        }
-
-        if (session == null||attribute == null) {
-            return;
-        }
-        //删除session
-        if (isRemoveSession) {
-            sessionMapper.delete(session);
-        }
-        //删除Cache，再访问受限接口时会重新授权
-        DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
-        Authenticator authc = securityManager.getAuthenticator();
-        ((LogoutAware) authc).onLogout((SimplePrincipalCollection) attribute);
-    }*/
-
     /**
      *
      * @param flag 0客户资料 1联系跟进
@@ -401,7 +354,7 @@ public class PermissionService {
                 //授权接口
                 List<RolesPermissionRelation> permissionList = dto.getPermissionList();
 
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+                rolesPermissionRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),flag);
 
                 if (permissionList.size()>0){
                     permissionList.forEach(i->i.setType(flag));
@@ -412,7 +365,7 @@ public class PermissionService {
                     //授权查看部门
                     List<RolesDepartmentRelation> rolesDepartmentRelationList = dto.getRolesDepartmentRelationList();
 
-                    rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),0);
+                    rolesDepartmentRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),0);
 
                     //全部客户
                     if (rolesDepartmentRelationList.size()>0){
@@ -421,7 +374,7 @@ public class PermissionService {
                     }
 
                 }else {
-                    rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),0);
+                    rolesDepartmentRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),0);
                     //     部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户 -4与自己同一个部门 -5与自己同一个部门及下级部门
                     RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
                     rolesDepartmentRelation.setType(0);
@@ -439,7 +392,6 @@ public class PermissionService {
                 }
                 //设置录入人数
                 rolesMapper.updateNumberById(dto.getNumber(),dto.getRoleId());
-                // TODO: 2020/8/8 可能会有问题，重复设置权限会产生录入人数的刷新
                 userMapper.updateNumberByRoleId(dto.getNumber(),dto.getRoleId());
                 break;
             case 2:
@@ -448,7 +400,7 @@ public class PermissionService {
                     //授权查看部门
                     List<RolesDepartmentRelation> rolesDepartmentRelationList = dto.getRolesDepartmentRelationList();
 
-                    rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
+                    rolesDepartmentRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),1);
 
                     if (rolesDepartmentRelationList.size()>0){
                         rolesDepartmentRelationList.forEach(i->i.setType(1));
@@ -473,7 +425,7 @@ public class PermissionService {
 //                        rolesDepartmentRelation.setRoleId(dto.getRoleId());
 //                        rolesDepartmentRelationMapper.insert(rolesDepartmentRelation);
 //                    }
-                    rolesDepartmentRelationMapper.deleteByRoleId(dto.getRoleId(),1);
+                    rolesDepartmentRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),1);
                     //   部门id -1为全部客户 0为禁止 -2只看自己负责 -3同步客户资料 -4与自己同一个部门 -5与自己同一个部门及下级部门
                     RolesDepartmentRelation rolesDepartmentRelation=new RolesDepartmentRelation();
                     rolesDepartmentRelation.setType(1);
@@ -484,7 +436,7 @@ public class PermissionService {
                 //授权接口
                 List<RolesPermissionRelation> permissionRelationList = dto.getPermissionList();
 
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+                rolesPermissionRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),flag);
 
                 if (permissionRelationList.size()>0){
                     permissionRelationList.forEach(i->i.setType(flag));
@@ -492,7 +444,7 @@ public class PermissionService {
                 }
                 break;
             case 3:
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+                rolesPermissionRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),flag);
                 List<RolesPermissionRelation> permissionList1 = dto.getPermissionList();
                 if (permissionList1.size()>0){
                     permissionList1.forEach(i->i.setType(flag));
@@ -500,7 +452,7 @@ public class PermissionService {
                 }
                 break;
             case 4:
-                rolesPermissionRelationMapper.deleteByRoleId(dto.getRoleId(),flag);
+                rolesPermissionRelationMapper.deleteByRoleIdAndType(dto.getRoleId(),flag);
                 List<RolesPermissionRelation> permissionList2 = dto.getPermissionList();
                 if (permissionList2.size()>0){
                     permissionList2.forEach(i->i.setType(flag));
@@ -508,7 +460,6 @@ public class PermissionService {
                 }
                 break;
         }
-        //ShiroUtils.reloadAuthorizing();
         return RespVO.ofSuccess();
     }
 

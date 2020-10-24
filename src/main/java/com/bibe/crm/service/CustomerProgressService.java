@@ -114,6 +114,11 @@ public class CustomerProgressService {
 
     public RespVO  list(Integer customerId){
         List<ProgressVO> list = customerProgressMapper.list(customerId);
+        //评论列表
+        list.forEach(i->{
+            List<Map<String, Object>> comment = commentInfoMapper.findAllByProgressId(i.getId());
+            i.setCommentInfo(comment);
+        });
         return RespVO.ofSuccess(list);
     }
 

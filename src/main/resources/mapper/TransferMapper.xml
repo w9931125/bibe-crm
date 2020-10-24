@@ -201,4 +201,10 @@
         from transfer
         where version=#{version,jdbcType=VARCHAR}
     </select>
+
+    <!--验证重复-->
+    <select id="count" resultType="java.lang.Integer">
+    select count(1) from customer t,customer_contact t1 where  t.name=#{name}  and t.`status`=0 or t1.phone=#{phone}
+    </select>
+
 </mapper>

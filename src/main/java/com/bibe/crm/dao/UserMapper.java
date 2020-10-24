@@ -122,7 +122,7 @@ public interface UserMapper {
      List<IdNameVO> findAllByDeptId(@Param("deptId")Integer deptId);
 
 
-    /**
+    /**ddd
      * 减少录入次数
      * @param id
      * @return
@@ -137,4 +137,5 @@ public interface UserMapper {
      */
     List<Integer> findIdByDeptId(@Param("deptId")Integer deptId);
 
+    List<Integer> findIdByDeptIdIn(@Param("deptIdCollection")Collection<Integer> deptIdCollection);
 }
