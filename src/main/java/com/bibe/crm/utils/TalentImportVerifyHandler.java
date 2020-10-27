@@ -40,9 +40,9 @@ public class TalentImportVerifyHandler implements IExcelVerifyHandler<ImportDTO>
      * 校验是否重复
      */
     public boolean checkForDuplicates(String name, String phone) {
-        int list = transferMapper.count(name,phone);
-        // 姓名与手机号相等个数不等于0则为重复
-        if (list>0){
+        List<Integer> list = transferMapper.count(name,phone);
+        //个数大于1则为重复
+        if (list.size()>1){
             return true;
         }else{
             return false;

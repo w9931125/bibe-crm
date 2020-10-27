@@ -204,7 +204,10 @@
 
     <!--验证重复-->
     <select id="count" resultType="java.lang.Integer">
-    select count(1) from customer t,customer_contact t1 where  t.name=#{name}  and t.`status`=0 or t1.phone=#{phone}
+        select count(1) from customer t where  t.`status`=0 and t.name=#{name}
+        UNION
+        select count(1) from customer_contact q where q.phone=#{phone}
+    <!--select count(1) from customer t,customer_contact t1 where  t.name=#{name}  and t.`status`=0 or t1.phone=#{phone}-->
     </select>
 
 </mapper>

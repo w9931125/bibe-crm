@@ -16,5 +16,5 @@ public interface TransferMapper {
 
     List<Transfer> findAllByVersion(@Param("version")String version);
 
-   int count(@Param("name")String name,@Param("phone")String phone);
+   List<Integer> count(@Param("name")String name,@Param("phone")String phone);
 }
