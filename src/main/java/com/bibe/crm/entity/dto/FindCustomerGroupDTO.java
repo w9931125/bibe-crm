@@ -41,6 +41,8 @@ public class FindCustomerGroupDTO extends BasePage {
      */
     private List<Integer> groupIds;
 
+    private Integer desc=2;
+
     /**
      * 城市id
      */

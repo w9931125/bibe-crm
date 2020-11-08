@@ -32,7 +32,7 @@ public class FindCustomerDTO  extends BasePage {
     private String startNextDate;
     private String endNextDate;
 
-
+    private Integer desc=2;
     /**
      * 用户ids
      */

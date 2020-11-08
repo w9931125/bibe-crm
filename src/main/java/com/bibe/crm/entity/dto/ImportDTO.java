@@ -71,7 +71,7 @@ public class ImportDTO  implements IExcelDataModel, IExcelModel {
      */
     @Excel(name = "[联系人]手机号")
     @NotBlank(message = "[联系人手机号]不能为空")
-    @Pattern(regexp = "[0-9]{11}", message = "手机号不正确")
+    //@Pattern(regexp = "[0-9]{11}", message = "手机号不正确")
     private String phone;
 
     /**
@@ -99,7 +99,7 @@ public class ImportDTO  implements IExcelDataModel, IExcelModel {
 
     @Override
     public int getRowNum() {
-        return rowNum;
+        return rowNum+1;
     }
 
     @Override

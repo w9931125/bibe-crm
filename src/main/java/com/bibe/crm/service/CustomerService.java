@@ -213,9 +213,6 @@ public class CustomerService {
     }
 
     public IPage<CustomerVO> pageList(FindCustomerDTO dto, Page page) {
-/*        if (dto.getUserId()==null||dto.getDeptId()==null){
-            return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
-        }*/
         List<Integer> userIds = dto.getUserIds();
         if (null != dto.getDeptId()) {
             userIds = userMapper.findIdByDeptIdIn(dto.getDeptId());
@@ -235,18 +232,15 @@ public class CustomerService {
                 }
                 i.setLatsTime(newInfo.getCreateTime());
             }
-            //主要联系人
-            System.out.printf("看下id"+i.getId().toString());
-            CustomerContact customerContact = customerContactMapper.findAllByCustomerId(i.getId());
-            if (customerContact!=null){
-                if (customerContact.getPhone()!=null){
-                    i.setPhone(customerContact.getPhone());
-                }
+            String phone= customerContactMapper.findAllByCustomerId(i.getId());
+            if (phone!=null){
+                i.setPhone(phone);
             }
         });
         pageList.setRecords(records);
         return pageList;
     }
+
 
 
 
@@ -267,11 +261,9 @@ public class CustomerService {
                 i.setLatsTime(newInfo.getCreateTime());
             }
             //主要联系人
-            CustomerContact customerContact = customerContactMapper.findAllByCustomerId(i.getId());
-            if (customerContact!=null){
-                if (customerContact.getPhone()!=null){
-                    i.setPhone(customerContact.getPhone());
-                }
+            String phone= customerContactMapper.findAllByCustomerId(i.getId());
+            if (phone!=null){
+                i.setPhone(phone);
             }
         });
         pageList.setRecords(records);
@@ -286,9 +278,6 @@ public class CustomerService {
      * @return
      */
     public IPage<PublicCustomerVO>  customerGroupPageList(FindCustomerGroupDTO dto, Page page) {
-/*        if (dto.getUserId()==null||dto.getDeptId()==null){
-            return RespVO.fail(ExceptionTypeEnum.SELECT_CUSTOMER_ERROR);
-        }*/
         IPage<PublicCustomerVO> pageList = customerMapper.customerGroupPageList(dto, page);
         List<PublicCustomerVO> records = pageList.getRecords();
         records.forEach(i -> {
@@ -304,11 +293,9 @@ public class CustomerService {
                 i.setLatsTime(newInfo.getCreateTime());
             }
             //主要联系人
-            CustomerContact customerContact = customerContactMapper.findAllByCustomerId(i.getId());
-            if (customerContact!=null){
-                if (customerContact.getPhone()!=null){
-                    i.setPhone(customerContact.getPhone());
-                }
+            String phone= customerContactMapper.findAllByCustomerId(i.getId());
+            if (phone!=null){
+                i.setPhone(phone);
             }
         });
         pageList.setRecords(records);
@@ -325,6 +312,21 @@ public class CustomerService {
         customerMapper.updateUserIdAndGroupIdByIdIn(userId,groupId,ids);
         return RespVO.ofSuccess();
     }
+
+/*
+
+    private ArrayList<CustomerVO> removeDuplicate(List<CustomerVO> fileVOS) {
+        Set<CustomerVO> set = new TreeSet<CustomerVO>(new Comparator<CustomerVO>() {
+            @Override
+            public int compare(CustomerVO o1, CustomerVO o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+        set.addAll(fileVOS);
+        return new ArrayList<CustomerVO>(set);
+    }
+*/
+
 
 
 

@@ -17,7 +17,6 @@ spring:
     username: wxf#123
     password: fmima123#
     url: jdbc:mysql://106.55.35.69:3302/bibe_crm?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&allowPublicKeyRetrieval=TRUE&failOverReadOnly=false&serverTimezone=Asia/Shanghai
-
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
   main:

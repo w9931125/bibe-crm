@@ -21,7 +21,7 @@ public class TalentImportVerifyHandler implements IExcelVerifyHandler<ImportDTO>
     private TransferMapper transferMapper;
 
     @Override
-    public ExcelVerifyHandlerResult verifyHandler(ImportDTO inputEntity) {
+    public synchronized ExcelVerifyHandlerResult verifyHandler(ImportDTO inputEntity) {
         StringJoiner joiner = new StringJoiner(",");
         // 根据姓名与手机号判断数据是否重复
         String name = inputEntity.getName();
@@ -42,7 +42,7 @@ public class TalentImportVerifyHandler implements IExcelVerifyHandler<ImportDTO>
     public boolean checkForDuplicates(String name, String phone) {
         List<Integer> list = transferMapper.count(name,phone);
         //个数大于1则为重复
-        if (list.size()>1){
+        if (list.size()>1||list.get(0).equals(1)){
             return true;
         }else{
             return false;

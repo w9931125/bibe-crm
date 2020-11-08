@@ -10,6 +10,8 @@ import com.bibe.crm.entity.po.*;
 import com.bibe.crm.entity.vo.RespVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -48,11 +50,17 @@ public class ImportExcelUtil {
         return RespVO.ofSuccess();
     }
 
-    public void submit(String version){
-        List<Transfer> transfers = transferMapper.findAllByVersion(version);
+    public  void submit(String version){
+        List<Transfer> data = transferMapper.findAllByVersion(version);
+        //过滤
+        ArrayList<Transfer> transfers = removeDuplicate(data);
         Customer customer=new Customer();
         CustomerContact customerContact=new CustomerContact();
-        transfers.forEach(i->{
+        for (Transfer i : transfers) {
+            boolean b = checkForDuplicates(i.getName(), i.getPhone());
+            if (b){
+                continue;
+            }
             //客户
             customer.setName(i.getName()!=null?i.getName():null);
             customer.setIndustry(i.getIndustry()!=null?i.getIndustry():null);
@@ -76,10 +84,39 @@ public class ImportExcelUtil {
             customerContact.setCustomerId(customer.getId());
             customerContact.setCreateTime(new Date());
             customerContactMapper.insertSelective(customerContact);
-        });
+        }
         log.info("导入数据同步完成。。。。。。。。。");
         int i = transferMapper.deleteByVersion(version);
         System.out.println("本次删除多少条"+i);
+    }
+
+
+    private boolean checkForDuplicates(String name, String phone) {
+        List<Integer> list = transferMapper.count(name,phone);
+        //个数大于1则为重复
+        if (list.size()>1){
+            return true;
+        }else{
+            return false;
+        }
+        //return list.stream().anyMatch(e -> e.getName().equals(name) && e.getPhone().equals(phone));
+    }
+
+    private ArrayList<Transfer> removeDuplicate(List<Transfer> fileVOS) {
+        Set<Transfer> set = new TreeSet<Transfer>(new Comparator<Transfer>() {
+            @Override
+            public int compare(Transfer o1, Transfer o2) {
+                //字符串,则按照asicc码升序排列
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        set.addAll(fileVOS);
+        set.forEach(i->{
+            //去空
+            i.setName(i.getName().replaceAll(" ",""));
+            i.setPhone(i.getPhone().replaceAll("-",""));
+        });
+        return new ArrayList<Transfer>(set);
     }
 
     /**
@@ -122,6 +159,7 @@ public class ImportExcelUtil {
         try {
             result = ExcelImportUtil.importExcelMore(file.getInputStream(), ImportDTO.class, params);
         } catch (Exception e) {
+            log.error("出现问题了"+e);
             return RespVO.fail(ExceptionTypeEnum.EXCEL_ERROR);
         }
         List<ImportDTO> list = result.getList();
@@ -195,6 +233,17 @@ public class ImportExcelUtil {
         transferMapper.insertList(data);
         return RespVO.ofSuccess(map);
     }
+
+
+    private  boolean isRowEmpty(Row row){
+        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+            Cell cell = row.getCell(c);
+            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
+                return false;
+        }
+        return true;
+    }
+
     /**
      * 下载模板
      * @param resp

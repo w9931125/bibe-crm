@@ -212,7 +212,7 @@
   </update>
 
   <select id="findNewInfo" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List" /> from  customer_progress where create_time=(select max(create_time) from customer_progress where customer_id=#{customerId} ) limit 1
+    select remarks,next_time,create_time from  customer_progress where create_time=(select max(create_time) from customer_progress where customer_id=#{customerId} ) limit 1
   </select>
 
   <select id="show" parameterType="java.lang.Integer" resultType="java.util.Map">
