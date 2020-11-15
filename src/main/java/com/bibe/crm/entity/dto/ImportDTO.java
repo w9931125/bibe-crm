@@ -98,14 +98,15 @@ public class ImportDTO  implements IExcelDataModel, IExcelModel {
     private String errorMsg;
 
     @Override
-    public int getRowNum() {
+    public Integer getRowNum() {
         return rowNum+1;
     }
 
     @Override
-    public void setRowNum(int i) {
-       this.rowNum=i;
+    public void setRowNum(Integer integer) {
+        this.rowNum=integer;
     }
+
 
     @Override
     public String getErrorMsg() {

@@ -153,7 +153,7 @@ public class ImportExcelUtil {
         // 标题行设置为0行，默认是0，可以不设置
         params.setTitleRows(0);
         // 开启Excel校验
-        params.setNeedVerfiy(true);
+        params.setNeedVerify(true);
         params.setVerifyHandler(talentImportVerifyHandler);
         ExcelImportResult<ImportDTO> result = null;
         try {
@@ -234,15 +234,6 @@ public class ImportExcelUtil {
         return RespVO.ofSuccess(map);
     }
 
-
-    private  boolean isRowEmpty(Row row){
-        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
-            Cell cell = row.getCell(c);
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_BLANK)
-                return false;
-        }
-        return true;
-    }
 
     /**
      * 下载模板

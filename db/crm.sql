@@ -3611,7 +3611,7 @@ DROP TABLE IF EXISTS `customer`;
 CREATE TABLE IF NOT EXISTS `customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL COMMENT '客户名称',
-  `industry` varchar(40) DEFAULT NULL COMMENT '客户行业',
+  `industry` varchar(2000) DEFAULT NULL COMMENT '客户行业',
   `user_id` int(11) DEFAULT NULL COMMENT '负责人id',
   `group_id` int(11) DEFAULT '0' COMMENT '客户分组id 0代表无',
   `area_id` int(11) DEFAULT NULL COMMENT '城市id',
@@ -3627,7 +3627,11 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `change_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '转为公客时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  	INDEX `name` (`name`) USING HASH,
+	INDEX `status` (`status`) USING HASH,
+	INDEX `customer_type` (`customer_type`),
+    INDEX `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='客户表';
 
 -- 正在导出表  bibe_crm.customer 的数据：~0 rows (大约)
@@ -3649,7 +3653,9 @@ CREATE TABLE IF NOT EXISTS `customer_contact` (
   `type` varchar(50) DEFAULT '0' COMMENT '联系人类型：0次要 1主要',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  	INDEX `phone` (`phone`) USING HASH,
+	INDEX `customer_id` (`customer_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='客户联系人信息';
 
 -- 正在导出表  bibe_crm.customer_contact 的数据：~0 rows (大约)
@@ -3696,7 +3702,7 @@ CREATE TABLE IF NOT EXISTS `customer_progress` (
   `contact_type` varchar(30) DEFAULT NULL COMMENT '联系方式0:电话,1:QQ,2:微信,3:登门拜访,4:邮件',
   `position` varchar(30) DEFAULT NULL COMMENT '职务',
   `speak_time` int(11) DEFAULT NULL COMMENT '沟通时长/分钟',
-  `remarks` varchar(100) DEFAULT NULL COMMENT '跟进结果',
+  `remarks` varchar(300) DEFAULT NULL COMMENT '跟进结果',
   `satisfied` int(11) DEFAULT NULL COMMENT '客户满意度,0成交客户,1A+,2A-,3B+,4B-,5C+,6C-,7D,8E',
   `user_id` int(11) DEFAULT NULL COMMENT '创建人id',
   `files_id` varchar(80) DEFAULT NULL COMMENT '文件id',
@@ -3704,7 +3710,9 @@ CREATE TABLE IF NOT EXISTS `customer_progress` (
   `next_time` datetime DEFAULT NULL COMMENT '下次跟进时间',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  	INDEX `customer_id` (`customer_id`),
+	INDEX `create_time` (`create_time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='客户进度表（联系跟进）';
 
 -- 正在导出表  bibe_crm.customer_progress 的数据：~0 rows (大约)
@@ -3862,7 +3870,7 @@ DELETE FROM `roles_permission_relation`;
 DROP TABLE IF EXISTS `transfer`;
 CREATE TABLE IF NOT EXISTS `transfer` (
   `name` varchar(30) DEFAULT NULL COMMENT '客户名称',
-  `industry` varchar(40) DEFAULT NULL COMMENT '客户行业',
+  `industry` varchar(2000) DEFAULT NULL COMMENT '客户行业',
   `user_id` int(11) DEFAULT NULL COMMENT '负责人id',
   `group_id` int(11) DEFAULT '0' COMMENT '客户分组id 0代表无',
   `area_id` int(11) DEFAULT NULL COMMENT '城市id',

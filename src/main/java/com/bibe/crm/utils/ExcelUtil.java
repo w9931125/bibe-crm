@@ -214,7 +214,7 @@ public class ExcelUtil {
         params.setHeadRows(headerRows);
         params.setSaveUrl("/excel/");
         params.setNeedSave(true);
-        params.setNeedVerfiy(needVerfiy);
+        params.setNeedVerify(needVerfiy);
         try {
             return ExcelImportUtil.importExcel(inputStream, pojoClass, params);
         } catch (NoSuchElementException e) {
